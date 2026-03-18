@@ -1,0 +1,1296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Photorganizer</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f3f3f3;
+    --bg2: #ebebeb;
+    --surface: rgba(255,255,255,0.85);
+    --surface-hover: rgba(0,0,0,0.04);
+    --border: rgba(0,0,0,0.08);
+    --accent: #0078D4;
+    --text: #1a1a1a;
+    --text-muted: #605E5C;
+    --text-dim: #797775;
+    --success: #107C41;
+    --warning: #CA5010;
+    --radius-sm: 7px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Sora', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background:
+      radial-gradient(ellipse 70% 50% at 15% 0%,  rgba(0,120,212,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 40% at 85% 90%, rgba(0,153,188,0.05) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  /* ── Window ──────────────────────────────────── */
+  .app-window {
+    width: 860px;
+    height: 620px;
+    margin: 24px auto;
+    border-radius: 16px;
+    border: 1px solid rgba(0,0,0,0.1);
+    overflow: hidden;
+    box-shadow: 0 0 0 1px rgba(0,0,0,0.1), 0 12px 40px rgba(0,0,0,0.14);
+    display: flex;
+    flex-direction: column;
+    animation: windowIn 0.45s cubic-bezier(0.16,1,0.3,1) both;
+  }
+
+  @keyframes windowIn {
+    from { opacity: 0; transform: scale(0.97) translateY(10px); }
+    to   { opacity: 1; transform: scale(1)    translateY(0); }
+  }
+
+  /* ── Title bar ───────────────────────────────── */
+  .titlebar {
+    height: 42px;
+    background: rgba(242,242,242,0.98);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center;
+    padding: 0 16px;
+    flex-shrink: 0;
+    user-select: none;
+    position: relative;
+  }
+
+  .dots { display: flex; gap: 7px; }
+  .dot { width: 11px; height: 11px; border-radius: 50%; cursor: pointer; transition: filter 0.15s; }
+  .dot:hover { filter: brightness(1.25); }
+  .dot.close { background: #ff5f57; }
+  .dot.min   { background: #febc2e; }
+  .dot.max   { background: #28c840; }
+
+  .titlebar-center {
+    position: absolute; left: 50%; transform: translateX(-50%);
+    display: flex; align-items: center; gap: 7px;
+    font-size: 12.5px; font-weight: 500; color: var(--text-dim);
+  }
+
+  /* ── Toolbar ─────────────────────────────────── */
+  .toolbar {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(248,248,248,0.9);
+    display: flex; align-items: center; gap: 10px;
+    flex-shrink: 0;
+  }
+
+  .folder-pick {
+    flex: 1;
+    display: flex; align-items: center; gap: 9px;
+    padding: 8px 13px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.15s;
+    min-width: 0;
+  }
+  .folder-pick:hover { background: var(--surface-hover); border-color: rgba(0,120,212,0.35); }
+  .folder-pick svg { opacity: 0.4; flex-shrink: 0; }
+
+  .folder-path {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px; color: var(--accent);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1;
+  }
+  .folder-path.placeholder { color: var(--text-muted); }
+
+  /* ── Custom Dropdown ─────────────────────────── */
+  .dropdown {
+    position: relative;
+    min-width: 152px;
+  }
+  .dropdown-trigger {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    cursor: pointer; transition: all 0.15s;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px; color: var(--text-dim);
+    user-select: none;
+  }
+  .dropdown-trigger:hover,
+  .dropdown-trigger.open {
+    background: var(--surface-hover);
+    border-color: rgba(0,120,212,0.35);
+    color: var(--text);
+  }
+  .dropdown-trigger svg { opacity: 0.4; flex-shrink: 0; }
+  .dropdown-trigger .chevron {
+    margin-left: auto;
+    transition: transform 0.2s;
+    opacity: 0.4;
+  }
+  .dropdown-trigger.open .chevron { transform: rotate(180deg); opacity: 0.7; }
+  .dropdown-label { flex: 1; }
+
+  .dropdown-menu {
+    position: absolute;
+    top: calc(100% + 5px);
+    left: 0; right: 0;
+    background: #ffffff;
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.12);
+    z-index: 50;
+    display: none;
+    animation: dropIn 0.18s cubic-bezier(0.16,1,0.3,1);
+  }
+  .dropdown-menu.open { display: block; }
+  @keyframes dropIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .dropdown-item {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 8px 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px; color: var(--text-dim);
+    cursor: pointer; transition: background 0.1s;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+  }
+  .dropdown-item:last-child { border-bottom: none; }
+  .dropdown-item:hover { background: var(--surface-hover); color: var(--text); }
+  .dropdown-item.selected {
+    color: var(--accent);
+    background: rgba(0,120,212,0.08);
+  }
+  .dropdown-item .check {
+    opacity: 0;
+    color: var(--accent);
+  }
+  .dropdown-item.selected .check { opacity: 1; }
+
+  .btn {
+    display: flex; align-items: center; gap: 7px;
+    padding: 8px 18px;
+    border-radius: var(--radius-sm);
+    font-family: 'Sora', sans-serif;
+    font-size: 13px; font-weight: 600;
+    cursor: pointer; border: none;
+    transition: all 0.18s; white-space: nowrap;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, #005a9e, #0078D4);
+    color: #ffffff;
+    box-shadow: 0 2px 10px rgba(0,120,212,0.3);
+  }
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(0,120,212,0.4); }
+  .btn-primary:active { transform: translateY(0); }
+  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+
+  /* ── HEIC Warning Banner ─────────────────────── */
+  .heic-banner {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 20px;
+    background: rgba(202,80,16,0.06);
+    border-bottom: 1px solid rgba(202,80,16,0.18);
+    flex-shrink: 0;
+    animation: bannerIn 0.4s 0.2s cubic-bezier(0.16,1,0.3,1) both;
+  }
+  @keyframes bannerIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .heic-banner-icon {
+    width: 28px; height: 28px;
+    background: rgba(202,80,16,0.1);
+    border: 1px solid rgba(202,80,16,0.25);
+    border-radius: 7px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .heic-banner-text { flex: 1; }
+  .heic-banner-title { font-size: 12.5px; font-weight: 600; color: var(--warning); margin-bottom: 1px; }
+  .heic-banner-desc  { font-size: 11px; color: rgba(202,80,16,0.75); line-height: 1.4; }
+  .heic-link {
+    font-size: 11.5px; font-weight: 500; color: var(--accent);
+    text-decoration: underline; text-underline-offset: 2px;
+    cursor: pointer; white-space: nowrap;
+  }
+  .banner-dismiss {
+    width: 22px; height: 22px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; color: var(--text-muted);
+    border-radius: 4px; transition: all 0.12s;
+  }
+  .banner-dismiss:hover { background: var(--surface-hover); color: var(--text); }
+
+  /* ── Progress Strip ──────────────────────────── */
+  .progress-strip {
+    padding: 10px 20px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(248,248,248,0.9);
+    flex-shrink: 0;
+    display: none;
+  }
+  .progress-strip.visible { display: block; }
+
+  .progress-top {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 7px;
+  }
+  .progress-status {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 12.5px; font-weight: 500; color: var(--text);
+  }
+
+  .spinner {
+    width: 13px; height: 13px;
+    border: 2px solid rgba(0,120,212,0.15);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    flex-shrink: 0;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .progress-right {
+    display: flex; align-items: center; gap: 14px;
+    font-size: 11.5px; color: var(--text-muted);
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .progress-pct { color: var(--accent); font-weight: 600; }
+
+  .progress-track { height: 3px; background: rgba(0,0,0,0.08); border-radius: 3px; overflow: hidden; }
+  .progress-fill {
+    height: 100%; border-radius: 3px;
+    background: linear-gradient(90deg, #0078D4, #107C41);
+    transition: width 0.35s ease;
+  }
+  .progress-fill.indeterminate {
+    width: 30% !important;
+    animation: indeterminate 1.4s ease-in-out infinite;
+  }
+  @keyframes indeterminate {
+    0%   { margin-left: -30%; }
+    100% { margin-left: 130%; }
+  }
+
+  /* ── Stats row ───────────────────────────────── */
+  .stats-row {
+    display: flex; align-items: center; gap: 6px;
+    padding: 8px 20px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(250,250,250,0.7);
+    flex-shrink: 0;
+  }
+
+  /* ── Filter toggle chips ── */
+  .stat-chip {
+    display: flex; align-items: center; gap: 5px;
+    padding: 3px 10px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    font-size: 11.5px; color: var(--text-muted);
+    font-family: 'JetBrains Mono', monospace;
+    cursor: default;
+    user-select: none;
+  }
+  /* Clickable filter chips */
+  .stat-chip.toggleable {
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .stat-chip.toggleable:hover {
+    border-color: rgba(0,0,0,0.22);
+    color: var(--text);
+  }
+  .stat-chip.toggleable.off {
+    opacity: 0.38;
+    background: transparent;
+  }
+  .stat-chip.toggleable.off:hover { opacity: 0.6; }
+
+  /* Per-format active accent colours */
+  .stat-chip.toggleable.on.fmt-jpg  { border-color: rgba(16,124,65,0.35); color: #107C41; background: rgba(16,124,65,0.08); }
+  .stat-chip.toggleable.on.fmt-heic { border-color: rgba(0,120,212,0.35);  color: #0078D4; background: rgba(0,120,212,0.08);  }
+  .stat-chip.toggleable.on.fmt-png  { border-color: rgba(202,80,16,0.35);  color: #CA5010; background: rgba(202,80,16,0.08);  }
+  .stat-chip.toggleable.on.fmt-mov  { border-color: rgba(164,38,44,0.35); color: #A4262C; background: rgba(164,38,44,0.08); }
+
+  /* "All" chip — always highlighted when all selected */
+  .stat-chip.chip-all { cursor: pointer; transition: all 0.15s; }
+  .stat-chip.chip-all:hover { border-color: rgba(0,120,212,0.3); }
+  .stat-chip.chip-all.all-on  { border-color: rgba(0,120,212,0.4); background: rgba(0,120,212,0.08); }
+  .stat-chip.chip-all.all-off { opacity: 0.45; background: transparent; }
+
+  .stat-chip .val        { font-weight: 500; }
+  .stat-chip .val.blue   { color: var(--accent); }
+  .stat-chip .val.green  { color: var(--success); }
+  .stat-chip .val.warn   { color: var(--warning); }
+  .stat-div { width: 1px; height: 14px; background: var(--border); margin: 0 2px; }
+
+  /* ── Confirm Dialog ───────────────────────────── */
+  .dialog-backdrop {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.35);
+    backdrop-filter: blur(4px);
+    z-index: 300;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.2s;
+  }
+  .dialog-backdrop.open { opacity: 1; pointer-events: all; }
+
+  .dialog {
+    width: 380px;
+    background: #ffffff;
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 14px;
+    box-shadow: 0 16px 40px rgba(0,0,0,0.14);
+    overflow: hidden;
+    transform: scale(0.96) translateY(6px);
+    transition: transform 0.22s cubic-bezier(0.16,1,0.3,1);
+  }
+  .dialog-backdrop.open .dialog { transform: scale(1) translateY(0); }
+
+  .dialog-header {
+    display: flex; align-items: center; gap: 11px;
+    padding: 18px 20px 14px;
+    border-bottom: 1px solid rgba(0,0,0,0.07);
+  }
+  .dialog-icon {
+    width: 34px; height: 34px; flex-shrink: 0;
+    background: rgba(202,80,16,0.1);
+    border: 1px solid rgba(202,80,16,0.25);
+    border-radius: 9px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .dialog-title { font-size: 14px; font-weight: 600; color: var(--text); }
+  .dialog-body {
+    padding: 14px 20px 18px;
+    font-size: 12.5px; color: var(--text-dim); line-height: 1.6;
+  }
+  .dialog-body strong { color: var(--text); font-weight: 600; }
+  .dialog-fmt-list {
+    display: flex; flex-wrap: wrap; gap: 5px;
+    margin: 10px 0 0;
+  }
+  .dialog-footer {
+    display: flex; justify-content: flex-end; gap: 8px;
+    padding: 12px 20px;
+    border-top: 1px solid rgba(0,0,0,0.07);
+    background: rgba(0,0,0,0.03);
+  }
+
+  /* ── File Table ──────────────────────────────── */
+  .table-wrap {
+    flex: 1; overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0,0,0,0.12) transparent;
+  }
+  .table-wrap::-webkit-scrollbar { width: 4px; }
+  .table-wrap::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.12); border-radius: 4px; }
+
+  table { width: 100%; border-collapse: collapse; }
+
+  thead {
+    position: sticky; top: 0;
+    background: rgba(245,245,245,0.98);
+    backdrop-filter: blur(8px);
+    z-index: 2;
+  }
+  th {
+    padding: 10px 16px;
+    font-size: 10.5px; font-weight: 600;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--text-muted); text-align: left;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  th:first-child { padding-left: 20px; }
+  th:last-child  { padding-right: 20px; }
+
+  tbody tr {
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    transition: background 0.12s;
+    animation: rowIn 0.35s cubic-bezier(0.16,1,0.3,1) both;
+  }
+  @keyframes rowIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  tbody tr:hover { background: var(--surface-hover); }
+  tbody tr:last-child { border-bottom: none; }
+
+  td { padding: 9px 16px; font-size: 12.5px; color: var(--text-dim); vertical-align: middle; }
+  td:first-child { padding-left: 20px; }
+  td:last-child  { padding-right: 20px; }
+
+  .td-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; color: var(--text);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 220px;
+    cursor: default;
+  }
+  .td-name:hover {
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: rgba(0,120,212,0.4);
+  }
+
+  .fmt-badge {
+    display: inline-flex; align-items: center;
+    padding: 2px 8px; border-radius: 5px;
+    font-size: 10px; font-weight: 700;
+    font-family: 'JetBrains Mono', monospace; letter-spacing: 0.05em;
+  }
+  .fmt-jpg  { background: rgba(16,124,65,0.08); color: #107C41; border: 1px solid rgba(16,124,65,0.2); }
+  .fmt-heic { background: rgba(0,120,212,0.08); color: #0078D4; border: 1px solid rgba(0,120,212,0.2); }
+  .fmt-mov  { background: rgba(164,38,44,0.08); color: #A4262C; border: 1px solid rgba(164,38,44,0.2); }
+  .fmt-png  { background: rgba(202,80,16,0.08); color: #CA5010; border: 1px solid rgba(202,80,16,0.2); }
+
+  .td-time {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px; color: var(--text-muted); white-space: nowrap;
+  }
+
+  .td-dest {
+    display: flex; align-items: center; gap: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px; white-space: nowrap;
+  }
+  .td-dest.ok   { color: var(--success); }
+  .td-dest.warn { color: var(--warning); }
+  .td-dest svg  { opacity: 0.45; flex-shrink: 0; }
+
+  .status-pill {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 2px 8px; border-radius: 20px;
+    font-size: 10.5px; font-weight: 500;
+  }
+  .pill-ready  { background: rgba(16,124,65,0.07);  color: var(--success); border: 1px solid rgba(16,124,65,0.2); }
+  .pill-done   { background: rgba(0,120,212,0.07);  color: var(--accent);  border: 1px solid rgba(0,120,212,0.18); }
+  .pill-noexif { background: rgba(202,80,16,0.07);  color: var(--warning); border: 1px solid rgba(202,80,16,0.2);  }
+  .dot-sm { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+
+  /* ── Hover Preview Card ───────────────────────── */
+  .preview-card {
+    position: fixed;
+    width: 200px;
+    background: #ffffff;
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.14), 0 0 0 1px rgba(0,0,0,0.05);
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 200;
+    opacity: 0;
+    transform: scale(0.94) translateY(4px);
+    transition: none; /* hidden instantly */
+  }
+  .preview-card.visible {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    transition: opacity 0.16s ease, transform 0.16s cubic-bezier(0.16,1,0.3,1);
+  }
+  .preview-thumb {
+    width: 100%; height: 136px;
+    display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden; flex-shrink: 0;
+  }
+  .preview-thumb.type-jpg  { background: linear-gradient(135deg,#cce4f6,#a8d2f0 50%,#79b8e8); }
+  .preview-thumb.type-heic { background: linear-gradient(135deg,#d4e8fb,#b0d2f5 50%,#80b8ef); }
+  .preview-thumb.type-mov  { background: linear-gradient(135deg,#fce4e4,#f5b8b8 50%,#e88080); }
+  .preview-thumb.type-png  { background: linear-gradient(135deg,#d4ede0,#a8d9bc 50%,#70c099); }
+  .preview-thumb.type-noexif { background: linear-gradient(135deg,#fef0e0,#fad6a5); }
+  .preview-thumb::after {
+    content:''; position:absolute; inset:0;
+    background:rgba(255,255,255,0.12);
+    pointer-events:none;
+  }
+  .thumb-emoji {
+    font-size: 46px;
+    filter: drop-shadow(0 4px 14px rgba(0,0,0,0.55));
+    user-select: none; position: relative; z-index: 1;
+  }
+  .thumb-fmt {
+    position:absolute; top:8px; left:8px; z-index:2;
+    padding:2px 7px; border-radius:5px;
+    font-size:9.5px; font-weight:700;
+    font-family:'JetBrains Mono',monospace; letter-spacing:0.06em;
+    background:rgba(255,255,255,0.75); border:1px solid rgba(0,0,0,0.1);
+    backdrop-filter:blur(6px);
+  }
+  .thumb-fmt.type-jpg  { color:#107C41; }
+  .thumb-fmt.type-heic { color:#0078D4; }
+  .thumb-fmt.type-mov  { color:#A4262C; }
+  .thumb-fmt.type-png  { color:#CA5010; }
+  .thumb-fmt.type-noexif { color:#CA5010; }
+  .thumb-play {
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center; z-index:2;
+  }
+  .thumb-play-btn {
+    width:36px; height:36px;
+    background:rgba(0,0,0,0.35); border:1.5px solid rgba(255,255,255,0.6);
+    border-radius:50%; display:flex; align-items:center; justify-content:center;
+    backdrop-filter:blur(4px);
+  }
+  .preview-info { padding:10px 12px 12px; }
+  .preview-name {
+    font-family:'JetBrains Mono',monospace;
+    font-size:11.5px; font-weight:500; color:var(--text);
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    margin-bottom:7px;
+  }
+  .preview-meta { display:flex; flex-direction:column; gap:4px; }
+  .preview-meta-row {
+    display:flex; align-items:center; gap:7px;
+    font-size:10.5px; color:var(--text-muted);
+  }
+  .preview-meta-row svg { opacity:0.4; flex-shrink:0; }
+  .preview-meta-val {
+    font-family:'JetBrains Mono',monospace;
+    font-size:10.5px; color:var(--text-dim);
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .preview-meta-val.ok   { color:var(--success); }
+  .preview-meta-val.warn { color:var(--warning); }
+
+  /* ════════════════════════════════════════════════════
+     DARK THEME OVERRIDES  (body.dark)
+  ════════════════════════════════════════════════════ */
+  body.dark {
+    --bg: #0d0d14;
+    --bg2: #111120;
+    --surface: rgba(255,255,255,0.04);
+    --surface-hover: rgba(255,255,255,0.07);
+    --border: rgba(255,255,255,0.08);
+    --accent: #63b3ed;
+    --text: #e8eaf0;
+    --text-muted: #6b7280;
+    --text-dim: #9ca3af;
+    --success: #68d391;
+    --warning: #f6ad55;
+  }
+
+  /* bg glow */
+  body.dark::before {
+    background:
+      radial-gradient(ellipse 70% 50% at 15% 0%,  rgba(99,179,237,0.05) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 40% at 85% 90%, rgba(159,122,234,0.05) 0%, transparent 60%);
+  }
+
+  /* window frame */
+  body.dark .app-window {
+    border-color: rgba(255,255,255,0.1);
+    box-shadow: 0 0 0 1px rgba(0,0,0,0.5), 0 32px 80px rgba(0,0,0,0.7);
+  }
+
+  /* titlebar */
+  body.dark .titlebar { background: rgba(10,10,18,0.98); }
+
+  /* toolbar */
+  body.dark .toolbar { background: rgba(10,10,18,0.7); }
+
+  /* folder pick */
+  body.dark .folder-pick:hover { border-color: rgba(99,179,237,0.3); }
+
+  /* dropdown trigger */
+  body.dark .dropdown-trigger:hover,
+  body.dark .dropdown-trigger.open { border-color: rgba(99,179,237,0.35); }
+
+  /* dropdown menu */
+  body.dark .dropdown-menu {
+    background: #1a1a2c;
+    border-color: rgba(255,255,255,0.12);
+    box-shadow: 0 12px 36px rgba(0,0,0,0.6);
+  }
+  body.dark .dropdown-item { border-bottom-color: rgba(255,255,255,0.04); }
+  body.dark .dropdown-item.selected { background: rgba(99,179,237,0.07); }
+
+  /* primary button */
+  body.dark .btn-primary {
+    background: linear-gradient(135deg, #4a9fd4, #63b3ed);
+    color: #071524;
+    box-shadow: 0 3px 14px rgba(99,179,237,0.28);
+  }
+  body.dark .btn-primary:hover { box-shadow: 0 5px 18px rgba(99,179,237,0.38); }
+
+  /* HEIC banner */
+  body.dark .heic-banner {
+    background: rgba(246,173,85,0.07);
+    border-bottom-color: rgba(246,173,85,0.18);
+  }
+  body.dark .heic-banner-icon {
+    background: rgba(246,173,85,0.12);
+    border-color: rgba(246,173,85,0.28);
+  }
+  body.dark .heic-banner-desc { color: rgba(246,173,85,0.65); }
+  body.dark .heic-banner #heicWarningIcon { stroke: #f6ad55; }
+
+  /* progress strip */
+  body.dark .progress-strip { background: rgba(10,10,18,0.6); }
+  body.dark .spinner { border-color: rgba(99,179,237,0.2); border-top-color: var(--accent); }
+  body.dark .progress-track { background: rgba(255,255,255,0.06); }
+
+  /* stats row */
+  body.dark .stats-row { background: rgba(10,10,18,0.3); }
+
+  /* format chips */
+  body.dark .stat-chip.toggleable.on.fmt-jpg  { border-color: rgba(104,211,145,0.4); color: #68d391; background: rgba(104,211,145,0.08); }
+  body.dark .stat-chip.toggleable.on.fmt-heic { border-color: rgba(99,179,237,0.4);  color: #63b3ed; background: rgba(99,179,237,0.08); }
+  body.dark .stat-chip.toggleable.on.fmt-png  { border-color: rgba(246,173,85,0.4);  color: #f6ad55; background: rgba(246,173,85,0.08); }
+  body.dark .stat-chip.toggleable.on.fmt-mov  { border-color: rgba(252,129,129,0.4); color: #fc8181; background: rgba(252,129,129,0.08); }
+  body.dark .stat-chip.chip-all.all-on  { border-color: rgba(99,179,237,0.45); background: rgba(99,179,237,0.08); }
+  body.dark .stat-chip.chip-all:hover   { border-color: rgba(99,179,237,0.3); }
+  body.dark .stat-chip.toggleable:hover { border-color: rgba(255,255,255,0.18); }
+
+  /* dialog */
+  body.dark .dialog {
+    background: #16162a;
+    border-color: rgba(255,255,255,0.12);
+    box-shadow: 0 24px 60px rgba(0,0,0,0.7);
+  }
+  body.dark .dialog-header { border-bottom-color: rgba(255,255,255,0.07); }
+  body.dark .dialog-icon   { background: rgba(246,173,85,0.12); border-color: rgba(246,173,85,0.28); }
+  body.dark .dialog-footer { border-top-color: rgba(255,255,255,0.07); background: rgba(0,0,0,0.15); }
+  body.dark .dialog-footer .btn:not(.btn-primary) {
+    background: rgba(255,255,255,0.04);
+    border-color: rgba(255,255,255,0.08);
+  }
+  body.dark .dialog-backdrop { background: rgba(0,0,0,0.55); }
+
+  /* table */
+  body.dark thead { background: rgba(13,13,20,0.96); }
+  body.dark tbody tr { border-bottom-color: rgba(255,255,255,0.035); }
+  body.dark .td-name:hover { text-decoration-color: rgba(99,179,237,0.4); }
+  body.dark .table-wrap { scrollbar-color: rgba(255,255,255,0.08) transparent; }
+  body.dark .table-wrap::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); }
+
+  /* fmt badges */
+  body.dark .fmt-jpg  { background: rgba(104,211,145,0.1); color: #68d391; border-color: rgba(104,211,145,0.2); }
+  body.dark .fmt-heic { background: rgba(99,179,237,0.1);  color: #63b3ed; border-color: rgba(99,179,237,0.2); }
+  body.dark .fmt-mov  { background: rgba(252,129,129,0.1); color: #fc8181; border-color: rgba(252,129,129,0.2); }
+  body.dark .fmt-png  { background: rgba(246,173,85,0.1);  color: #f6ad55; border-color: rgba(246,173,85,0.2); }
+
+  /* status pills */
+  body.dark .pill-ready  { background: rgba(104,211,145,0.08); border-color: rgba(104,211,145,0.18); }
+  body.dark .pill-done   { background: rgba(99,179,237,0.08);  border-color: rgba(99,179,237,0.18); }
+  body.dark .pill-noexif { background: rgba(246,173,85,0.08);  border-color: rgba(246,173,85,0.2); }
+
+  /* preview card */
+  body.dark .preview-card {
+    background: #16162a;
+    border-color: rgba(255,255,255,0.13);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.7), 0 0 0 1px rgba(0,0,0,0.4);
+  }
+  body.dark .preview-thumb.type-jpg    { background: linear-gradient(135deg,#1a2a3a,#0f3460 50%,#1a4a6a); }
+  body.dark .preview-thumb.type-heic   { background: linear-gradient(135deg,#1a1a35,#2d1b69 50%,#1a2d4a); }
+  body.dark .preview-thumb.type-mov    { background: linear-gradient(135deg,#2a1a1a,#6b1a1a 50%,#3a1020); }
+  body.dark .preview-thumb.type-png    { background: linear-gradient(135deg,#1a2a1a,#1a4a2a 50%,#0f3020); }
+  body.dark .preview-thumb.type-noexif { background: linear-gradient(135deg,#1e1a10,#3a2a0a); }
+  body.dark .preview-thumb::after      { background: rgba(0,0,0,0.08); }
+  body.dark .thumb-fmt {
+    background: rgba(0,0,0,0.55);
+    border-color: rgba(255,255,255,0.12);
+  }
+  body.dark .thumb-fmt.type-jpg    { color: #68d391; }
+  body.dark .thumb-fmt.type-heic   { color: #63b3ed; }
+  body.dark .thumb-fmt.type-mov    { color: #fc8181; }
+  body.dark .thumb-fmt.type-png    { color: #f6ad55; }
+  body.dark .thumb-fmt.type-noexif { color: #f6ad55; }
+  body.dark .thumb-play-btn {
+    background: rgba(0,0,0,0.5);
+    border-color: rgba(255,255,255,0.3);
+  }
+
+  /* ── Theme Toggle Button ── */
+  .theme-toggle {
+    width: 30px; height: 18px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .theme-toggle-track {
+    width: 30px; height: 17px;
+    border-radius: 9px;
+    background: rgba(0,0,0,0.12);
+    border: 1px solid rgba(0,0,0,0.12);
+    position: relative;
+    transition: background 0.25s, border-color 0.25s;
+    display: flex; align-items: center;
+  }
+  body.dark .theme-toggle-track {
+    background: rgba(99,179,237,0.25);
+    border-color: rgba(99,179,237,0.4);
+  }
+  .theme-toggle-thumb {
+    position: absolute; left: 2px;
+    width: 13px; height: 13px;
+    border-radius: 50%;
+    background: #ffffff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+    transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), background 0.25s;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  body.dark .theme-toggle-thumb {
+    transform: translateX(13px);
+    background: #1e3a5f;
+  }
+  /* sun icon */
+  .toggle-icon-sun, .toggle-icon-moon {
+    position: absolute;
+    transition: opacity 0.2s, transform 0.25s;
+  }
+  .toggle-icon-sun  { opacity: 1;  transform: scale(1); }
+  .toggle-icon-moon { opacity: 0;  transform: scale(0.5); }
+  body.dark .toggle-icon-sun  { opacity: 0;  transform: scale(0.5); }
+  body.dark .toggle-icon-moon { opacity: 1;  transform: scale(1); }
+
+</style>
+</head>
+<body>
+<div class="app-window">
+
+  <!-- Title Bar -->
+  <div class="titlebar">
+    <div class="dots">
+      <div class="dot close"></div>
+      <div class="dot min"></div>
+      <div class="dot max"></div>
+    </div>
+    <div class="titlebar-center">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="3" width="8" height="8" rx="1"/>
+        <rect x="13" y="3" width="8" height="8" rx="1"/>
+        <rect x="3" y="13" width="8" height="8" rx="1"/>
+        <rect x="13" y="13" width="8" height="8" rx="1"/>
+      </svg>
+      Photorganizer
+    </div>
+  </div>
+
+  <!-- Toolbar -->
+  <div class="toolbar">
+    <div class="folder-pick" onclick="pickFolder()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/>
+      </svg>
+      <span class="folder-path placeholder" id="folderPath">Choose a folder…</span>
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="opacity:.3;flex-shrink:0;">
+        <polyline points="6 9 12 15 18 9"/>
+      </svg>
+    </div>
+
+    <div class="dropdown" id="fmtDropdown">
+      <div class="dropdown-trigger" id="fmtTrigger" onclick="toggleDropdown()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="4" width="18" height="18" rx="2"/>
+          <line x1="16" y1="2" x2="16" y2="6"/>
+          <line x1="8"  y1="2" x2="8"  y2="6"/>
+          <line x1="3"  y1="10" x2="21" y2="10"/>
+        </svg>
+        <span class="dropdown-label" id="formatLabel">yyyy-MM-dd</span>
+        <svg class="chevron" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
+      </div>
+      <div class="dropdown-menu" id="fmtMenu">
+        <div class="dropdown-item selected" onclick="selectFormat(this, 'yyyy-MM-dd')">
+          yyyy-MM-dd
+          <svg class="check" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="dropdown-item" onclick="selectFormat(this, 'dd-MM-yyyy')">
+          dd-MM-yyyy
+          <svg class="check" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="dropdown-item" onclick="selectFormat(this, 'yyyyMMdd')">
+          yyyyMMdd
+          <svg class="check" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="dropdown-item" onclick="selectFormat(this, 'yyyy.M.d')">
+          yyyy.M.d
+          <svg class="check" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="dropdown-item" onclick="selectFormat(this, 'MM-dd-yyyy')">
+          MM-dd-yyyy
+          <svg class="check" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn btn-primary" id="organizeBtn" onclick="startOrganize()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/>
+        <polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/>
+      </svg>
+      Organize
+    </button>
+  </div>
+
+  <!-- HEIC Banner -->
+  <div class="heic-banner" id="heicBanner">
+    <div class="heic-banner-icon">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#CA5010" stroke-width="2.5">
+        <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+        <line x1="12" y1="9"  x2="12"    y2="13"/>
+        <line x1="12" y1="17" x2="12.01" y2="17"/>
+      </svg>
+    </div>
+    <div class="heic-banner-text">
+      <div class="heic-banner-title">HEIC Codec Not Installed</div>
+      <div class="heic-banner-desc">HEIC files were detected but cannot be decoded. Capture time will fall back to the file's last-modified date, which may be inaccurate.</div>
+    </div>
+    <span class="heic-link">Get HEIC Codec →</span>
+    <div class="banner-dismiss" onclick="document.getElementById('heicBanner').style.display='none'">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Progress Strip -->
+  <div class="progress-strip" id="progressStrip">
+    <div class="progress-top">
+      <div class="progress-status">
+        <div class="spinner"></div>
+        <span id="progressLabel">Scanning folder…</span>
+      </div>
+      <div class="progress-right">
+        <span id="progressDetail"></span>
+        <span class="progress-pct" id="progressPct"></span>
+      </div>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill indeterminate" id="progressFill"></div>
+    </div>
+  </div>
+
+  <!-- Stats Row / Filter Toggles -->
+  <div class="stats-row" id="statsRow">
+    <div class="stat-chip chip-all all-on" id="chipAll" onclick="toggleAll()">
+      All <span class="val blue" id="chipAllVal">247</span>
+    </div>
+    <div class="stat-div"></div>
+    <div class="stat-chip toggleable on fmt-jpg"  onclick="toggleFmt(this,'JPG')">JPG  <span class="val" id="cntJPG">128</span></div>
+    <div class="stat-chip toggleable on fmt-heic" onclick="toggleFmt(this,'HEIC')">HEIC <span class="val" id="cntHEIC">61</span></div>
+    <div class="stat-chip toggleable on fmt-png"  onclick="toggleFmt(this,'PNG')">PNG  <span class="val" id="cntPNG">34</span></div>
+    <div class="stat-chip toggleable on fmt-mov"  onclick="toggleFmt(this,'MOV')">MOV  <span class="val" id="cntMOV">24</span></div>
+    <div class="stat-div"></div>
+    <div class="stat-chip" id="chipGroups">Groups  <span class="val green">18</span></div>
+    <div class="stat-chip" id="chipNoExif">No EXIF <span class="val warn">6</span></div>
+
+    <div style="flex:1;"></div>
+    <div class="stat-div"></div>
+
+    <div class="theme-toggle" id="themeToggle" title="Switch theme" onclick="toggleTheme()">
+      <div class="theme-toggle-track">
+        <div class="theme-toggle-thumb">
+          <svg class="toggle-icon-sun" width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#CA5010" stroke-width="2.5">
+            <circle cx="12" cy="12" r="4"/>
+            <line x1="12" y1="2"  x2="12" y2="5"/>
+            <line x1="12" y1="19" x2="12" y2="22"/>
+            <line x1="4.22" y1="4.22"  x2="6.34"  y2="6.34"/>
+            <line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/>
+            <line x1="2"  y1="12" x2="5"  y2="12"/>
+            <line x1="19" y1="12" x2="22" y2="12"/>
+            <line x1="4.22"  y1="19.78" x2="6.34"  y2="17.66"/>
+            <line x1="17.66" y1="6.34"  x2="19.78" y2="4.22"/>
+          </svg>
+          <svg class="toggle-icon-moon" width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#63b3ed" stroke-width="2.5">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- File Table -->
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th style="width:34%">File Name</th>
+          <th style="width:10%">Format</th>
+          <th style="width:22%">Capture Time</th>
+          <th style="width:24%">Destination Folder</th>
+          <th style="width:10%">Status</th>
+        </tr>
+      </thead>
+      <tbody id="fileTableBody"></tbody>
+    </table>
+  </div>
+
+</div>
+
+<!-- Confirm Dialog -->
+<div class="dialog-backdrop" id="confirmDialog">
+  <div class="dialog">
+    <div class="dialog-header">
+      <div class="dialog-icon">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#f6ad55" stroke-width="2.5">
+          <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+          <line x1="12" y1="9" x2="12" y2="13"/>
+          <line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+      </div>
+      <div class="dialog-title">Partial Organize</div>
+    </div>
+    <div class="dialog-body">
+      Not all file types are selected. This operation will only organize the following formats:
+      <div class="dialog-fmt-list" id="dialogFmtList"></div>
+      <br>Files of unselected types will be left in place. Do you want to continue?
+    </div>
+    <div class="dialog-footer">
+      <button class="btn" style="background:rgba(0,0,0,0.04);border:1px solid rgba(0,0,0,0.1);color:var(--text-dim);" onclick="closeDialog()">Cancel</button>
+      <button class="btn btn-primary" onclick="confirmOrganize()">Continue</button>
+    </div>
+  </div>
+</div>
+
+<!-- Hover Preview Card -->
+<div class="preview-card" id="previewCard">
+  <div class="preview-thumb" id="pcThumb">
+    <span class="thumb-fmt" id="pcFmt"></span>
+    <span class="thumb-emoji" id="pcEmoji"></span>
+    <div class="thumb-play" id="pcPlay" style="display:none">
+      <div class="thumb-play-btn">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" style="color:#fff;margin-left:2px;">
+          <polygon points="5 3 19 12 5 21 5 3"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+  <div class="preview-info">
+    <div class="preview-name" id="pcName"></div>
+    <div class="preview-meta">
+      <div class="preview-meta-row">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+        </svg>
+        <span class="preview-meta-val" id="pcTime"></span>
+      </div>
+      <div class="preview-meta-row">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/>
+        </svg>
+        <span class="preview-meta-val" id="pcDest"></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const FILES = [
+    { name:'IMG_4821.jpg',     fmt:'JPG',  time:'2024-07-15  09:14:32', dest:'2024-07-15', s:'ready'  },
+    { name:'IMG_4822.jpg',     fmt:'JPG',  time:'2024-07-15  09:21:08', dest:'2024-07-15', s:'ready'  },
+    { name:'IMG_4823.heic',    fmt:'HEIC', time:'2024-07-15  11:03:55', dest:'2024-07-15', s:'ready'  },
+    { name:'VID_0088.mov',     fmt:'MOV',  time:'2024-07-15  14:47:20', dest:'2024-07-15', s:'ready'  },
+    { name:'IMG_4900.jpg',     fmt:'JPG',  time:'2024-07-16  08:05:11', dest:'2024-07-16', s:'ready'  },
+    { name:'IMG_4901.heic',    fmt:'HEIC', time:'2024-07-16  10:33:44', dest:'2024-07-16', s:'ready'  },
+    { name:'VID_0091.mov',     fmt:'MOV',  time:'2024-07-16  15:22:09', dest:'2024-07-16', s:'ready'  },
+    { name:'screenshot_01.png',fmt:'PNG',  time:'2024-07-17  18:00:03', dest:'2024-07-17', s:'ready'  },
+    { name:'IMG_4950.jpg',     fmt:'JPG',  time:'2024-07-17  09:41:28', dest:'2024-07-17', s:'ready'  },
+    { name:'IMG_4951.heic',    fmt:'HEIC', time:'2024-07-17  12:14:50', dest:'2024-07-17', s:'ready'  },
+    { name:'IMG_5010.jpg',     fmt:'JPG',  time:'2024-07-18  07:58:22', dest:'2024-07-18', s:'ready'  },
+    { name:'IMG_5011.heic',    fmt:'HEIC', time:'2024-07-18  08:30:00', dest:'2024-07-18', s:'ready'  },
+    { name:'IMG_5012.jpg',     fmt:'JPG',  time:'2024-07-18  09:11:37', dest:'2024-07-18', s:'ready'  },
+    { name:'VID_0100.mov',     fmt:'MOV',  time:'2024-07-18  17:45:55', dest:'2024-07-18', s:'ready'  },
+    { name:'IMG_5088.heic',    fmt:'HEIC', time:'2024-07-19  08:02:14', dest:'2024-07-19', s:'ready'  },
+    { name:'VID_0102.mov',     fmt:'MOV',  time:'2024-07-19  19:30:42', dest:'2024-07-19', s:'ready'  },
+    { name:'IMG_5120.jpg',     fmt:'JPG',  time:'2024-07-20  10:09:01', dest:'2024-07-20', s:'ready'  },
+    { name:'wallpaper.png',    fmt:'PNG',  time:'—',                    dest:'(no EXIF)',  s:'noexif' },
+    { name:'download.jpg',     fmt:'JPG',  time:'—',                    dest:'(no EXIF)',  s:'noexif' },
+  ];
+
+  const COUNTS = { JPG:128, HEIC:61, PNG:34, MOV:24 };
+  const FMTS   = ['JPG','HEIC','PNG','MOV'];
+  const $      = id => document.getElementById(id);
+  const el = {
+    tbody:  $('fileTableBody'),
+    strip:  $('progressStrip'),
+    fill:   $('progressFill'),
+    label:  $('progressLabel'),
+    detail: $('progressDetail'),
+    pct:    $('progressPct'),
+    btn:    $('organizeBtn'),
+    stats:  $('statsRow'),
+    path:   $('folderPath'),
+  };
+
+  /* ── Filter state ── */
+  // allMode = true  → show everything; individual chips are visually OFF
+  // allMode = false → show only formats in `active` set
+  let allMode = true;
+  const active = new Set();   // empty when allMode; populated when user picks formats
+
+  function toggleFmt(chip, fmt) {
+    // Clicking a format chip exits allMode
+    allMode = false;
+    $('chipAll').classList.replace('all-on', 'all-off');
+
+    if (active.has(fmt)) {
+      active.delete(fmt);
+      chip.classList.replace('on', 'off');
+      // If nothing left selected, fall back to allMode
+      if (active.size === 0) { setAllMode(); return; }
+    } else {
+      active.add(fmt);
+      chip.classList.replace('off', 'on');
+    }
+    updateAllCount();
+    applyFilter();
+  }
+
+  function toggleAll() {
+    setAllMode();
+  }
+
+  function setAllMode() {
+    allMode = true;
+    active.clear();
+    // All chip → on
+    $('chipAll').classList.replace('all-off', 'all-on');
+    // All format chips → off
+    document.querySelectorAll('.stat-chip.toggleable').forEach(c => {
+      c.classList.replace('on', 'off');
+    });
+    updateAllCount();
+    applyFilter();
+  }
+
+  function updateAllCount() {
+    $('chipAllVal').textContent = FILES.length;
+  }
+
+  function applyFilter() {
+    document.querySelectorAll('#fileTableBody tr').forEach(tr => {
+      tr.style.display = (allMode || active.has(tr.dataset.fmt)) ? '' : 'none';
+    });
+  }
+
+  /* ── Render table ── */
+  const EMOJIS = {
+    jpg:  ['🌄','🏖️','🌊','🏔️','🌸','🌃','🎑','🌅','🏕️','🌺'],
+    heic: ['🌁','🎆','🏙️','🌠','🌌','🌉','🎇','🗻','🌃','🌄'],
+    mov:  ['🎬','🎥','📽️','🎞️','🎬'],
+    png:  ['🖼️','📸','🖥️','🎨','📊'],
+  };
+  function getEmoji(fmt, idx) {
+    const arr = EMOJIS[fmt.toLowerCase()] || EMOJIS.jpg;
+    return arr[idx % arr.length];
+  }
+
+  function renderTable() {
+    el.tbody.innerHTML = '';
+    FILES.forEach((f, i) => {
+      const isWarn = f.s === 'noexif';
+      const icon = isWarn
+        ? `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`
+        : `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>`;
+      const pill = isWarn
+        ? `<span class="status-pill pill-noexif"><span class="dot-sm"></span>No EXIF</span>`
+        : `<span class="status-pill pill-ready"><span class="dot-sm"></span>Ready</span>`;
+
+      const tr = document.createElement('tr');
+      tr.style.animationDelay = Math.min(i * 0.03, 0.45) + 's';
+      tr.dataset.fmt = f.fmt;
+      tr.innerHTML = `
+        <td><div class="td-name">${f.name}</div></td>
+        <td><span class="fmt-badge fmt-${f.fmt.toLowerCase()}">${f.fmt}</span></td>
+        <td><span class="td-time">${f.time}</span></td>
+        <td><span class="td-dest ${isWarn?'warn':'ok'}">${icon}${f.dest}</span></td>
+        <td>${pill}</td>`;
+
+      const nameEl = tr.querySelector('.td-name');
+      nameEl.addEventListener('mouseenter', () => schedulePreview(f, i, nameEl));
+      nameEl.addEventListener('mouseleave', cancelAndHide);
+      el.tbody.appendChild(tr);
+    });
+    applyFilter();
+  }
+
+  /* ── Preview card ── */
+  const card = $('previewCard');
+  let showTimer = null;
+
+  function schedulePreview(f, idx, anchor) {
+    cancelAndHide();
+    showTimer = setTimeout(() => {
+      const fmt = f.s === 'noexif' ? 'noexif' : f.fmt.toLowerCase();
+      card.querySelector('.preview-thumb').className = `preview-thumb type-${fmt}`;
+      const fmtEl = $('pcFmt');
+      fmtEl.textContent = f.fmt; fmtEl.className = `thumb-fmt type-${fmt}`;
+      $('pcEmoji').textContent = f.s === 'noexif' ? '❓' : getEmoji(f.fmt, idx);
+      $('pcPlay').style.display = fmt === 'mov' ? 'flex' : 'none';
+      $('pcName').textContent = f.name;
+      $('pcTime').textContent = f.time;
+      const d = $('pcDest'); d.textContent = f.dest;
+      d.className = 'preview-meta-val ' + (f.s === 'noexif' ? 'warn' : 'ok');
+
+      const CARD_W=208, CARD_H=230, GAP=10;
+      const rect = anchor.getBoundingClientRect();
+      let x = rect.right + GAP;
+      if (x + CARD_W > window.innerWidth - 8) x = rect.left - CARD_W - GAP;
+      let y = Math.max(8, Math.min(rect.top + rect.height/2 - CARD_H/2, window.innerHeight - CARD_H - 8));
+      card.style.left = x+'px'; card.style.top = y+'px';
+      card.classList.add('visible');
+    }, 500);
+  }
+  function cancelAndHide() { clearTimeout(showTimer); card.classList.remove('visible'); }
+
+  /* ── Progress helpers ── */
+  function showScanning() {
+    el.strip.classList.add('visible');
+    el.label.textContent = 'Scanning folder…';
+    el.detail.textContent = ''; el.pct.textContent = '';
+    el.fill.classList.add('indeterminate'); el.fill.style.width = '';
+  }
+  function hideProgress() {
+    el.strip.classList.remove('visible');
+    el.fill.classList.remove('indeterminate');
+    el.fill.style.width = '0%';
+  }
+
+  /* ── Folder pick ── */
+  let folderSelected = false;
+  function pickFolder() {
+    el.tbody.innerHTML = '';
+    el.btn.disabled = true; folderSelected = false;
+    el.path.textContent = 'D:\\Photos\\2024_vacation';
+    el.path.classList.remove('placeholder');
+    showScanning();
+    setTimeout(() => {
+      hideProgress(); renderTable();
+      // Reveal numbers and meta chips now that data is loaded
+      document.querySelectorAll('#statsRow .val').forEach(v => v.style.display = '');
+      $('chipGroups').style.display = '';
+      $('chipNoExif').style.display = '';
+      el.btn.disabled = false; folderSelected = true;
+      setAllMode();
+    }, 2000);
+  }
+
+  /* ── Confirm dialog ── */
+  const FMT_COLORS = {
+    JPG:  'fmt-jpg', HEIC: 'fmt-heic', PNG: 'fmt-png', MOV: 'fmt-mov',
+  };
+  function openDialog() {
+    const list = $('dialogFmtList');
+    list.innerHTML = '';
+    const toOrganize = allMode ? FMTS : [...active];
+    toOrganize.forEach(fmt => {
+      const b = document.createElement('span');
+      b.className = `fmt-badge ${FMT_COLORS[fmt]}`;
+      b.style.padding = '3px 10px'; b.style.fontSize = '11px';
+      b.textContent = `${fmt}  ·  ${COUNTS[fmt]} files`;
+      list.appendChild(b);
+    });
+    $('confirmDialog').classList.add('open');
+  }
+  function closeDialog() { $('confirmDialog').classList.remove('open'); }
+  function confirmOrganize() { closeDialog(); runOrganize(); }
+
+  /* ── Organize ── */
+  let running = false;
+  function startOrganize() {
+    if (running || !folderSelected) return;
+    if (!allMode && active.size < FMTS.length) { openDialog(); return; }
+    runOrganize();
+  }
+
+  function runOrganize() {
+    if (running) return;
+    running = true; el.btn.disabled = true;
+    el.fill.classList.remove('indeterminate');
+    el.fill.style.width = '0%';
+    el.label.textContent = 'Organizing files…';
+    el.detail.textContent = '0 / 247 files'; el.pct.textContent = '0%';
+    el.strip.classList.add('visible');
+
+    let progress = 0;
+    const TOTAL = 247;
+    const iv = setInterval(() => {
+      progress += Math.random() * 7 + 3;
+      if (progress >= 100) progress = 100;
+      const moved = Math.round(TOTAL * progress / 100);
+      el.fill.style.width = progress + '%';
+      el.pct.textContent  = Math.round(progress) + '%';
+      el.detail.textContent = `${moved} / ${TOTAL} files`;
+      if (progress >= 100) {
+        clearInterval(iv);
+        el.label.textContent  = 'Done — all files organized';
+        el.detail.textContent = `${TOTAL} files moved into 18 folders`;
+        el.pct.textContent = '';
+        el.btn.disabled = false; running = false;
+        setTimeout(() => hideProgress(), 3500);
+      }
+    }, 130);
+  }
+
+  /* ── Folder format dropdown ── */
+  function toggleDropdown() {
+    const t = $('fmtTrigger'), m = $('fmtMenu');
+    const open = m.classList.toggle('open'); t.classList.toggle('open', open);
+  }
+  function selectFormat(item, fmt) {
+    $('formatLabel').textContent = fmt;
+    document.querySelectorAll('.dropdown-item').forEach(e => e.classList.remove('selected'));
+    item.classList.add('selected');
+    $('fmtMenu').classList.remove('open'); $('fmtTrigger').classList.remove('open');
+  }
+  document.addEventListener('click', e => {
+    if (!$('fmtDropdown').contains(e.target)) {
+      $('fmtMenu').classList.remove('open'); $('fmtTrigger').classList.remove('open');
+    }
+  });
+
+
+  /* ── Theme toggle ── */
+  function toggleTheme() {
+    document.body.classList.toggle('dark');
+  }
+
+  /* ── Init ── */
+  el.btn.disabled = true;
+  // Initial state: All selected, individual chips off
+  $('chipAll').classList.add('all-on');
+  document.querySelectorAll('.stat-chip.toggleable').forEach(c => c.classList.replace('on','off'));
+  updateAllCount();
+  // Hide numbers until a folder is loaded
+  document.querySelectorAll('#statsRow .val').forEach(v => v.style.display = 'none');
+  $('chipGroups').style.display = 'none';
+  $('chipNoExif').style.display = 'none';
+  // Show empty-state placeholder
+  el.tbody.innerHTML = `
+    <tr id="emptyStateRow">
+      <td colspan="5" style="text-align:center;padding:52px 0;color:var(--text-muted);">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" style="opacity:0.25;">
+            <path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/>
+          </svg>
+          <span style="font-size:12.5px;opacity:0.45;">Choose a folder to get started</span>
+        </div>
+      </td>
+    </tr>`;
+</script>
+</body>
+</html>
