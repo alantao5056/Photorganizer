@@ -8,9 +8,148 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" />
-                <!-- Other merged dictionaries here -->
             </ResourceDictionary.MergedDictionaries>
-            <!-- Other app resources here -->
+
+            <!-- Chip button: no built-in hover/press visual states -->
+            <Style x:Key="ChipButtonStyle" TargetType="Button">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="MinHeight" Value="0"/>
+                <Setter Property="MinWidth" Value="0"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="{TemplateBinding CornerRadius}"
+                                    Padding="{TemplateBinding Padding}">
+                                <ContentPresenter Content="{TemplateBinding Content}"
+                                                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <ResourceDictionary.ThemeDictionaries>
+                <!-- Light Theme -->
+                <ResourceDictionary x:Key="Light">
+                    <SolidColorBrush x:Key="AppBackgroundBrush" Color="#F3F3F3"/>
+                    <SolidColorBrush x:Key="TitleBarBrush" Color="#FAF2F2F2"/>
+                    <SolidColorBrush x:Key="ToolbarBrush" Color="#E6F8F8F8"/>
+                    <SolidColorBrush x:Key="SurfaceBrush" Color="#D9FFFFFF"/>
+                    <SolidColorBrush x:Key="AppBorderBrush" Color="#14000000"/>
+                    <SolidColorBrush x:Key="StatsRowBrush" Color="#B3FAFAFA"/>
+                    <SolidColorBrush x:Key="TableHeaderBrush" Color="#FAF5F5F5"/>
+                    <SolidColorBrush x:Key="RowBorderBrush" Color="#0D000000"/>
+
+                    <SolidColorBrush x:Key="AppTextBrush" Color="#1A1A1A"/>
+                    <SolidColorBrush x:Key="TextMutedBrush" Color="#605E5C"/>
+                    <SolidColorBrush x:Key="TextDimBrush" Color="#797775"/>
+                    <SolidColorBrush x:Key="AccentBrush" Color="#0078D4"/>
+                    <SolidColorBrush x:Key="SuccessBrush" Color="#107C41"/>
+                    <SolidColorBrush x:Key="WarningBrush" Color="#CA5010"/>
+
+                    <SolidColorBrush x:Key="JpgForeground" Color="#107C41"/>
+                    <SolidColorBrush x:Key="JpgBackground" Color="#14107C41"/>
+                    <SolidColorBrush x:Key="JpgBorder" Color="#33107C41"/>
+                    <SolidColorBrush x:Key="HeicForeground" Color="#0078D4"/>
+                    <SolidColorBrush x:Key="HeicBackground" Color="#140078D4"/>
+                    <SolidColorBrush x:Key="HeicBorder" Color="#330078D4"/>
+                    <SolidColorBrush x:Key="PngForeground" Color="#CA5010"/>
+                    <SolidColorBrush x:Key="PngBackground" Color="#14CA5010"/>
+                    <SolidColorBrush x:Key="PngBorder" Color="#33CA5010"/>
+                    <SolidColorBrush x:Key="MovForeground" Color="#A4262C"/>
+                    <SolidColorBrush x:Key="MovBackground" Color="#14A4262C"/>
+                    <SolidColorBrush x:Key="MovBorder" Color="#33A4262C"/>
+
+                    <SolidColorBrush x:Key="ReadyForeground" Color="#107C41"/>
+                    <SolidColorBrush x:Key="ReadyBackground" Color="#12107C41"/>
+                    <SolidColorBrush x:Key="ReadyBorder" Color="#33107C41"/>
+                    <SolidColorBrush x:Key="NoExifForeground" Color="#CA5010"/>
+                    <SolidColorBrush x:Key="NoExifBackground" Color="#12CA5010"/>
+                    <SolidColorBrush x:Key="NoExifBorder" Color="#33CA5010"/>
+
+                    <LinearGradientBrush x:Key="PrimaryButtonBrush" StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#005A9E" Offset="0"/>
+                        <GradientStop Color="#0078D4" Offset="1"/>
+                    </LinearGradientBrush>
+                    <SolidColorBrush x:Key="PrimaryButtonText" Color="White"/>
+
+                    <SolidColorBrush x:Key="BannerBackground" Color="#0FCA5010"/>
+                    <SolidColorBrush x:Key="BannerBorderBrush" Color="#2ECA5010"/>
+                    <SolidColorBrush x:Key="BannerIconBg" Color="#1ACA5010"/>
+                    <SolidColorBrush x:Key="BannerIconBorder" Color="#40CA5010"/>
+                    <SolidColorBrush x:Key="BannerIconStroke" Color="#CA5010"/>
+                    <SolidColorBrush x:Key="BannerDescText" Color="#BFCA5010"/>
+
+                    <LinearGradientBrush x:Key="ProgressGradient" StartPoint="0,0.5" EndPoint="1,0.5">
+                        <GradientStop Color="#0078D4" Offset="0"/>
+                        <GradientStop Color="#107C41" Offset="1"/>
+                    </LinearGradientBrush>
+                    <SolidColorBrush x:Key="ProgressTrackBrush" Color="#14000000"/>
+                </ResourceDictionary>
+
+                <!-- Dark Theme -->
+                <ResourceDictionary x:Key="Dark">
+                    <SolidColorBrush x:Key="AppBackgroundBrush" Color="#0D0D14"/>
+                    <SolidColorBrush x:Key="TitleBarBrush" Color="#FA0A0A12"/>
+                    <SolidColorBrush x:Key="ToolbarBrush" Color="#B30A0A12"/>
+                    <SolidColorBrush x:Key="SurfaceBrush" Color="#0AFFFFFF"/>
+                    <SolidColorBrush x:Key="AppBorderBrush" Color="#14FFFFFF"/>
+                    <SolidColorBrush x:Key="StatsRowBrush" Color="#4D0A0A12"/>
+                    <SolidColorBrush x:Key="TableHeaderBrush" Color="#F50D0D14"/>
+                    <SolidColorBrush x:Key="RowBorderBrush" Color="#09FFFFFF"/>
+
+                    <SolidColorBrush x:Key="AppTextBrush" Color="#E8EAF0"/>
+                    <SolidColorBrush x:Key="TextMutedBrush" Color="#6B7280"/>
+                    <SolidColorBrush x:Key="TextDimBrush" Color="#9CA3AF"/>
+                    <SolidColorBrush x:Key="AccentBrush" Color="#63B3ED"/>
+                    <SolidColorBrush x:Key="SuccessBrush" Color="#68D391"/>
+                    <SolidColorBrush x:Key="WarningBrush" Color="#F6AD55"/>
+
+                    <SolidColorBrush x:Key="JpgForeground" Color="#68D391"/>
+                    <SolidColorBrush x:Key="JpgBackground" Color="#1A68D391"/>
+                    <SolidColorBrush x:Key="JpgBorder" Color="#3368D391"/>
+                    <SolidColorBrush x:Key="HeicForeground" Color="#63B3ED"/>
+                    <SolidColorBrush x:Key="HeicBackground" Color="#1A63B3ED"/>
+                    <SolidColorBrush x:Key="HeicBorder" Color="#3363B3ED"/>
+                    <SolidColorBrush x:Key="PngForeground" Color="#F6AD55"/>
+                    <SolidColorBrush x:Key="PngBackground" Color="#1AF6AD55"/>
+                    <SolidColorBrush x:Key="PngBorder" Color="#33F6AD55"/>
+                    <SolidColorBrush x:Key="MovForeground" Color="#FC8181"/>
+                    <SolidColorBrush x:Key="MovBackground" Color="#1AFC8181"/>
+                    <SolidColorBrush x:Key="MovBorder" Color="#33FC8181"/>
+
+                    <SolidColorBrush x:Key="ReadyForeground" Color="#68D391"/>
+                    <SolidColorBrush x:Key="ReadyBackground" Color="#1468D391"/>
+                    <SolidColorBrush x:Key="ReadyBorder" Color="#2E68D391"/>
+                    <SolidColorBrush x:Key="NoExifForeground" Color="#F6AD55"/>
+                    <SolidColorBrush x:Key="NoExifBackground" Color="#14F6AD55"/>
+                    <SolidColorBrush x:Key="NoExifBorder" Color="#33F6AD55"/>
+
+                    <LinearGradientBrush x:Key="PrimaryButtonBrush" StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#4A9FD4" Offset="0"/>
+                        <GradientStop Color="#63B3ED" Offset="1"/>
+                    </LinearGradientBrush>
+                    <SolidColorBrush x:Key="PrimaryButtonText" Color="#071524"/>
+
+                    <SolidColorBrush x:Key="BannerBackground" Color="#12F6AD55"/>
+                    <SolidColorBrush x:Key="BannerBorderBrush" Color="#2EF6AD55"/>
+                    <SolidColorBrush x:Key="BannerIconBg" Color="#1FF6AD55"/>
+                    <SolidColorBrush x:Key="BannerIconBorder" Color="#47F6AD55"/>
+                    <SolidColorBrush x:Key="BannerIconStroke" Color="#F6AD55"/>
+                    <SolidColorBrush x:Key="BannerDescText" Color="#A6F6AD55"/>
+
+                    <LinearGradientBrush x:Key="ProgressGradient" StartPoint="0,0.5" EndPoint="1,0.5">
+                        <GradientStop Color="#63B3ED" Offset="0"/>
+                        <GradientStop Color="#68D391" Offset="1"/>
+                    </LinearGradientBrush>
+                    <SolidColorBrush x:Key="ProgressTrackBrush" Color="#0FFFFFFF"/>
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

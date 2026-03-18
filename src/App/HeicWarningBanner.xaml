@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl
+    x:Class="Alan.Photorganizer.App.HeicWarningBanner"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Grid Padding="20,9" ColumnSpacing="10"
+          Background="{ThemeResource BannerBackground}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Warning icon -->
+        <Border Grid.Column="0" Width="28" Height="28" CornerRadius="7"
+                Background="{ThemeResource BannerIconBg}"
+                BorderBrush="{ThemeResource BannerIconBorder}" BorderThickness="1">
+            <FontIcon Glyph="&#xE7BA;" FontSize="13" Foreground="{ThemeResource BannerIconStroke}"
+                      HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </Border>
+
+        <!-- Text -->
+        <StackPanel Grid.Column="1" Spacing="1" VerticalAlignment="Center">
+            <TextBlock Text="HEIC Codec Not Installed" FontSize="12.5" FontWeight="SemiBold"
+                       Foreground="{ThemeResource WarningBrush}"/>
+            <TextBlock FontSize="11" Foreground="{ThemeResource BannerDescText}" TextWrapping="Wrap">
+                    HEIC files were detected but cannot be decoded. Capture time will fall back to the file's last-modified date, which may be inaccurate.
+            </TextBlock>
+        </StackPanel>
+
+        <!-- Codec link -->
+        <HyperlinkButton Grid.Column="2" Content="Get HEIC Codec &#x2192;"
+                         FontSize="11.5" FontWeight="Medium" Padding="4,2"
+                         Foreground="{ThemeResource AccentBrush}"/>
+
+        <!-- Dismiss -->
+        <Button Grid.Column="3" Click="BannerDismiss_Click"
+                Width="22" Height="22" Padding="0" CornerRadius="4"
+                Background="Transparent" BorderThickness="0">
+            <FontIcon Glyph="&#xE711;" FontSize="11" Foreground="{ThemeResource TextMutedBrush}"/>
+        </Button>
+
+        <Border Height="1" VerticalAlignment="Bottom" Background="{ThemeResource BannerBorderBrush}"
+                Grid.ColumnSpan="4" Margin="-20,0"/>
+    </Grid>
+
+</UserControl>
