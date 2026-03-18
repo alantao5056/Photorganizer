@@ -1,31 +1,28 @@
 using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
-using Microsoft.UI.Xaml.Navigation;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-
-// To learn more about WinUI, the WinUI project structure,
-// and more about our project templates, see: http://aka.ms/winui-project-info.
+using Microsoft.UI.Windowing;
+using Windows.Graphics;
 
 namespace Alan.Photorganizer.App
 {
-    /// <summary>
-    /// An empty window that can be used on its own or navigated to within a Frame.
-    /// </summary>
     public sealed partial class MainWindow : Window
     {
         public MainWindow()
         {
             InitializeComponent();
+            CenterOnScreen();
+        }
+
+        private void CenterOnScreen()
+        {
+            var appWindow = AppWindow;
+            var displayArea = DisplayArea.GetFromWindowId(appWindow.Id, DisplayAreaFallback.Primary);
+            var workArea = displayArea.WorkArea;
+            var size = appWindow.Size;
+
+            int x = (workArea.Width - size.Width) / 2 + workArea.X;
+            int y = (workArea.Height - size.Height) / 2 + workArea.Y;
+
+            appWindow.Move(new PointInt32(x, y));
         }
     }
 }
