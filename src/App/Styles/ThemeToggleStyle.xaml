@@ -1,0 +1,99 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Style x:Key="ThemeToggleSwitchStyle" TargetType="ToggleSwitch">
+        <Setter Property="MinWidth" Value="46"/>
+        <Setter Property="MinHeight" Value="24"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleSwitch">
+                    <Grid Background="Transparent">
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal"/>
+                                <VisualState x:Name="PointerOver"/>
+                                <VisualState x:Name="Pressed"/>
+                                <VisualState x:Name="Disabled"/>
+                            </VisualStateGroup>
+                            <VisualStateGroup x:Name="ToggleStates">
+                                <VisualState x:Name="Off">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="KnobTranslateTransform"
+                                                         Storyboard.TargetProperty="X"
+                                                         To="0" Duration="0:0:0.2"/>
+                                        <DoubleAnimation Storyboard.TargetName="SunIcon"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="1" Duration="0:0:0.15"/>
+                                        <DoubleAnimation Storyboard.TargetName="MoonIcon"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="0" Duration="0:0:0.15"/>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="On">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="KnobTranslateTransform"
+                                                         Storyboard.TargetProperty="X"
+                                                         To="22" Duration="0:0:0.2"/>
+                                        <DoubleAnimation Storyboard.TargetName="SunIcon"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="0" Duration="0:0:0.15"/>
+                                        <DoubleAnimation Storyboard.TargetName="MoonIcon"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="1" Duration="0:0:0.15"/>
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+
+                        <!-- Required for ToggleSwitch input handling -->
+                        <Grid x:Name="SwitchAreaGrid" Width="46" Height="24">
+                            <Grid x:Name="SwitchKnobBounds">
+                                <!-- Track -->
+                                <Border x:Name="OuterBorder" CornerRadius="12"
+                                        Background="{ThemeResource AppBorderBrush}"
+                                        BorderBrush="{ThemeResource AppBorderBrush}"
+                                        BorderThickness="1"/>
+
+                                <!-- Sliding knob with icon -->
+                                <Grid x:Name="SwitchKnob" Width="20" Height="20"
+                                      HorizontalAlignment="Left" VerticalAlignment="Center"
+                                      Margin="2,0,0,0">
+                                    <Grid.RenderTransform>
+                                        <TranslateTransform x:Name="KnobTranslateTransform" X="0"/>
+                                    </Grid.RenderTransform>
+                                    <Ellipse Width="20" Height="20"
+                                             Fill="{ThemeResource SurfaceBrush}"
+                                             Stroke="{ThemeResource AppBorderBrush}"
+                                             StrokeThickness="1"/>
+                                    <FontIcon x:Name="SunIcon" Glyph="&#xE706;" FontSize="11"
+                                              Foreground="{ThemeResource TextDimBrush}"
+                                              HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    <FontIcon x:Name="MoonIcon" Glyph="&#xE708;" FontSize="11"
+                                              Foreground="{ThemeResource TextDimBrush}"
+                                              Opacity="0"
+                                              HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Grid>
+
+                                <!-- Invisible thumb for input handling -->
+                                <Thumb x:Name="SwitchThumb"
+                                       AutomationProperties.AccessibilityView="Raw">
+                                    <Thumb.Template>
+                                        <ControlTemplate TargetType="Thumb">
+                                            <Border Background="Transparent"/>
+                                        </ControlTemplate>
+                                    </Thumb.Template>
+                                </Thumb>
+                            </Grid>
+                        </Grid>
+
+                        <!-- Hidden content presenters (required named parts) -->
+                        <ContentPresenter x:Name="OnContentPresenter" Visibility="Collapsed"/>
+                        <ContentPresenter x:Name="OffContentPresenter" Visibility="Collapsed"/>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>
