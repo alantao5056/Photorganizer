@@ -257,9 +257,9 @@
             <!-- Right: theme toggle -->
             <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
                 <Border Width="1" Height="14" Background="{ThemeResource AppBorderBrush}" Margin="2,0"/>
-                <ToggleSwitch x:Name="ThemeToggle" Toggled="ThemeToggle_Toggled"
-                              OnContent="" OffContent="" Header=""
-                              Style="{StaticResource ThemeToggleSwitchStyle}"
+                <ToggleButton x:Name="ThemeToggle" IsChecked="{x:Bind IsDarkTheme, Mode=OneTime}"
+                              Click="ThemeToggle_Click"
+                              Style="{StaticResource ThemeToggleButtonStyle}"
                               VerticalAlignment="Center"/>
             </StackPanel>
 

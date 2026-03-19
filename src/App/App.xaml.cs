@@ -15,6 +15,7 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -34,6 +35,12 @@ namespace Alan.Photorganizer.App
         /// </summary>
         public App()
         {
+            // Apply saved theme before InitializeComponent to avoid a light→dark flash
+            if (ApplicationData.Current.LocalSettings.Values["IsDarkTheme"] is bool isDark && isDark)
+            {
+                RequestedTheme = ApplicationTheme.Dark;
+            }
+
             InitializeComponent();
         }
 

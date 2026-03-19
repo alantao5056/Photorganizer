@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using Windows.Graphics;
+using Windows.Storage;
 using Windows.UI;
 
 namespace Alan.Photorganizer.App
@@ -113,6 +114,8 @@ namespace Alan.Photorganizer.App
         private bool _allMode = true;
         private readonly HashSet<string> _activeFormats = [];
         private bool _folderLoaded;
+
+        public bool IsDarkTheme { get; set; } = Application.Current.RequestedTheme == ApplicationTheme.Dark;
 
         public MainWindow()
         {
@@ -238,9 +241,10 @@ namespace Alan.Photorganizer.App
         }
 
         // ── Theme Toggle ──
-        private void ThemeToggle_Toggled(object sender, RoutedEventArgs e)
+        private void ThemeToggle_Click(object sender, RoutedEventArgs e)
         {
-            RootGrid.RequestedTheme = ThemeToggle.IsOn ? ElementTheme.Dark : ElementTheme.Light;
+            bool isDark = ThemeToggle.IsChecked == true;
+            RootGrid.RequestedTheme = isDark ? ElementTheme.Dark : ElementTheme.Light;
 
             if (_folderLoaded)
             {
@@ -256,6 +260,8 @@ namespace Alan.Photorganizer.App
                 var accent = IsDark ? Color.FromArgb(255, 99, 179, 237) : Color.FromArgb(255, 0, 120, 212);
                 FolderPath.Foreground = new SolidColorBrush(accent);
             }
+
+            ApplicationData.Current.LocalSettings.Values["IsDarkTheme"] = isDark;
         }
 
         // ── Filter Chips ──
@@ -387,5 +393,6 @@ namespace Alan.Photorganizer.App
                 FormatLabel.Text = item.Text;
             }
         }
+
     }
 }
