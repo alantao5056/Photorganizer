@@ -112,6 +112,8 @@ namespace Alan.Photorganizer.App
             ExtendsContentIntoTitleBar = true;
             SetTitleBar(AppTitleBar);
 
+            UpdateCaptionButtonColors(IsDarkTheme);
+
             var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(this);
             var dpi = GetDpiForWindow(hwnd);
             var scale = dpi / 96.0;
@@ -132,6 +134,31 @@ namespace Alan.Photorganizer.App
         }
 
         private bool IsDark => RootGrid.ActualTheme == ElementTheme.Dark;
+
+        private void UpdateCaptionButtonColors(bool dark)
+        {
+            var titleBar = AppWindow.TitleBar;
+            if (dark)
+            {
+                titleBar.ButtonForegroundColor = Colors.White;
+                titleBar.ButtonHoverForegroundColor = Colors.White;
+                titleBar.ButtonHoverBackgroundColor = Color.FromArgb(0x33, 255, 255, 255);
+                titleBar.ButtonPressedForegroundColor = Colors.White;
+                titleBar.ButtonPressedBackgroundColor = Color.FromArgb(0x22, 255, 255, 255);
+                titleBar.ButtonInactiveForegroundColor = Color.FromArgb(0x99, 255, 255, 255);
+            }
+            else
+            {
+                titleBar.ButtonForegroundColor = Colors.Black;
+                titleBar.ButtonHoverForegroundColor = Colors.Black;
+                titleBar.ButtonHoverBackgroundColor = Color.FromArgb(0x1A, 0, 0, 0);
+                titleBar.ButtonPressedForegroundColor = Colors.Black;
+                titleBar.ButtonPressedBackgroundColor = Color.FromArgb(0x12, 0, 0, 0);
+                titleBar.ButtonInactiveForegroundColor = Color.FromArgb(0x99, 0, 0, 0);
+            }
+            titleBar.ButtonBackgroundColor = Colors.Transparent;
+            titleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
+        }
 
         private List<FileItem> BuildFileItems()
         {
@@ -242,6 +269,8 @@ namespace Alan.Photorganizer.App
                 var accent = IsDark ? Color.FromArgb(255, 99, 179, 237) : Color.FromArgb(255, 0, 120, 212);
                 FolderPath.Foreground = new SolidColorBrush(accent);
             }
+
+            UpdateCaptionButtonColors(isDark);
 
             ApplicationData.Current.LocalSettings.Values["IsDarkTheme"] = isDark;
         }
