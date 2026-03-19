@@ -4,6 +4,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Alan.Photorganizer.App"
+    xmlns:models="using:Alan.Photorganizer.App.Models"
     Title="Photorganizer">
 
     <Window.SystemBackdrop>
@@ -316,7 +317,7 @@
                     </Style>
                 </ListView.ItemContainerStyle>
                 <ListView.ItemTemplate>
-                    <DataTemplate x:DataType="local:FileItem">
+                    <DataTemplate x:DataType="models:FileItem">
                         <Grid Padding="0,9" BorderBrush="{ThemeResource RowBorderBrush}" BorderThickness="0,0,0,1">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="34*"/>
