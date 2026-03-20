@@ -49,7 +49,6 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <FontIcon Grid.Column="0" Glyph="&#xE8B7;" FontSize="14" Opacity="0.4"
                               Foreground="{ThemeResource TextDimBrush}" Margin="0,0,9,0"/>
@@ -57,8 +56,6 @@
                                FontFamily="Cascadia Mono, Consolas" FontSize="12.5"
                                Foreground="{ThemeResource TextMutedBrush}"
                                TextTrimming="CharacterEllipsis" VerticalAlignment="Center"/>
-                    <FontIcon Grid.Column="2" Glyph="&#xE70D;" FontSize="11" Opacity="0.3"
-                              Foreground="{ThemeResource TextDimBrush}" Margin="9,0,0,0"/>
                 </Grid>
             </Button>
 

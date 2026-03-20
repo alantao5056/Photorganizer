@@ -6,6 +6,7 @@ using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Windowing;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using Windows.Graphics;
@@ -20,78 +21,56 @@ namespace Alan.Photorganizer.App
         [DllImport("user32.dll")]
         private static extern uint GetDpiForWindow(IntPtr hwnd);
 
-        private static readonly (string Name, string Fmt, string Time, string Dest, string Status)[] SampleFiles =
-        [
-            ("IMG_4821.jpg",      "JPG",  "2024-07-15  09:14:32", "2024-07-15", "ready"),
-            ("IMG_4822.jpg",      "JPG",  "2024-07-15  09:21:08", "2024-07-15", "ready"),
-            ("IMG_4823.heic",     "HEIC", "2024-07-15  11:03:55", "2024-07-15", "ready"),
-            ("VID_0088.mov",      "MOV",  "2024-07-15  14:47:20", "2024-07-15", "ready"),
-            ("IMG_4900.jpg",      "JPG",  "2024-07-16  08:05:11", "2024-07-16", "ready"),
-            ("IMG_4901.heic",     "HEIC", "2024-07-16  10:33:44", "2024-07-16", "ready"),
-            ("VID_0091.mov",      "MOV",  "2024-07-16  15:22:09", "2024-07-16", "ready"),
-            ("screenshot_01.png", "PNG",  "2024-07-17  18:00:03", "2024-07-17", "ready"),
-            ("IMG_4950.jpg",      "JPG",  "2024-07-17  09:41:28", "2024-07-17", "ready"),
-            ("IMG_4951.heic",     "HEIC", "2024-07-17  12:14:50", "2024-07-17", "ready"),
-            ("IMG_5010.jpg",      "JPG",  "2024-07-18  07:58:22", "2024-07-18", "ready"),
-            ("IMG_5011.heic",     "HEIC", "2024-07-18  08:30:00", "2024-07-18", "ready"),
-            ("IMG_5012.jpg",      "JPG",  "2024-07-18  09:11:37", "2024-07-18", "ready"),
-            ("VID_0100.mov",      "MOV",  "2024-07-18  17:45:55", "2024-07-18", "ready"),
-            ("IMG_5088.heic",     "HEIC", "2024-07-19  08:02:14", "2024-07-19", "ready"),
-            ("VID_0102.mov",      "MOV",  "2024-07-19  19:30:42", "2024-07-19", "ready"),
-            ("IMG_5120.jpg",      "JPG",  "2024-07-20  10:09:01", "2024-07-20", "ready"),
-            ("wallpaper.png",     "PNG",  "\u2014",               "(no EXIF)",  "noexif"),
-            ("download.jpg",      "JPG",  "\u2014",               "(no EXIF)",  "noexif"),
-        ];
-
-        private static readonly Dictionary<string, (Color Light, Color Dark)> FormatFgColors = new()
+        private static readonly Dictionary<MediaFormat, (Color Light, Color Dark)> FormatFgColors = new()
         {
-            ["JPG"]  = (Color.FromArgb(255, 16, 124, 65),  Color.FromArgb(255, 104, 211, 145)),
-            ["HEIC"] = (Color.FromArgb(255, 0, 120, 212),   Color.FromArgb(255, 99, 179, 237)),
-            ["PNG"]  = (Color.FromArgb(255, 202, 80, 16),   Color.FromArgb(255, 246, 173, 85)),
-            ["MOV"]  = (Color.FromArgb(255, 164, 38, 44),   Color.FromArgb(255, 252, 129, 129)),
+            [MediaFormat.JPG]  = (Color.FromArgb(255, 16, 124, 65),  Color.FromArgb(255, 104, 211, 145)),
+            [MediaFormat.HEIC] = (Color.FromArgb(255, 0, 120, 212),   Color.FromArgb(255, 99, 179, 237)),
+            [MediaFormat.PNG]  = (Color.FromArgb(255, 202, 80, 16),   Color.FromArgb(255, 246, 173, 85)),
+            [MediaFormat.MOV]  = (Color.FromArgb(255, 164, 38, 44),   Color.FromArgb(255, 252, 129, 129)),
         };
 
-        private static readonly Dictionary<string, (Color Light, Color Dark)> FormatBgColors = new()
+        private static readonly Dictionary<MediaFormat, (Color Light, Color Dark)> FormatBgColors = new()
         {
-            ["JPG"]  = (Color.FromArgb(0x14, 16, 124, 65),  Color.FromArgb(0x1A, 104, 211, 145)),
-            ["HEIC"] = (Color.FromArgb(0x14, 0, 120, 212),   Color.FromArgb(0x1A, 99, 179, 237)),
-            ["PNG"]  = (Color.FromArgb(0x14, 202, 80, 16),   Color.FromArgb(0x1A, 246, 173, 85)),
-            ["MOV"]  = (Color.FromArgb(0x14, 164, 38, 44),   Color.FromArgb(0x1A, 252, 129, 129)),
+            [MediaFormat.JPG]  = (Color.FromArgb(0x14, 16, 124, 65),  Color.FromArgb(0x1A, 104, 211, 145)),
+            [MediaFormat.HEIC] = (Color.FromArgb(0x14, 0, 120, 212),   Color.FromArgb(0x1A, 99, 179, 237)),
+            [MediaFormat.PNG]  = (Color.FromArgb(0x14, 202, 80, 16),   Color.FromArgb(0x1A, 246, 173, 85)),
+            [MediaFormat.MOV]  = (Color.FromArgb(0x14, 164, 38, 44),   Color.FromArgb(0x1A, 252, 129, 129)),
         };
 
-        private static readonly Dictionary<string, (Color Light, Color Dark)> FormatBdColors = new()
+        private static readonly Dictionary<MediaFormat, (Color Light, Color Dark)> FormatBdColors = new()
         {
-            ["JPG"]  = (Color.FromArgb(0x33, 16, 124, 65),  Color.FromArgb(0x33, 104, 211, 145)),
-            ["HEIC"] = (Color.FromArgb(0x33, 0, 120, 212),   Color.FromArgb(0x33, 99, 179, 237)),
-            ["PNG"]  = (Color.FromArgb(0x33, 202, 80, 16),   Color.FromArgb(0x33, 246, 173, 85)),
-            ["MOV"]  = (Color.FromArgb(0x33, 164, 38, 44),   Color.FromArgb(0x33, 252, 129, 129)),
+            [MediaFormat.JPG]  = (Color.FromArgb(0x33, 16, 124, 65),  Color.FromArgb(0x33, 104, 211, 145)),
+            [MediaFormat.HEIC] = (Color.FromArgb(0x33, 0, 120, 212),   Color.FromArgb(0x33, 99, 179, 237)),
+            [MediaFormat.PNG]  = (Color.FromArgb(0x33, 202, 80, 16),   Color.FromArgb(0x33, 246, 173, 85)),
+            [MediaFormat.MOV]  = (Color.FromArgb(0x33, 164, 38, 44),   Color.FromArgb(0x33, 252, 129, 129)),
         };
 
         // Chip active colors (for the stat bar chips)
-        private static readonly Dictionary<string, (Color Light, Color Dark)> ChipFgColors = new()
+        private static readonly Dictionary<MediaFormat, (Color Light, Color Dark)> ChipFgColors = new()
         {
-            ["JPG"]  = (Color.FromArgb(255, 16, 124, 65),   Color.FromArgb(255, 104, 211, 145)),
-            ["HEIC"] = (Color.FromArgb(255, 0, 120, 212),    Color.FromArgb(255, 99, 179, 237)),
-            ["PNG"]  = (Color.FromArgb(255, 202, 80, 16),    Color.FromArgb(255, 246, 173, 85)),
-            ["MOV"]  = (Color.FromArgb(255, 164, 38, 44),    Color.FromArgb(255, 252, 129, 129)),
+            [MediaFormat.JPG]  = (Color.FromArgb(255, 16, 124, 65),   Color.FromArgb(255, 104, 211, 145)),
+            [MediaFormat.HEIC] = (Color.FromArgb(255, 0, 120, 212),    Color.FromArgb(255, 99, 179, 237)),
+            [MediaFormat.PNG]  = (Color.FromArgb(255, 202, 80, 16),    Color.FromArgb(255, 246, 173, 85)),
+            [MediaFormat.MOV]  = (Color.FromArgb(255, 164, 38, 44),    Color.FromArgb(255, 252, 129, 129)),
         };
 
-        private static readonly Dictionary<string, (Color Light, Color Dark)> ChipBgColors = new()
+        private static readonly Dictionary<MediaFormat, (Color Light, Color Dark)> ChipBgColors = new()
         {
-            ["JPG"]  = (Color.FromArgb(0x14, 16, 124, 65),  Color.FromArgb(0x14, 104, 211, 145)),
-            ["HEIC"] = (Color.FromArgb(0x14, 0, 120, 212),   Color.FromArgb(0x14, 99, 179, 237)),
-            ["PNG"]  = (Color.FromArgb(0x14, 202, 80, 16),   Color.FromArgb(0x14, 246, 173, 85)),
-            ["MOV"]  = (Color.FromArgb(0x14, 164, 38, 44),   Color.FromArgb(0x14, 252, 129, 129)),
+            [MediaFormat.JPG]  = (Color.FromArgb(0x14, 16, 124, 65),  Color.FromArgb(0x14, 104, 211, 145)),
+            [MediaFormat.HEIC] = (Color.FromArgb(0x14, 0, 120, 212),   Color.FromArgb(0x14, 99, 179, 237)),
+            [MediaFormat.PNG]  = (Color.FromArgb(0x14, 202, 80, 16),   Color.FromArgb(0x14, 246, 173, 85)),
+            [MediaFormat.MOV]  = (Color.FromArgb(0x14, 164, 38, 44),   Color.FromArgb(0x14, 252, 129, 129)),
         };
 
-        private static readonly Dictionary<string, (Color Light, Color Dark)> ChipBdColors = new()
+        private static readonly Dictionary<MediaFormat, (Color Light, Color Dark)> ChipBdColors = new()
         {
-            ["JPG"]  = (Color.FromArgb(0x59, 16, 124, 65),  Color.FromArgb(0x66, 104, 211, 145)),
-            ["HEIC"] = (Color.FromArgb(0x59, 0, 120, 212),   Color.FromArgb(0x66, 99, 179, 237)),
-            ["PNG"]  = (Color.FromArgb(0x59, 202, 80, 16),   Color.FromArgb(0x66, 246, 173, 85)),
-            ["MOV"]  = (Color.FromArgb(0x59, 164, 38, 44),   Color.FromArgb(0x66, 252, 129, 129)),
+            [MediaFormat.JPG]  = (Color.FromArgb(0x59, 16, 124, 65),  Color.FromArgb(0x66, 104, 211, 145)),
+            [MediaFormat.HEIC] = (Color.FromArgb(0x59, 0, 120, 212),   Color.FromArgb(0x66, 99, 179, 237)),
+            [MediaFormat.PNG]  = (Color.FromArgb(0x59, 202, 80, 16),   Color.FromArgb(0x66, 246, 173, 85)),
+            [MediaFormat.MOV]  = (Color.FromArgb(0x59, 164, 38, 44),   Color.FromArgb(0x66, 252, 129, 129)),
         };
 
+        private List<FileInfo> _scannedFiles = [];
         private List<FileItem> _allFiles = [];
         private bool _allMode = true;
         private readonly HashSet<string> _activeFormats = [];
@@ -160,57 +139,61 @@ namespace Alan.Photorganizer.App
             titleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
         }
 
-        private List<FileItem> BuildFileItems()
+        private List<FileItem> BuildFileItems(IEnumerable<FileInfo> files)
         {
             bool dark = IsDark;
-            var successColor = dark ? Color.FromArgb(255, 104, 211, 145) : Color.FromArgb(255, 16, 124, 65);
-            var warningColor = dark ? Color.FromArgb(255, 246, 173, 85) : Color.FromArgb(255, 202, 80, 16);
 
-            var readyBg = dark ? Color.FromArgb(0x14, 104, 211, 145) : Color.FromArgb(0x12, 16, 124, 65);
-            var readyBd = dark ? Color.FromArgb(0x2E, 104, 211, 145) : Color.FromArgb(0x33, 16, 124, 65);
-            var noexifBg = dark ? Color.FromArgb(0x14, 246, 173, 85) : Color.FromArgb(0x12, 202, 80, 16);
-            var noexifBd = dark ? Color.FromArgb(0x33, 246, 173, 85) : Color.FromArgb(0x33, 202, 80, 16);
-
-            return SampleFiles.Select(f =>
+            return files.Select(f =>
             {
-                bool hasExif = f.Status == "ready";
-                var fmtFg = FormatFgColors[f.Fmt];
-                var fmtBg = FormatBgColors[f.Fmt];
-                var fmtBd = FormatBdColors[f.Fmt];
+                var fmt = MediaFormatExtensions.FromExtension(f.Extension)!.Value;
+                var fmtFg = FormatFgColors[fmt];
+                var fmtBg = FormatBgColors[fmt];
+                var fmtBd = FormatBdColors[fmt];
 
                 return new FileItem
                 {
                     Name = f.Name,
-                    Format = f.Fmt,
-                    CaptureTime = f.Time,
-                    DestFolder = f.Dest,
-                    HasExif = hasExif,
+                    Format = fmt.ToString(),
+                    CaptureTime = "\u2014",
+                    DestFolder = "\u2014",
+                    HasExif = false,
                     FormatFg = new SolidColorBrush(dark ? fmtFg.Dark : fmtFg.Light),
                     FormatBg = new SolidColorBrush(dark ? fmtBg.Dark : fmtBg.Light),
                     FormatBd = new SolidColorBrush(dark ? fmtBd.Dark : fmtBd.Light),
-                    DestIcon = hasExif ? "\uE8B7" : "\uE946",
-                    DestFg = new SolidColorBrush(hasExif ? successColor : warningColor),
-                    StatusText = hasExif ? "Ready" : "No EXIF",
-                    StatusFg = new SolidColorBrush(hasExif ? successColor : warningColor),
-                    StatusBg = new SolidColorBrush(hasExif ? readyBg : noexifBg),
-                    StatusBd = new SolidColorBrush(hasExif ? readyBd : noexifBd),
+                    DestIcon = "\uE946",
+                    DestFg = new SolidColorBrush(dark
+                        ? Color.FromArgb(255, 246, 173, 85) : Color.FromArgb(255, 202, 80, 16)),
+                    StatusText = "Pending",
+                    StatusFg = new SolidColorBrush(dark
+                        ? Color.FromArgb(255, 246, 173, 85) : Color.FromArgb(255, 202, 80, 16)),
+                    StatusBg = new SolidColorBrush(dark
+                        ? Color.FromArgb(0x14, 246, 173, 85) : Color.FromArgb(0x12, 202, 80, 16)),
+                    StatusBd = new SolidColorBrush(dark
+                        ? Color.FromArgb(0x33, 246, 173, 85) : Color.FromArgb(0x33, 202, 80, 16)),
                 };
             }).ToList();
         }
 
-        private void LoadFiles()
+        private void LoadFiles(IEnumerable<FileInfo> files)
         {
-            _allFiles = BuildFileItems();
+            _allFiles = BuildFileItems(files);
             ApplyFilter();
             EmptyState.Visibility = Visibility.Collapsed;
+
+            // Update chip counts
+            var counts = _allFiles.GroupBy(f => f.Format)
+                .ToDictionary(g => g.Key, g => g.Count());
+            ChipAllVal.Text = _allFiles.Count.ToString();
+            CntJpg.Text = counts.GetValueOrDefault(nameof(MediaFormat.JPG)).ToString();
+            CntHeic.Text = counts.GetValueOrDefault(nameof(MediaFormat.HEIC)).ToString();
+            CntPng.Text = counts.GetValueOrDefault(nameof(MediaFormat.PNG)).ToString();
+            CntMov.Text = counts.GetValueOrDefault(nameof(MediaFormat.MOV)).ToString();
 
             ChipAllVal.Visibility = Visibility.Visible;
             CntJpg.Visibility = Visibility.Visible;
             CntHeic.Visibility = Visibility.Visible;
             CntPng.Visibility = Visibility.Visible;
             CntMov.Visibility = Visibility.Visible;
-            ChipGroups.Visibility = Visibility.Visible;
-            ChipNoExif.Visibility = Visibility.Visible;
         }
 
         private void ApplyFilter()
@@ -219,34 +202,38 @@ namespace Alan.Photorganizer.App
                 FileList.ItemsSource = _allFiles;
             else
                 FileList.ItemsSource = _allFiles.Where(f => _activeFormats.Contains(f.Format)).ToList();
+
         }
 
         // ── Folder Pick ──
         private async void FolderPick_Click(object sender, RoutedEventArgs e)
         {
-            if (_folderLoaded) return;
+            var picker = new Windows.Storage.Pickers.FolderPicker();
+            picker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.PicturesLibrary;
+            picker.FileTypeFilter.Add("*");
 
-            FolderPath.Text = @"D:\Photos\2024_vacation";
+            // Initialize the picker with the current window handle (required for WinUI 3)
+            var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(this);
+            WinRT.Interop.InitializeWithWindow.Initialize(picker, hwnd);
+
+            var folder = await picker.PickSingleFolderAsync();
+            if (folder == null) return;
+
+            FolderPath.Text = folder.Path;
             FolderPath.Foreground = (Brush)Application.Current.Resources["AccentBrush"];
-            OrganizeBtn.IsEnabled = false;
 
-            ProgressStrip.Visibility = Visibility.Visible;
-            ProgressBar.IsIndeterminate = true;
-            ProgressLabel.Text = "Scanning folder...";
-            ProgressDetail.Text = "";
-            ProgressPct.Text = "";
-
-            await System.Threading.Tasks.Task.Delay(2000);
-
-            ProgressStrip.Visibility = Visibility.Collapsed;
-            ProgressBar.IsIndeterminate = false;
+            // Scan root-level supported files
+            var dir = new DirectoryInfo(folder.Path);
+            _scannedFiles = dir.EnumerateFiles()
+                .Where(f => MediaFormatExtensions.IsSupportedExtension(f.Extension))
+                .OrderBy(f => f.Name)
+                .ToList();
 
             _folderLoaded = true;
-            OrganizeBtn.IsEnabled = true;
             _allMode = true;
             _activeFormats.Clear();
             SetAllModeVisuals();
-            LoadFiles();
+            LoadFiles(_scannedFiles);
         }
 
         // ── Theme Toggle ──
@@ -257,7 +244,7 @@ namespace Alan.Photorganizer.App
 
             if (_folderLoaded)
             {
-                _allFiles = BuildFileItems();
+                _allFiles = BuildFileItems(_scannedFiles);
                 ApplyFilter();
             }
 
@@ -325,6 +312,7 @@ namespace Alan.Photorganizer.App
                 ApplyFormatChipColors(chip, fmt);
         }
 
+
         private void ApplyAllChipColors()
         {
             bool dark = IsDark;
@@ -337,10 +325,10 @@ namespace Alan.Photorganizer.App
             ChipAll.Opacity = _allMode ? 1.0 : 0.38;
         }
 
-        private void ApplyFormatChipColors(Button chip, string fmt)
+        private void ApplyFormatChipColors(Button chip, MediaFormat fmt)
         {
             bool dark = IsDark;
-            bool active = !_allMode && _activeFormats.Contains(fmt);
+            bool active = !_allMode && _activeFormats.Contains(fmt.ToString());
 
             // Always keep format-specific colors
             chip.Background = new SolidColorBrush(dark ? ChipBgColors[fmt].Dark : ChipBgColors[fmt].Light);
@@ -363,12 +351,12 @@ namespace Alan.Photorganizer.App
             }
         }
 
-        private (Button Chip, string Fmt)[] GetFormatChips() =>
+        private (Button Chip, MediaFormat Fmt)[] GetFormatChips() =>
         [
-            (ChipJpg, "JPG"),
-            (ChipHeic, "HEIC"),
-            (ChipPng, "PNG"),
-            (ChipMov, "MOV"),
+            (ChipJpg, MediaFormat.JPG),
+            (ChipHeic, MediaFormat.HEIC),
+            (ChipPng, MediaFormat.PNG),
+            (ChipMov, MediaFormat.MOV),
         ];
 
         // ── Chip Hover ──

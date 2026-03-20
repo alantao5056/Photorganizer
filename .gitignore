@@ -56,3 +56,4 @@ nunit-*.xml
 # Visual Studio
 .vs
 /.claude/settings.local.json
+/CLAUDE.md
