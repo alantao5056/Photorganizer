@@ -194,6 +194,14 @@ namespace Alan.Photorganizer.App
             CntHeic.Visibility = Visibility.Visible;
             CntPng.Visibility = Visibility.Visible;
             CntMov.Visibility = Visibility.Visible;
+
+            // Disable format chips with 0 files
+            foreach (var (chip, fmt) in GetFormatChips())
+            {
+                int count = counts.GetValueOrDefault(fmt.ToString());
+                chip.IsEnabled = count > 0;
+                chip.Opacity = count > 0 ? (_allMode ? 0.38 : (_activeFormats.Contains(fmt.ToString()) ? 1.0 : 0.38)) : 0.25;
+            }
         }
 
         private void ApplyFilter()
@@ -335,8 +343,11 @@ namespace Alan.Photorganizer.App
             chip.BorderBrush = new SolidColorBrush(dark ? ChipBdColors[fmt].Dark : ChipBdColors[fmt].Light);
             SetChipTextColor(chip, dark ? ChipFgColors[fmt].Dark : ChipFgColors[fmt].Light);
 
-            // Only opacity changes between active/inactive
-            chip.Opacity = active ? 1.0 : 0.38;
+            // Disabled chips (0 count) stay dim; otherwise toggle active/inactive
+            if (!chip.IsEnabled)
+                chip.Opacity = 0.25;
+            else
+                chip.Opacity = active ? 1.0 : 0.38;
         }
 
         private static void SetChipTextColor(Button chip, Color color)
@@ -368,13 +379,13 @@ namespace Alan.Photorganizer.App
 
         private void Chip_PointerEntered(object sender, PointerRoutedEventArgs e)
         {
-            if (sender is Button chip && !IsChipActive(chip))
+            if (sender is Button chip && chip.IsEnabled && !IsChipActive(chip))
                 chip.Opacity = 1.0;
         }
 
         private void Chip_PointerExited(object sender, PointerRoutedEventArgs e)
         {
-            if (sender is Button chip && !IsChipActive(chip))
+            if (sender is Button chip && chip.IsEnabled && !IsChipActive(chip))
                 chip.Opacity = 0.38;
         }
 
