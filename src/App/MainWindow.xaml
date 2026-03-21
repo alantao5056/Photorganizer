@@ -273,10 +273,10 @@
                   Canvas.ZIndex="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="34*"/>
-                    <ColumnDefinition Width="10*"/>
+                    <ColumnDefinition Width="80"/>
                     <ColumnDefinition Width="22*"/>
                     <ColumnDefinition Width="24*"/>
-                    <ColumnDefinition Width="10*"/>
+                    <ColumnDefinition Width="100"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="0" Text="FILE NAME" Padding="20,0,16,0"
                            VerticalAlignment="Center" CharacterSpacing="100"
@@ -318,10 +318,10 @@
                         <Grid Padding="0,9" BorderBrush="{ThemeResource RowBorderBrush}" BorderThickness="0,0,0,1">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="34*"/>
-                                <ColumnDefinition Width="10*"/>
+                                <ColumnDefinition Width="80"/>
                                 <ColumnDefinition Width="22*"/>
                                 <ColumnDefinition Width="24*"/>
-                                <ColumnDefinition Width="10*"/>
+                                <ColumnDefinition Width="100"/>
                             </Grid.ColumnDefinitions>
 
                             <!-- File Name -->
@@ -337,7 +337,7 @@
                                                Margin="16,0"/>
 
                             <!-- Capture Time -->
-                            <TextBlock Grid.Column="2" Text="{x:Bind CaptureTime}" Padding="16,0"
+                            <TextBlock Grid.Column="2" Text="{x:Bind CaptureTime, Mode=OneWay}" Padding="16,0"
                                        FontFamily="Cascadia Mono, Consolas" FontSize="11.5"
                                        Foreground="{ThemeResource TextMutedBrush}"
                                        VerticalAlignment="Center"/>
@@ -352,16 +352,9 @@
                             </StackPanel>
 
                             <!-- Status Pill -->
-                            <Border Grid.Column="4" Padding="8,2" CornerRadius="10"
-                                    Background="{ThemeResource PendingBackground}" BorderBrush="{ThemeResource PendingBorder}"
-                                    BorderThickness="1" HorizontalAlignment="Left" VerticalAlignment="Center"
-                                    Margin="16,0,20,0">
-                                <StackPanel Orientation="Horizontal" Spacing="5">
-                                    <Ellipse Width="5" Height="5" Fill="{ThemeResource PendingForeground}"/>
-                                    <TextBlock Text="{x:Bind StatusText}" Foreground="{ThemeResource PendingForeground}"
-                                               FontSize="10.5" FontWeight="Medium"/>
-                                </StackPanel>
-                            </Border>
+                            <local:StatusPill Grid.Column="4" Status="{x:Bind StatusText, Mode=OneWay}"
+                                              HorizontalAlignment="Left" VerticalAlignment="Center"
+                                              Margin="16,0,20,0"/>
                         </Grid>
                     </DataTemplate>
                 </ListView.ItemTemplate>

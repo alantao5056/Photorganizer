@@ -12,7 +12,9 @@ using System.Runtime.InteropServices;
 using Windows.Graphics;
 using Windows.Storage;
 using Windows.UI;
+using System.Threading.Tasks;
 using Alan.Photorganizer.App.Models;
+using Alan.Photorganizer.App.Services;
 
 namespace Alan.Photorganizer.App
 {
@@ -125,12 +127,34 @@ namespace Alan.Photorganizer.App
                 {
                     Name = f.Name,
                     Format = fmt.ToString(),
+                    FilePath = f.FullName,
                     CaptureTime = "\u2014",
                     DestFolder = "\u2014",
                     HasExif = false,
                     StatusText = "Pending",
                 };
             }).ToList();
+        }
+
+        private async Task ExtractMetadataAsync(List<FileItem> files)
+        {
+            foreach (var file in files)
+            {
+                var dateTaken = await Task.Run(() => MetadataService.ExtractDateTaken(file.FilePath));
+
+                if (dateTaken.HasValue)
+                {
+                    file.CaptureTime = dateTaken.Value.ToString("yyyy-MM-dd  HH:mm:ss");
+                    file.HasExif = true;
+                    file.StatusText = "Ready";
+                }
+                else
+                {
+                    file.CaptureTime = "";
+                    file.HasExif = false;
+                    file.StatusText = "No EXIF";
+                }
+            }
         }
 
         private void LoadFiles(IEnumerable<FileInfo> files)
@@ -201,6 +225,8 @@ namespace Alan.Photorganizer.App
             _activeFormats.Clear();
             SetAllModeVisuals();
             LoadFiles(_scannedFiles);
+
+            await ExtractMetadataAsync(_allFiles);
         }
 
         // ── Theme Toggle ──
