@@ -21,30 +21,6 @@ namespace Alan.Photorganizer.App
         [DllImport("user32.dll")]
         private static extern uint GetDpiForWindow(IntPtr hwnd);
 
-        private static readonly Dictionary<MediaFormat, (Color Light, Color Dark)> FormatFgColors = new()
-        {
-            [MediaFormat.JPG]  = (Color.FromArgb(255, 16, 124, 65),  Color.FromArgb(255, 104, 211, 145)),
-            [MediaFormat.HEIC] = (Color.FromArgb(255, 0, 120, 212),   Color.FromArgb(255, 99, 179, 237)),
-            [MediaFormat.PNG]  = (Color.FromArgb(255, 202, 80, 16),   Color.FromArgb(255, 246, 173, 85)),
-            [MediaFormat.MOV]  = (Color.FromArgb(255, 164, 38, 44),   Color.FromArgb(255, 252, 129, 129)),
-        };
-
-        private static readonly Dictionary<MediaFormat, (Color Light, Color Dark)> FormatBgColors = new()
-        {
-            [MediaFormat.JPG]  = (Color.FromArgb(0x14, 16, 124, 65),  Color.FromArgb(0x1A, 104, 211, 145)),
-            [MediaFormat.HEIC] = (Color.FromArgb(0x14, 0, 120, 212),   Color.FromArgb(0x1A, 99, 179, 237)),
-            [MediaFormat.PNG]  = (Color.FromArgb(0x14, 202, 80, 16),   Color.FromArgb(0x1A, 246, 173, 85)),
-            [MediaFormat.MOV]  = (Color.FromArgb(0x14, 164, 38, 44),   Color.FromArgb(0x1A, 252, 129, 129)),
-        };
-
-        private static readonly Dictionary<MediaFormat, (Color Light, Color Dark)> FormatBdColors = new()
-        {
-            [MediaFormat.JPG]  = (Color.FromArgb(0x33, 16, 124, 65),  Color.FromArgb(0x33, 104, 211, 145)),
-            [MediaFormat.HEIC] = (Color.FromArgb(0x33, 0, 120, 212),   Color.FromArgb(0x33, 99, 179, 237)),
-            [MediaFormat.PNG]  = (Color.FromArgb(0x33, 202, 80, 16),   Color.FromArgb(0x33, 246, 173, 85)),
-            [MediaFormat.MOV]  = (Color.FromArgb(0x33, 164, 38, 44),   Color.FromArgb(0x33, 252, 129, 129)),
-        };
-
         // Chip active colors (for the stat bar chips)
         private static readonly Dictionary<MediaFormat, (Color Light, Color Dark)> ChipFgColors = new()
         {
@@ -141,14 +117,9 @@ namespace Alan.Photorganizer.App
 
         private List<FileItem> BuildFileItems(IEnumerable<FileInfo> files)
         {
-            bool dark = IsDark;
-
             return files.Select(f =>
             {
                 var fmt = MediaFormatExtensions.FromExtension(f.Extension)!.Value;
-                var fmtFg = FormatFgColors[fmt];
-                var fmtBg = FormatBgColors[fmt];
-                var fmtBd = FormatBdColors[fmt];
 
                 return new FileItem
                 {
@@ -157,19 +128,7 @@ namespace Alan.Photorganizer.App
                     CaptureTime = "\u2014",
                     DestFolder = "\u2014",
                     HasExif = false,
-                    FormatFg = new SolidColorBrush(dark ? fmtFg.Dark : fmtFg.Light),
-                    FormatBg = new SolidColorBrush(dark ? fmtBg.Dark : fmtBg.Light),
-                    FormatBd = new SolidColorBrush(dark ? fmtBd.Dark : fmtBd.Light),
-                    DestIcon = "\uE946",
-                    DestFg = new SolidColorBrush(dark
-                        ? Color.FromArgb(255, 246, 173, 85) : Color.FromArgb(255, 202, 80, 16)),
                     StatusText = "Pending",
-                    StatusFg = new SolidColorBrush(dark
-                        ? Color.FromArgb(255, 246, 173, 85) : Color.FromArgb(255, 202, 80, 16)),
-                    StatusBg = new SolidColorBrush(dark
-                        ? Color.FromArgb(0x14, 246, 173, 85) : Color.FromArgb(0x12, 202, 80, 16)),
-                    StatusBd = new SolidColorBrush(dark
-                        ? Color.FromArgb(0x33, 246, 173, 85) : Color.FromArgb(0x33, 202, 80, 16)),
                 };
             }).ToList();
         }
@@ -250,15 +209,8 @@ namespace Alan.Photorganizer.App
             bool isDark = ThemeToggle.IsChecked == true;
             RootGrid.RequestedTheme = isDark ? ElementTheme.Dark : ElementTheme.Light;
 
-            if (_folderLoaded)
-            {
-                _allFiles = BuildFileItems(_scannedFiles);
-                ApplyFilter();
-            }
-
             UpdateChipVisuals();
 
-            // Update folder path accent color
             if (_folderLoaded)
             {
                 var accent = IsDark ? Color.FromArgb(255, 99, 179, 237) : Color.FromArgb(255, 0, 120, 212);

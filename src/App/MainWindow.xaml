@@ -332,14 +332,9 @@
                                        MaxWidth="240"/>
 
                             <!-- Format Badge -->
-                            <Border Grid.Column="1" Padding="8,2" CornerRadius="5"
-                                    Background="{x:Bind FormatBg}" BorderBrush="{x:Bind FormatBd}"
-                                    BorderThickness="1" HorizontalAlignment="Left" VerticalAlignment="Center"
-                                    Margin="16,0">
-                                <TextBlock Text="{x:Bind Format}" Foreground="{x:Bind FormatFg}"
-                                           FontFamily="Cascadia Mono, Consolas" FontSize="10"
-                                           FontWeight="Bold" CharacterSpacing="50"/>
-                            </Border>
+                            <local:FormatBadge Grid.Column="1" Format="{x:Bind Format}"
+                                               HorizontalAlignment="Left" VerticalAlignment="Center"
+                                               Margin="16,0"/>
 
                             <!-- Capture Time -->
                             <TextBlock Grid.Column="2" Text="{x:Bind CaptureTime}" Padding="16,0"
@@ -350,20 +345,20 @@
                             <!-- Destination Folder -->
                             <StackPanel Grid.Column="3" Orientation="Horizontal" Spacing="6"
                                         Padding="16,0" VerticalAlignment="Center">
-                                <FontIcon Glyph="{x:Bind DestIcon}" FontSize="10"
-                                          Foreground="{x:Bind DestFg}" Opacity="0.45"/>
-                                <TextBlock Text="{x:Bind DestFolder}" Foreground="{x:Bind DestFg}"
+                                <FontIcon Glyph="&#xE946;" FontSize="10"
+                                          Foreground="{ThemeResource WarningBrush}" Opacity="0.45"/>
+                                <TextBlock Text="{x:Bind DestFolder}" Foreground="{ThemeResource WarningBrush}"
                                            FontFamily="Cascadia Mono, Consolas" FontSize="11.5"/>
                             </StackPanel>
 
                             <!-- Status Pill -->
                             <Border Grid.Column="4" Padding="8,2" CornerRadius="10"
-                                    Background="{x:Bind StatusBg}" BorderBrush="{x:Bind StatusBd}"
+                                    Background="{ThemeResource PendingBackground}" BorderBrush="{ThemeResource PendingBorder}"
                                     BorderThickness="1" HorizontalAlignment="Left" VerticalAlignment="Center"
                                     Margin="16,0,20,0">
                                 <StackPanel Orientation="Horizontal" Spacing="5">
-                                    <Ellipse Width="5" Height="5" Fill="{x:Bind StatusFg}"/>
-                                    <TextBlock Text="{x:Bind StatusText}" Foreground="{x:Bind StatusFg}"
+                                    <Ellipse Width="5" Height="5" Fill="{ThemeResource PendingForeground}"/>
+                                    <TextBlock Text="{x:Bind StatusText}" Foreground="{ThemeResource PendingForeground}"
                                                FontSize="10.5" FontWeight="Medium"/>
                                 </StackPanel>
                             </Border>
