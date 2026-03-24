@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl
+    x:Class="Alan.Photorganizer.App.CustomFormatPanel"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <StackPanel>
+        <TextBox x:Name="FormatBox"
+                 PlaceholderText="e.g. yyyy MMM dd"
+                 FontFamily="Cascadia Mono, Consolas" FontSize="13"
+                 TextChanged="FormatBox_TextChanged"/>
+
+        <TextBlock x:Name="PreviewBlock"
+                   FontSize="12" Opacity="0.6"
+                   Margin="0,8,0,0"/>
+
+        <TextBlock Text="Available format specifiers:"
+                   FontWeight="SemiBold" FontSize="12"
+                   Margin="0,12,0,4"/>
+
+        <Grid ColumnSpacing="12" RowSpacing="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="yyyy" FontFamily="Cascadia Mono, Consolas" FontSize="11.5" Opacity="0.85"/>
+            <TextBlock Grid.Row="0" Grid.Column="1" Text="Full year (2024)" FontSize="11.5" Opacity="0.55"/>
+
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="yy" FontFamily="Cascadia Mono, Consolas" FontSize="11.5" Opacity="0.85"/>
+            <TextBlock Grid.Row="1" Grid.Column="1" Text="Two-digit year (24)" FontSize="11.5" Opacity="0.55"/>
+
+            <TextBlock Grid.Row="2" Grid.Column="0" Text="MMMM" FontFamily="Cascadia Mono, Consolas" FontSize="11.5" Opacity="0.85"/>
+            <TextBlock Grid.Row="2" Grid.Column="1" Text="Full month name (March)" FontSize="11.5" Opacity="0.55"/>
+
+            <TextBlock Grid.Row="3" Grid.Column="0" Text="MMM" FontFamily="Cascadia Mono, Consolas" FontSize="11.5" Opacity="0.85"/>
+            <TextBlock Grid.Row="3" Grid.Column="1" Text="Abbreviated month (Mar)" FontSize="11.5" Opacity="0.55"/>
+
+            <TextBlock Grid.Row="4" Grid.Column="0" Text="MM" FontFamily="Cascadia Mono, Consolas" FontSize="11.5" Opacity="0.85"/>
+            <TextBlock Grid.Row="4" Grid.Column="1" Text="Two-digit month (03)" FontSize="11.5" Opacity="0.55"/>
+
+            <TextBlock Grid.Row="5" Grid.Column="0" Text="M" FontFamily="Cascadia Mono, Consolas" FontSize="11.5" Opacity="0.85"/>
+            <TextBlock Grid.Row="5" Grid.Column="1" Text="Month without leading zero (3)" FontSize="11.5" Opacity="0.55"/>
+
+            <TextBlock Grid.Row="6" Grid.Column="0" Text="dddd" FontFamily="Cascadia Mono, Consolas" FontSize="11.5" Opacity="0.85"/>
+            <TextBlock Grid.Row="6" Grid.Column="1" Text="Full day name (Monday)" FontSize="11.5" Opacity="0.55"/>
+
+            <TextBlock Grid.Row="7" Grid.Column="0" Text="ddd" FontFamily="Cascadia Mono, Consolas" FontSize="11.5" Opacity="0.85"/>
+            <TextBlock Grid.Row="7" Grid.Column="1" Text="Abbreviated day (Mon)" FontSize="11.5" Opacity="0.55"/>
+
+            <TextBlock Grid.Row="8" Grid.Column="0" Text="dd" FontFamily="Cascadia Mono, Consolas" FontSize="11.5" Opacity="0.85"/>
+            <TextBlock Grid.Row="8" Grid.Column="1" Text="Two-digit day (05)" FontSize="11.5" Opacity="0.55"/>
+
+            <TextBlock Grid.Row="9" Grid.Column="0" Text="d" FontFamily="Cascadia Mono, Consolas" FontSize="11.5" Opacity="0.85"/>
+            <TextBlock Grid.Row="9" Grid.Column="1" Text="Day without leading zero (5)" FontSize="11.5" Opacity="0.55"/>
+        </Grid>
+
+        <TextBlock Text="Use any separator: - . / or space"
+                   FontSize="11.5" Opacity="0.55"
+                   Margin="0,6,0,0"/>
+    </StackPanel>
+
+</UserControl>

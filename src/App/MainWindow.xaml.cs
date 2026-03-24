@@ -55,6 +55,8 @@ namespace Alan.Photorganizer.App
         private bool _folderLoaded;
         private Dictionary<MediaFormat, Dictionary<DateTime, List<FileItem>>> _dateGroups = [];
         private Dictionary<MediaFormat, List<FileItem>> _noExifFiles = [];
+        private string _currentFormat = "yyyy-MM-dd";
+        private string _customFormat = "";
 
         public bool IsDarkTheme { get; set; } = Application.Current.RequestedTheme == ApplicationTheme.Dark;
 
@@ -458,8 +460,66 @@ namespace Alan.Photorganizer.App
         {
             if (sender is RadioMenuFlyoutItem item)
             {
+                _currentFormat = item.Text;
                 FormatLabel.Text = item.Text;
                 UpdateAllDestFolders();
+            }
+        }
+
+        private async void CustomFormatItem_Click(object sender, RoutedEventArgs e)
+        {
+            var panel = new CustomFormatPanel { FormatString = _customFormat };
+
+            var dialog = new ContentDialog
+            {
+                Title = "Custom folder format",
+                Content = panel,
+                PrimaryButtonText = "OK",
+                CloseButtonText = "Cancel",
+                DefaultButton = ContentDialogButton.Primary,
+                XamlRoot = Content.XamlRoot
+            };
+
+            var result = await dialog.ShowAsync();
+
+            if (result == ContentDialogResult.Primary)
+            {
+                var fmt = panel.FormatString;
+                if (string.IsNullOrEmpty(fmt))
+                {
+                    RevertFormatSelection();
+                    return;
+                }
+
+                try
+                {
+                    DateTime.Now.ToString(fmt);
+                    _customFormat = fmt;
+                    _currentFormat = fmt;
+                    FormatLabel.Text = fmt;
+                    UpdateAllDestFolders();
+                }
+                catch
+                {
+                    RevertFormatSelection();
+                }
+            }
+            else
+            {
+                RevertFormatSelection();
+            }
+        }
+
+        private void RevertFormatSelection()
+        {
+            CustomFormatItem.IsChecked = false;
+            foreach (var menuItem in FormatFlyout.Items.OfType<RadioMenuFlyoutItem>())
+            {
+                if (menuItem.Text == _currentFormat)
+                {
+                    menuItem.IsChecked = true;
+                    break;
+                }
             }
         }
 

@@ -79,20 +79,22 @@
                               Foreground="{ThemeResource TextDimBrush}" Margin="8,0,0,0"/>
                 </Grid>
                 <Button.Flyout>
-                    <MenuFlyout Placement="Bottom">
+                    <MenuFlyout x:Name="FormatFlyout" Placement="Bottom">
                         <RadioMenuFlyoutItem Text="yyyy-MM-dd" GroupName="FolderFormat" IsChecked="True" Click="FormatItem_Click"/>
-                        <RadioMenuFlyoutItem Text="yyyy-M-dd" GroupName="FolderFormat" Click="FormatItem_Click"/>
+                        <RadioMenuFlyoutItem Text="yyyy-M-d" GroupName="FolderFormat" Click="FormatItem_Click"/>
                         <RadioMenuFlyoutItem Text="dd-MM-yyyy" GroupName="FolderFormat" Click="FormatItem_Click"/>
-                        <RadioMenuFlyoutItem Text="dd-M-yyyy" GroupName="FolderFormat" Click="FormatItem_Click"/>
+                        <RadioMenuFlyoutItem Text="d-M-yyyy" GroupName="FolderFormat" Click="FormatItem_Click"/>
                         <RadioMenuFlyoutItem Text="MM-dd-yyyy" GroupName="FolderFormat" Click="FormatItem_Click"/>
-                        <RadioMenuFlyoutItem Text="M-dd-yyyy" GroupName="FolderFormat" Click="FormatItem_Click"/>
+                        <RadioMenuFlyoutItem Text="M-d-yyyy" GroupName="FolderFormat" Click="FormatItem_Click"/>
                         <RadioMenuFlyoutItem Text="yyyy.MM.dd" GroupName="FolderFormat" Click="FormatItem_Click"/>
-                        <RadioMenuFlyoutItem Text="yyyy.M.dd" GroupName="FolderFormat" Click="FormatItem_Click"/>
+                        <RadioMenuFlyoutItem Text="yyyy.M.d" GroupName="FolderFormat" Click="FormatItem_Click"/>
                         <RadioMenuFlyoutItem Text="dd.MM.yyyy" GroupName="FolderFormat" Click="FormatItem_Click"/>
-                        <RadioMenuFlyoutItem Text="dd.M.yyyy" GroupName="FolderFormat" Click="FormatItem_Click"/>
+                        <RadioMenuFlyoutItem Text="d.M.yyyy" GroupName="FolderFormat" Click="FormatItem_Click"/>
                         <RadioMenuFlyoutItem Text="MM.dd.yyyy" GroupName="FolderFormat" Click="FormatItem_Click"/>
-                        <RadioMenuFlyoutItem Text="M.dd.yyyy" GroupName="FolderFormat" Click="FormatItem_Click"/>
+                        <RadioMenuFlyoutItem Text="M.d.yyyy" GroupName="FolderFormat" Click="FormatItem_Click"/>
                         <RadioMenuFlyoutItem Text="yyyy MMM" GroupName="FolderFormat" Click="FormatItem_Click"/>
+                        <MenuFlyoutSeparator/>
+                        <RadioMenuFlyoutItem x:Name="CustomFormatItem" Text="Custom..." GroupName="FolderFormat" Click="CustomFormatItem_Click"/>
                     </MenuFlyout>
                 </Button.Flyout>
             </Button>
