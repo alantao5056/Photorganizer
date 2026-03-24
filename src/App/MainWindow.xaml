@@ -233,7 +233,7 @@
                     <StackPanel Orientation="Horizontal" Spacing="5" VerticalAlignment="Center">
                         <TextBlock Text="Groups" FontFamily="Cascadia Mono, Consolas" FontSize="11.5"
                                    Foreground="{ThemeResource TextMutedBrush}"/>
-                        <TextBlock Text="18" FontFamily="Cascadia Mono, Consolas" FontSize="11.5"
+                        <TextBlock x:Name="ChipGroupsVal" Text="0" FontFamily="Cascadia Mono, Consolas" FontSize="11.5"
                                    FontWeight="Medium" Foreground="{ThemeResource SuccessBrush}"/>
                     </StackPanel>
                 </Border>
@@ -246,7 +246,7 @@
                     <StackPanel Orientation="Horizontal" Spacing="5" VerticalAlignment="Center">
                         <TextBlock Text="No EXIF" FontFamily="Cascadia Mono, Consolas" FontSize="11.5"
                                    Foreground="{ThemeResource TextMutedBrush}"/>
-                        <TextBlock Text="6" FontFamily="Cascadia Mono, Consolas" FontSize="11.5"
+                        <TextBlock x:Name="ChipNoExifVal" Text="0" FontFamily="Cascadia Mono, Consolas" FontSize="11.5"
                                    FontWeight="Medium" Foreground="{ThemeResource WarningBrush}"/>
                     </StackPanel>
                 </Border>

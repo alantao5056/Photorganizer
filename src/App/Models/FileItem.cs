@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
@@ -13,6 +14,7 @@ namespace Alan.Photorganizer.App.Models
         public string Format { get; set; } = "";
         public string FilePath { get; set; } = "";
         public string DestFolder { get; set; } = "";
+        public DateTime? DateTaken { get; set; }
 
         public string CaptureTime
         {

@@ -53,6 +53,8 @@ namespace Alan.Photorganizer.App
         private bool _allMode = true;
         private readonly HashSet<string> _activeFormats = [];
         private bool _folderLoaded;
+        private Dictionary<MediaFormat, Dictionary<DateTime, List<FileItem>>> _dateGroups = [];
+        private Dictionary<MediaFormat, List<FileItem>> _noExifFiles = [];
 
         public bool IsDarkTheme { get; set; } = Application.Current.RequestedTheme == ApplicationTheme.Dark;
 
@@ -142,6 +144,8 @@ namespace Alan.Photorganizer.App
             {
                 var dateTaken = await Task.Run(() => MetadataService.ExtractDateTaken(file.FilePath));
 
+                file.DateTaken = dateTaken;
+
                 if (dateTaken.HasValue)
                 {
                     file.CaptureTime = dateTaken.Value.ToString("yyyy-MM-dd  HH:mm:ss");
@@ -155,6 +159,9 @@ namespace Alan.Photorganizer.App
                     file.StatusText = "No EXIF";
                 }
             }
+
+            BuildGrouping();
+            UpdateGroupAndNoExifPills();
         }
 
         private void LoadFiles(IEnumerable<FileInfo> files)
@@ -187,6 +194,76 @@ namespace Alan.Photorganizer.App
             }
         }
 
+        private void BuildGrouping()
+        {
+            _dateGroups = [];
+            _noExifFiles = [];
+            foreach (var fmt in Enum.GetValues<MediaFormat>())
+            {
+                var dateMap = new Dictionary<DateTime, List<FileItem>>();
+                var noExif = new List<FileItem>();
+                foreach (var file in _allFiles.Where(f => f.Format == fmt.ToString()))
+                {
+                    if (file.DateTaken is { } dt)
+                    {
+                        var key = dt.Date;
+                        if (!dateMap.TryGetValue(key, out var list))
+                        {
+                            list = [];
+                            dateMap[key] = list;
+                        }
+                        list.Add(file);
+                    }
+                    else
+                    {
+                        noExif.Add(file);
+                    }
+                }
+                _dateGroups[fmt] = dateMap;
+                _noExifFiles[fmt] = noExif;
+            }
+        }
+
+        private void UpdateGroupAndNoExifPills()
+        {
+            if (_dateGroups.Count == 0)
+            {
+                ChipGroups.Visibility = Visibility.Collapsed;
+                ChipNoExif.Visibility = Visibility.Collapsed;
+                return;
+            }
+
+            IEnumerable<MediaFormat> selectedFormats;
+            if (_allMode)
+                selectedFormats = Enum.GetValues<MediaFormat>();
+            else
+                selectedFormats = _activeFormats
+                    .Select(f => Enum.TryParse<MediaFormat>(f, out var mf) ? (MediaFormat?)mf : null)
+                    .Where(mf => mf.HasValue)
+                    .Select(mf => mf!.Value);
+
+            // Collect unique date groups and total no-EXIF count across selected formats
+            var uniqueDates = new HashSet<DateTime>();
+            int noExifCount = 0;
+            foreach (var fmt in selectedFormats)
+            {
+                if (_dateGroups.TryGetValue(fmt, out var dateMap))
+                    foreach (var date in dateMap.Keys)
+                        uniqueDates.Add(date);
+
+                if (_noExifFiles.TryGetValue(fmt, out var noExif))
+                    noExifCount += noExif.Count;
+            }
+
+            int groupCount = uniqueDates.Count;
+
+            ChipGroupsVal.Text = groupCount.ToString();
+            ChipGroups.Visibility = groupCount > 0 ? Visibility.Visible : Visibility.Collapsed;
+
+            ChipNoExifVal.Text = noExifCount.ToString();
+            ChipNoExif.Visibility = noExifCount > 0 ? Visibility.Visible : Visibility.Collapsed;
+        }
+
         private void ApplyFilter()
         {
             if (_allMode)
@@ -194,6 +271,7 @@ namespace Alan.Photorganizer.App
             else
                 FileList.ItemsSource = _allFiles.Where(f => _activeFormats.Contains(f.Format)).ToList();
 
+            UpdateGroupAndNoExifPills();
         }
 
         // ── Folder Pick ──
