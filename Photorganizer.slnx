@@ -10,4 +10,6 @@
     <Platform Solution="*|x86" Project="x86" />
     <Deploy />
   </Project>
+  <Project Path="src/Core/Core.csproj" />
+  <Project Path="tests/Tests/Tests.csproj" />
 </Solution>

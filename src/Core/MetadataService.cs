@@ -18,6 +18,7 @@ namespace Alan.Photorganizer.App.Services
             "yyyy:MM:dd HH:mm:sszzz",
             "yyyy-MM-ddTHH:mm:ss",
             "yyyy-MM-ddTHH:mm:sszzz",
+            "ddd MMM dd HH:mm:ss yyyy",
         ];
 
         /// <summary>
@@ -73,7 +74,7 @@ namespace Alan.Photorganizer.App.Services
             }
         }
 
-        private static bool TryParseDate(string? dateStr, out DateTime result)
+        internal static bool TryParseDate(string? dateStr, out DateTime result)
         {
             result = default;
             if (string.IsNullOrWhiteSpace(dateStr))
