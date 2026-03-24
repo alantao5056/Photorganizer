@@ -149,12 +149,14 @@ namespace Alan.Photorganizer.App
                 if (dateTaken.HasValue)
                 {
                     file.CaptureTime = dateTaken.Value.ToString("yyyy-MM-dd  HH:mm:ss");
+                    file.DestFolder = FormatDestFolder(dateTaken.Value);
                     file.HasExif = true;
                     file.StatusText = "Ready";
                 }
                 else
                 {
                     file.CaptureTime = "";
+                    file.DestFolder = "\u2014";
                     file.HasExif = false;
                     file.StatusText = "No EXIF";
                 }
@@ -457,6 +459,22 @@ namespace Alan.Photorganizer.App
             if (sender is RadioMenuFlyoutItem item)
             {
                 FormatLabel.Text = item.Text;
+                UpdateAllDestFolders();
+            }
+        }
+
+        private string FormatDestFolder(DateTime dateTaken)
+        {
+            var fmt = FormatLabel.Text;
+            return dateTaken.ToString(fmt);
+        }
+
+        private void UpdateAllDestFolders()
+        {
+            foreach (var file in _allFiles)
+            {
+                if (file.DateTaken.HasValue)
+                    file.DestFolder = FormatDestFolder(file.DateTaken.Value);
             }
         }
 

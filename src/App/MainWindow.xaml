@@ -343,13 +343,26 @@
                                        VerticalAlignment="Center"/>
 
                             <!-- Destination Folder -->
-                            <StackPanel Grid.Column="3" Orientation="Horizontal" Spacing="6"
-                                        Padding="16,0" VerticalAlignment="Center">
-                                <FontIcon Glyph="&#xE946;" FontSize="10"
-                                          Foreground="{ThemeResource WarningBrush}" Opacity="0.45"/>
-                                <TextBlock Text="{x:Bind DestFolder}" Foreground="{ThemeResource WarningBrush}"
-                                           FontFamily="Cascadia Mono, Consolas" FontSize="11.5"/>
-                            </StackPanel>
+                            <Grid Grid.Column="3" Padding="16,0" VerticalAlignment="Center">
+                                <!-- Valid date: folder icon + folder name -->
+                                <StackPanel Orientation="Horizontal" Spacing="6"
+                                            Visibility="{x:Bind HasExif, Mode=OneWay}">
+                                    <FontIcon Glyph="&#xED41;" FontSize="10"
+                                              Foreground="{ThemeResource TextMutedBrush}" Opacity="0.55"/>
+                                    <TextBlock Text="{x:Bind DestFolder, Mode=OneWay}"
+                                               Foreground="{ThemeResource AppTextBrush}"
+                                               FontFamily="Cascadia Mono, Consolas" FontSize="11.5"/>
+                                </StackPanel>
+                                <!-- No EXIF: warning icon + dash -->
+                                <StackPanel Orientation="Horizontal" Spacing="6"
+                                            Visibility="{x:Bind NoExif, Mode=OneWay}">
+                                    <FontIcon Glyph="&#xE946;" FontSize="10"
+                                              Foreground="{ThemeResource WarningBrush}" Opacity="0.45"/>
+                                    <TextBlock Text="{x:Bind DestFolder, Mode=OneWay}"
+                                               Foreground="{ThemeResource WarningBrush}"
+                                               FontFamily="Cascadia Mono, Consolas" FontSize="11.5"/>
+                                </StackPanel>
+                            </Grid>
 
                             <!-- Status Pill -->
                             <local:StatusPill Grid.Column="4" Status="{x:Bind StatusText, Mode=OneWay}"

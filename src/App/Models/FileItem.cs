@@ -7,13 +7,18 @@ namespace Alan.Photorganizer.App.Models
     public class FileItem : INotifyPropertyChanged
     {
         private string _captureTime = "";
+        private string _destFolder = "";
         private string _statusText = "Pending";
         private bool _hasExif = true;
 
         public string Name { get; set; } = "";
         public string Format { get; set; } = "";
         public string FilePath { get; set; } = "";
-        public string DestFolder { get; set; } = "";
+        public string DestFolder
+        {
+            get => _destFolder;
+            set { _destFolder = value; OnPropertyChanged(); }
+        }
         public DateTime? DateTaken { get; set; }
 
         public string CaptureTime
@@ -31,8 +36,10 @@ namespace Alan.Photorganizer.App.Models
         public bool HasExif
         {
             get => _hasExif;
-            set { _hasExif = value; OnPropertyChanged(); }
+            set { _hasExif = value; OnPropertyChanged(); OnPropertyChanged(nameof(NoExif)); }
         }
+
+        public bool NoExif => !_hasExif;
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
