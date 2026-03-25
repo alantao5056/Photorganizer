@@ -519,7 +519,8 @@
                     </Grid>
 
                     <!-- Body: CustomFormatPanel -->
-                    <local:CustomFormatPanel x:Name="CustomFmtPanel" Margin="20,16,20,6"/>
+                    <local:CustomFormatPanel x:Name="CustomFmtPanel" Margin="20,16,20,6"
+                                            ValidationChanged="CustomFmtPanel_ValidationChanged"/>
 
                     <!-- Footer -->
                     <Grid Padding="20,14"
@@ -533,7 +534,7 @@
                         </Grid.ColumnDefinitions>
                         <TextBlock x:Name="CustomFmtError" Grid.Column="0"
                                    Text="Pattern cannot be empty."
-                                   FontSize="11" Foreground="{ThemeResource WarningBrush}"
+                                   FontSize="11" Foreground="{ThemeResource ErrorBrush}"
                                    VerticalAlignment="Center" Visibility="Collapsed"/>
                         <Button Grid.Column="1" Content="Cancel" Click="CustomFmtCancel_Click"
                                 Background="{ThemeResource SurfaceBrush}"
@@ -541,7 +542,9 @@
                                 CornerRadius="7" Padding="18,8" FontSize="12.5"
                                 Foreground="{ThemeResource TextMutedBrush}"
                                 Margin="0,0,8,0"/>
-                        <Button Grid.Column="2" Content="Apply" Click="CustomFmtApply_Click"
+                        <Button x:Name="CustomFmtApplyBtn" Grid.Column="2" Content="Apply"
+                                Click="CustomFmtApply_Click"
+                                IsEnabled="False"
                                 Background="{ThemeResource PrimaryButtonBrush}"
                                 Foreground="{ThemeResource PrimaryButtonText}"
                                 CornerRadius="7" Padding="18,8" FontSize="12.5" FontWeight="SemiBold"/>

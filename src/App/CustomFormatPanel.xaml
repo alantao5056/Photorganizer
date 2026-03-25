@@ -13,7 +13,8 @@
                    Margin="0,0,0,7"/>
 
         <!-- Input with inline preview -->
-        <Border BorderBrush="{ThemeResource SystemControlForegroundBaseMediumLowBrush}"
+        <Border x:Name="InputBorder"
+                BorderBrush="{ThemeResource SystemControlForegroundBaseMediumLowBrush}"
                 BorderThickness="1.5" CornerRadius="6">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -29,7 +30,11 @@
                          Padding="10,8,10,8"
                          IsSpellCheckEnabled="False"
                          IsTextPredictionEnabled="False"
-                         TextChanged="FormatBox_TextChanged"/>
+                         TextChanged="FormatBox_TextChanged">
+                    <TextBox.Resources>
+                        <Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
+                    </TextBox.Resources>
+                </TextBox>
 
                 <Border Grid.Column="1"
                         BorderBrush="{ThemeResource SystemControlForegroundBaseMediumLowBrush}"
@@ -144,8 +149,8 @@
             </StackPanel>
         </Border>
 
-        <!-- Separator hint -->
-        <TextBlock Text="Use any separator: - . / or space"
+        <!-- Invalid characters hint -->
+        <TextBlock Text="Invalid folder characters: \ / : * &quot; &lt; &gt; |"
                    FontSize="11" Opacity="0.45"
                    Margin="0,8,0,0"/>
     </StackPanel>

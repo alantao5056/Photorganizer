@@ -472,8 +472,8 @@ namespace Alan.Photorganizer.App
         private void CustomFormatItem_Click(object sender, RoutedEventArgs e)
         {
             CustomFmtPanel.FormatString = _customFormat;
-            CustomFmtError.Visibility = Visibility.Collapsed;
             CustomFmtOverlay.Visibility = Visibility.Visible;
+            CustomFmtPanel.Revalidate();
             FormatFlyout.Hide();
         }
 
@@ -529,30 +529,29 @@ namespace Alan.Photorganizer.App
             }
         }
 
+        private void CustomFmtPanel_ValidationChanged(object sender, FormatValidationEventArgs e)
+        {
+            CustomFmtApplyBtn.IsEnabled = e.IsValid;
+            if (e.IsValid || e.ErrorMessage is null)
+            {
+                CustomFmtError.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                CustomFmtError.Text = e.ErrorMessage;
+                CustomFmtError.Visibility = Visibility.Visible;
+            }
+        }
+
         private void CustomFmtApply_Click(object sender, RoutedEventArgs e)
         {
             var fmt = CustomFmtPanel.FormatString;
-            if (string.IsNullOrEmpty(fmt))
-            {
-                CustomFmtError.Visibility = Visibility.Visible;
-                return;
-            }
-
-            try
-            {
-                DateTime.Now.ToString(fmt);
-                _customFormat = fmt;
-                _currentFormat = fmt;
-                FormatLabel.Text = fmt;
-                UpdateFormatDropdownVisuals(fmt);
-                UpdateAllDestFolders();
-                CustomFmtOverlay.Visibility = Visibility.Collapsed;
-            }
-            catch
-            {
-                CustomFmtError.Text = "Invalid format pattern.";
-                CustomFmtError.Visibility = Visibility.Visible;
-            }
+            _customFormat = fmt;
+            _currentFormat = fmt;
+            FormatLabel.Text = fmt;
+            UpdateFormatDropdownVisuals(fmt);
+            UpdateAllDestFolders();
+            CustomFmtOverlay.Visibility = Visibility.Collapsed;
         }
 
         private void CustomFmtCancel_Click(object sender, RoutedEventArgs e)

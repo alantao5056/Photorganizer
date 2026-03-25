@@ -76,6 +76,7 @@
                     <SolidColorBrush x:Key="AccentBrush" Color="#0078D4"/>
                     <SolidColorBrush x:Key="SuccessBrush" Color="#107C41"/>
                     <SolidColorBrush x:Key="WarningBrush" Color="#CA5010"/>
+                    <SolidColorBrush x:Key="ErrorBrush" Color="#D13438"/>
 
                     <SolidColorBrush x:Key="JpgForeground" Color="#107C41"/>
                     <SolidColorBrush x:Key="JpgBackground" Color="#14107C41"/>
@@ -148,6 +149,7 @@
                     <SolidColorBrush x:Key="AccentBrush" Color="#63B3ED"/>
                     <SolidColorBrush x:Key="SuccessBrush" Color="#68D391"/>
                     <SolidColorBrush x:Key="WarningBrush" Color="#F6AD55"/>
+                    <SolidColorBrush x:Key="ErrorBrush" Color="#FC8181"/>
 
                     <SolidColorBrush x:Key="JpgForeground" Color="#68D391"/>
                     <SolidColorBrush x:Key="JpgBackground" Color="#1A68D391"/>
