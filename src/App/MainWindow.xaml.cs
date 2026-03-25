@@ -63,6 +63,7 @@ namespace Alan.Photorganizer.App
         public MainWindow()
         {
             InitializeComponent();
+            LoadPersistedFormat();
             SetupWindow();
             SetAllModeVisuals();
         }
@@ -465,6 +466,7 @@ namespace Alan.Photorganizer.App
                 FormatLabel.Text = fmt;
                 UpdateFormatDropdownVisuals(fmt);
                 UpdateAllDestFolders();
+                SaveFormatToSettings();
                 FormatFlyout.Hide();
             }
         }
@@ -551,6 +553,7 @@ namespace Alan.Photorganizer.App
             FormatLabel.Text = fmt;
             UpdateFormatDropdownVisuals(fmt);
             UpdateAllDestFolders();
+            SaveFormatToSettings();
             CustomFmtOverlay.Visibility = Visibility.Collapsed;
         }
 
@@ -562,6 +565,28 @@ namespace Alan.Photorganizer.App
             {
                 RevertFormatSelection();
             }
+        }
+
+        private void LoadPersistedFormat()
+        {
+            var settings = ApplicationData.Current.LocalSettings;
+            if (settings.Values["CurrentFormat"] is string saved)
+            {
+                _currentFormat = saved;
+                FormatLabel.Text = saved;
+            }
+            if (settings.Values["CustomFormat"] is string custom)
+            {
+                _customFormat = custom;
+            }
+            UpdateFormatDropdownVisuals(_currentFormat);
+        }
+
+        private void SaveFormatToSettings()
+        {
+            var settings = ApplicationData.Current.LocalSettings;
+            settings.Values["CurrentFormat"] = _currentFormat;
+            settings.Values["CustomFormat"] = _customFormat;
         }
 
         private void RevertFormatSelection()
