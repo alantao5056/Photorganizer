@@ -303,6 +303,7 @@ namespace Alan.Photorganizer.App
                 .ToList();
 
             _folderLoaded = true;
+            OrganizeBtn.IsEnabled = true;
             _allMode = true;
             _activeFormats.Clear();
             SetAllModeVisuals();
@@ -453,7 +454,34 @@ namespace Alan.Photorganizer.App
         // ── Organize ──
         private void Organize_Click(object sender, RoutedEventArgs e)
         {
-            // Will be implemented later
+            if (_allMode || _activeFormats.Count == Enum.GetValues<MediaFormat>().Length)
+            {
+                StartOrganize();
+                return;
+            }
+            ShowPartialOrganizeDialog();
+        }
+
+        private void ShowPartialOrganizeDialog()
+        {
+            PartialOrganizePanel.PopulateBadges(_activeFormats, _allFiles);
+            PartialOrganizeOverlay.Visibility = Visibility.Visible;
+        }
+
+        private void PartialOrganizeCancel_Click(object sender, RoutedEventArgs e)
+        {
+            PartialOrganizeOverlay.Visibility = Visibility.Collapsed;
+        }
+
+        private void PartialOrganizeContinue_Click(object sender, RoutedEventArgs e)
+        {
+            PartialOrganizeOverlay.Visibility = Visibility.Collapsed;
+            StartOrganize();
+        }
+
+        private void StartOrganize()
+        {
+            // Will be implemented in a future task
         }
 
         // ── Format Dropdown ──
@@ -532,7 +560,7 @@ namespace Alan.Photorganizer.App
 
         private void CustomFmtPanel_ValidationChanged(object sender, FormatValidationEventArgs e)
         {
-            CustomFmtApplyBtn.IsEnabled = e.IsValid;
+            CustomFmtShell.IsPrimaryButtonEnabled = e.IsValid;
             if (e.IsValid || e.ErrorMessage is null)
             {
                 CustomFmtError.Visibility = Visibility.Collapsed;

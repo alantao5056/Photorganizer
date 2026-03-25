@@ -124,6 +124,8 @@
                     <SolidColorBrush x:Key="DialogFooterBrush" Color="#08000000"/>
                     <SolidColorBrush x:Key="AccentIconBackgroundBrush" Color="#140078D4"/>
                     <SolidColorBrush x:Key="AccentIconBorderBrush" Color="#330078D4"/>
+                    <SolidColorBrush x:Key="WarningIconBackgroundBrush" Color="#14CA5010"/>
+                    <SolidColorBrush x:Key="WarningIconBorderBrush" Color="#33CA5010"/>
 
                     <SolidColorBrush x:Key="FmtDropdownBg" Color="#FFFFFF"/>
                     <SolidColorBrush x:Key="FmtDropdownBorder" Color="#1A000000"/>
@@ -197,6 +199,8 @@
                     <SolidColorBrush x:Key="DialogFooterBrush" Color="#05FFFFFF"/>
                     <SolidColorBrush x:Key="AccentIconBackgroundBrush" Color="#1A63B3ED"/>
                     <SolidColorBrush x:Key="AccentIconBorderBrush" Color="#4063B3ED"/>
+                    <SolidColorBrush x:Key="WarningIconBackgroundBrush" Color="#1AF6AD55"/>
+                    <SolidColorBrush x:Key="WarningIconBorderBrush" Color="#40F6AD55"/>
 
                     <SolidColorBrush x:Key="FmtDropdownBg" Color="#1A1A2C"/>
                     <SolidColorBrush x:Key="FmtDropdownBorder" Color="#1EFFFFFF"/>

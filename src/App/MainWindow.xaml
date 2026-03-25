@@ -482,75 +482,49 @@
         <!-- ═══ Custom Format Dialog Overlay ═══ -->
         <Grid x:Name="CustomFmtOverlay" Visibility="Collapsed"
               Canvas.ZIndex="100" Grid.RowSpan="5">
-            <!-- Backdrop -->
-            <Border Background="#59000000"/>
-
-            <!-- Dialog Card -->
-            <Border x:Name="CustomFmtCard"
-                    HorizontalAlignment="Center" VerticalAlignment="Center"
-                    Width="420" CornerRadius="14"
-                    Background="{ThemeResource DialogBackgroundBrush}"
-                    BorderBrush="{ThemeResource AppBorderBrush}" BorderThickness="1">
-                <Border.Shadow>
-                    <ThemeShadow/>
-                </Border.Shadow>
-                <StackPanel>
-                    <!-- Header -->
-                    <Grid Padding="20,18,20,14"
-                          BorderBrush="{ThemeResource AppBorderBrush}" BorderThickness="0,0,0,1">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Border Grid.Column="0" Width="34" Height="34" CornerRadius="9" Margin="0,0,11,0"
-                                Background="{ThemeResource AccentIconBackgroundBrush}"
-                                BorderBrush="{ThemeResource AccentIconBorderBrush}" BorderThickness="1">
-                            <FontIcon Glyph="&#xE70F;" FontSize="14"
-                                      Foreground="{ThemeResource AccentBrush}"
-                                      HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </Border>
-                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                            <TextBlock Text="Custom Folder Format" FontSize="14" FontWeight="SemiBold"
-                                       Foreground="{ThemeResource AppTextBrush}"/>
-                            <TextBlock Text="Enter a date format pattern for subfolder names"
-                                       FontSize="11.5" Foreground="{ThemeResource TextMutedBrush}"
-                                       Margin="0,1,0,0"/>
-                        </StackPanel>
-                    </Grid>
-
-                    <!-- Body: CustomFormatPanel -->
+            <local:DialogShell x:Name="CustomFmtShell"
+                               IconGlyph="&#xE70F;"
+                               IconForeground="{ThemeResource AccentBrush}"
+                               IconBackground="{ThemeResource AccentIconBackgroundBrush}"
+                               IconBorderBrush="{ThemeResource AccentIconBorderBrush}"
+                               DialogTitle="Custom Folder Format"
+                               DialogSubtitle="Enter a date format pattern for subfolder names"
+                               DialogWidth="430"
+                               PrimaryButtonText="Apply"
+                               IsPrimaryButtonEnabled="False"
+                               FooterTopMargin="16"
+                               CancelClick="CustomFmtCancel_Click"
+                               PrimaryClick="CustomFmtApply_Click">
+                <local:DialogShell.Body>
                     <local:CustomFormatPanel x:Name="CustomFmtPanel" Margin="20,16,20,6"
                                             ValidationChanged="CustomFmtPanel_ValidationChanged"/>
+                </local:DialogShell.Body>
+                <local:DialogShell.FooterExtra>
+                    <TextBlock x:Name="CustomFmtError"
+                               Text="Pattern cannot be empty."
+                               FontSize="11" Foreground="{ThemeResource ErrorBrush}"
+                               Visibility="Collapsed"/>
+                </local:DialogShell.FooterExtra>
+            </local:DialogShell>
+        </Grid>
 
-                    <!-- Footer -->
-                    <Grid Padding="20,14"
-                          BorderBrush="{ThemeResource AppBorderBrush}" BorderThickness="0,1,0,0"
-                          Margin="0,16,0,0"
-                          Background="{ThemeResource DialogFooterBrush}">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock x:Name="CustomFmtError" Grid.Column="0"
-                                   Text="Pattern cannot be empty."
-                                   FontSize="11" Foreground="{ThemeResource ErrorBrush}"
-                                   VerticalAlignment="Center" Visibility="Collapsed"/>
-                        <Button Grid.Column="1" Content="Cancel" Click="CustomFmtCancel_Click"
-                                Background="{ThemeResource SurfaceBrush}"
-                                BorderBrush="{ThemeResource AppBorderBrush}" BorderThickness="1"
-                                CornerRadius="7" Padding="18,8" FontSize="12.5"
-                                Foreground="{ThemeResource TextMutedBrush}"
-                                Margin="0,0,8,0"/>
-                        <Button x:Name="CustomFmtApplyBtn" Grid.Column="2" Content="Apply"
-                                Click="CustomFmtApply_Click"
-                                IsEnabled="False"
-                                Background="{ThemeResource PrimaryButtonBrush}"
-                                Foreground="{ThemeResource PrimaryButtonText}"
-                                CornerRadius="7" Padding="18,8" FontSize="12.5" FontWeight="SemiBold"/>
-                    </Grid>
-                </StackPanel>
-            </Border>
+        <!-- ═══ Partial Organize Confirm Dialog Overlay ═══ -->
+        <Grid x:Name="PartialOrganizeOverlay" Visibility="Collapsed"
+              Canvas.ZIndex="100" Grid.RowSpan="5">
+            <local:DialogShell IconGlyph="&#xE7BA;"
+                               IconForeground="{ThemeResource WarningBrush}"
+                               IconBackground="{ThemeResource WarningIconBackgroundBrush}"
+                               IconBorderBrush="{ThemeResource WarningIconBorderBrush}"
+                               DialogTitle="Partial Organize"
+                               DialogSubtitle="Not all file types are selected"
+                               DialogWidth="380"
+                               PrimaryButtonText="Continue"
+                               CancelClick="PartialOrganizeCancel_Click"
+                               PrimaryClick="PartialOrganizeContinue_Click">
+                <local:DialogShell.Body>
+                    <local:PartialOrganizePanel x:Name="PartialOrganizePanel"/>
+                </local:DialogShell.Body>
+            </local:DialogShell>
         </Grid>
     </Grid>
 </Window>
