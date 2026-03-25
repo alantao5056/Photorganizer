@@ -10,7 +10,6 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using Windows.Graphics;
-using Windows.Storage;
 using Windows.UI;
 using System.Threading.Tasks;
 using Alan.Photorganizer.App.Models;
@@ -329,7 +328,7 @@ namespace Alan.Photorganizer.App
 
             UpdateCaptionButtonColors(isDark);
 
-            ApplicationData.Current.LocalSettings.Values["IsDarkTheme"] = isDark;
+            App.Settings.IsDarkTheme = isDark;
         }
 
         // ── Filter Chips ──
@@ -569,24 +568,16 @@ namespace Alan.Photorganizer.App
 
         private void LoadPersistedFormat()
         {
-            var settings = ApplicationData.Current.LocalSettings;
-            if (settings.Values["CurrentFormat"] is string saved)
-            {
-                _currentFormat = saved;
-                FormatLabel.Text = saved;
-            }
-            if (settings.Values["CustomFormat"] is string custom)
-            {
-                _customFormat = custom;
-            }
+            _currentFormat = App.Settings.CurrentFormat;
+            FormatLabel.Text = _currentFormat;
+            _customFormat = App.Settings.CustomFormat;
             UpdateFormatDropdownVisuals(_currentFormat);
         }
 
         private void SaveFormatToSettings()
         {
-            var settings = ApplicationData.Current.LocalSettings;
-            settings.Values["CurrentFormat"] = _currentFormat;
-            settings.Values["CustomFormat"] = _customFormat;
+            App.Settings.CurrentFormat = _currentFormat;
+            App.Settings.CustomFormat = _customFormat;
         }
 
         private void RevertFormatSelection()

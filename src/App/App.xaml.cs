@@ -15,7 +15,7 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
-using Windows.Storage;
+using Alan.Photorganizer.App.Services;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -29,6 +29,8 @@ namespace Alan.Photorganizer.App
     {
         private Window? _window;
 
+        public static ISettingsService Settings { get; } = new LocalSettingsService();
+
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
@@ -36,7 +38,7 @@ namespace Alan.Photorganizer.App
         public App()
         {
             // Apply saved theme before InitializeComponent to avoid a light→dark flash
-            if (ApplicationData.Current.LocalSettings.Values["IsDarkTheme"] is bool isDark && isDark)
+            if (Settings.IsDarkTheme)
             {
                 RequestedTheme = ApplicationTheme.Dark;
             }
