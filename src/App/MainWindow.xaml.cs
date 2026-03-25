@@ -466,45 +466,43 @@ namespace Alan.Photorganizer.App
             }
         }
 
-        private async void CustomFormatItem_Click(object sender, RoutedEventArgs e)
+        private void CustomFormatItem_Click(object sender, RoutedEventArgs e)
         {
-            var panel = new CustomFormatPanel { FormatString = _customFormat };
+            CustomFmtPanel.FormatString = _customFormat;
+            CustomFmtError.Visibility = Visibility.Collapsed;
+            CustomFmtOverlay.Visibility = Visibility.Visible;
+        }
 
-            var dialog = new ContentDialog
+        private void CustomFmtApply_Click(object sender, RoutedEventArgs e)
+        {
+            var fmt = CustomFmtPanel.FormatString;
+            if (string.IsNullOrEmpty(fmt))
             {
-                Title = "Custom folder format",
-                Content = panel,
-                PrimaryButtonText = "OK",
-                CloseButtonText = "Cancel",
-                DefaultButton = ContentDialogButton.Primary,
-                XamlRoot = Content.XamlRoot
-            };
-
-            var result = await dialog.ShowAsync();
-
-            if (result == ContentDialogResult.Primary)
-            {
-                var fmt = panel.FormatString;
-                if (string.IsNullOrEmpty(fmt))
-                {
-                    RevertFormatSelection();
-                    return;
-                }
-
-                try
-                {
-                    DateTime.Now.ToString(fmt);
-                    _customFormat = fmt;
-                    _currentFormat = fmt;
-                    FormatLabel.Text = fmt;
-                    UpdateAllDestFolders();
-                }
-                catch
-                {
-                    RevertFormatSelection();
-                }
+                CustomFmtError.Visibility = Visibility.Visible;
+                return;
             }
-            else
+
+            try
+            {
+                DateTime.Now.ToString(fmt);
+                _customFormat = fmt;
+                _currentFormat = fmt;
+                FormatLabel.Text = fmt;
+                UpdateAllDestFolders();
+                CustomFmtOverlay.Visibility = Visibility.Collapsed;
+            }
+            catch
+            {
+                CustomFmtError.Text = "Invalid format pattern.";
+                CustomFmtError.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void CustomFmtCancel_Click(object sender, RoutedEventArgs e)
+        {
+            CustomFmtOverlay.Visibility = Visibility.Collapsed;
+            // Only revert if custom format wasn't already the active selection
+            if (_currentFormat != _customFormat || string.IsNullOrEmpty(_customFormat))
             {
                 RevertFormatSelection();
             }

@@ -94,6 +94,11 @@
                         <GradientStop Color="#107C41" Offset="1"/>
                     </LinearGradientBrush>
                     <SolidColorBrush x:Key="ProgressTrackBrush" Color="#14000000"/>
+
+                    <SolidColorBrush x:Key="DialogBackgroundBrush" Color="#FFFFFF"/>
+                    <SolidColorBrush x:Key="DialogFooterBrush" Color="#08000000"/>
+                    <SolidColorBrush x:Key="AccentIconBackgroundBrush" Color="#140078D4"/>
+                    <SolidColorBrush x:Key="AccentIconBorderBrush" Color="#330078D4"/>
                 </ResourceDictionary>
 
                 <!-- Dark Theme -->
@@ -155,6 +160,11 @@
                         <GradientStop Color="#68D391" Offset="1"/>
                     </LinearGradientBrush>
                     <SolidColorBrush x:Key="ProgressTrackBrush" Color="#0FFFFFFF"/>
+
+                    <SolidColorBrush x:Key="DialogBackgroundBrush" Color="#16162A"/>
+                    <SolidColorBrush x:Key="DialogFooterBrush" Color="#05FFFFFF"/>
+                    <SolidColorBrush x:Key="AccentIconBackgroundBrush" Color="#1A63B3ED"/>
+                    <SolidColorBrush x:Key="AccentIconBorderBrush" Color="#4063B3ED"/>
                 </ResourceDictionary>
             </ResourceDictionary.ThemeDictionaries>
         </ResourceDictionary>

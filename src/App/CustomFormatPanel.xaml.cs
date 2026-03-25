@@ -1,3 +1,4 @@
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using System;
 
@@ -21,7 +22,7 @@ namespace Alan.Photorganizer.App
             var fmt = FormatBox.Text.Trim();
             if (string.IsNullOrEmpty(fmt))
             {
-                PreviewBlock.Text = "";
+                PreviewBlock.Text = "Preview: ";
                 return;
             }
             try
@@ -31,6 +32,18 @@ namespace Alan.Photorganizer.App
             catch
             {
                 PreviewBlock.Text = "Invalid format";
+            }
+        }
+
+        private void Token_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is HyperlinkButton btn && btn.Content is string token)
+            {
+                var pos = FormatBox.SelectionStart;
+                var text = FormatBox.Text;
+                FormatBox.Text = text.Insert(pos, token);
+                FormatBox.SelectionStart = pos + token.Length;
+                FormatBox.Focus(FocusState.Programmatic);
             }
         }
     }

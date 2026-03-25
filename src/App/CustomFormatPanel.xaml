@@ -5,71 +5,149 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <StackPanel>
-        <TextBox x:Name="FormatBox"
-                 PlaceholderText="e.g. yyyy MMM dd"
-                 FontFamily="Cascadia Mono, Consolas" FontSize="13"
-                 TextChanged="FormatBox_TextChanged"/>
+        <!-- FORMAT PATTERN label -->
+        <TextBlock Text="FORMAT PATTERN"
+                   FontSize="10.5" FontWeight="SemiBold"
+                   CharacterSpacing="80"
+                   Opacity="0.55"
+                   Margin="0,0,0,7"/>
 
-        <TextBlock x:Name="PreviewBlock"
-                   FontSize="12" Opacity="0.6"
-                   Margin="0,8,0,0"/>
+        <!-- Input with inline preview -->
+        <Border BorderBrush="{ThemeResource SystemControlForegroundBaseMediumLowBrush}"
+                BorderThickness="1.5" CornerRadius="6">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
 
-        <TextBlock Text="Available format specifiers:"
-                   FontWeight="SemiBold" FontSize="12"
-                   Margin="0,12,0,4"/>
+                <TextBox x:Name="FormatBox"
+                         Grid.Column="0"
+                         PlaceholderText="e.g. yyyy-MM-dd"
+                         FontFamily="Cascadia Mono, Consolas" FontSize="13"
+                         BorderThickness="0"
+                         Padding="10,8,10,8"
+                         IsSpellCheckEnabled="False"
+                         IsTextPredictionEnabled="False"
+                         TextChanged="FormatBox_TextChanged"/>
 
-        <Grid ColumnSpacing="12" RowSpacing="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
+                <Border Grid.Column="1"
+                        BorderBrush="{ThemeResource SystemControlForegroundBaseMediumLowBrush}"
+                        BorderThickness="1,0,0,0"
+                        Padding="12,0"
+                        Background="{ThemeResource SystemControlBackgroundListLowBrush}">
+                    <TextBlock x:Name="PreviewBlock"
+                               FontFamily="Cascadia Mono, Consolas"
+                               FontSize="11" Opacity="0.6"
+                               VerticalAlignment="Center"
+                               Text="Preview: "/>
+                </Border>
+            </Grid>
+        </Border>
 
-            <TextBlock Grid.Row="0" Grid.Column="0" Text="yyyy" FontFamily="Cascadia Mono, Consolas" FontSize="11.5" Opacity="0.85"/>
-            <TextBlock Grid.Row="0" Grid.Column="1" Text="Full year (2024)" FontSize="11.5" Opacity="0.55"/>
+        <!-- Token Reference Box -->
+        <Border Margin="0,14,0,0"
+                Padding="14,12"
+                BorderBrush="{ThemeResource SystemControlForegroundBaseMediumLowBrush}"
+                BorderThickness="1" CornerRadius="6"
+                Background="{ThemeResource SystemControlBackgroundListLowBrush}">
+            <StackPanel>
+                <TextBlock Text="FORMAT TOKENS — CLICK TO INSERT"
+                           FontSize="10" FontWeight="SemiBold"
+                           CharacterSpacing="80"
+                           Opacity="0.55"
+                           Margin="0,0,0,10"/>
 
-            <TextBlock Grid.Row="1" Grid.Column="0" Text="yy" FontFamily="Cascadia Mono, Consolas" FontSize="11.5" Opacity="0.85"/>
-            <TextBlock Grid.Row="1" Grid.Column="1" Text="Two-digit year (24)" FontSize="11.5" Opacity="0.55"/>
+                <!-- Year -->
+                <TextBlock Text="YEAR" FontSize="9.5" FontWeight="SemiBold"
+                           CharacterSpacing="100" Opacity="0.45"
+                           Margin="0,0,0,4"/>
+                <Grid ColumnSpacing="8" RowSpacing="3" Margin="0,0,0,8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="7">
+                        <HyperlinkButton x:Name="Token_yyyy" Content="yyyy" Click="Token_Click" Padding="0" FontFamily="Cascadia Mono, Consolas" FontSize="11"/>
+                        <TextBlock Text="Full year (2024)" FontSize="10.5" Opacity="0.55" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="7">
+                        <HyperlinkButton x:Name="Token_yy" Content="yy" Click="Token_Click" Padding="0" FontFamily="Cascadia Mono, Consolas" FontSize="11"/>
+                        <TextBlock Text="Two-digit year (24)" FontSize="10.5" Opacity="0.55" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Grid>
 
-            <TextBlock Grid.Row="2" Grid.Column="0" Text="MMMM" FontFamily="Cascadia Mono, Consolas" FontSize="11.5" Opacity="0.85"/>
-            <TextBlock Grid.Row="2" Grid.Column="1" Text="Full month name (March)" FontSize="11.5" Opacity="0.55"/>
+                <!-- Month -->
+                <TextBlock Text="MONTH" FontSize="9.5" FontWeight="SemiBold"
+                           CharacterSpacing="100" Opacity="0.45"
+                           Margin="0,0,0,4"/>
+                <Grid ColumnSpacing="8" RowSpacing="3" Margin="0,0,0,8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Spacing="7">
+                        <HyperlinkButton x:Name="Token_MMMM" Content="MMMM" Click="Token_Click" Padding="0" FontFamily="Cascadia Mono, Consolas" FontSize="11"/>
+                        <TextBlock Text="Full name (March)" FontSize="10.5" Opacity="0.55" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Spacing="7">
+                        <HyperlinkButton x:Name="Token_MMM" Content="MMM" Click="Token_Click" Padding="0" FontFamily="Cascadia Mono, Consolas" FontSize="11"/>
+                        <TextBlock Text="Abbreviated (Mar)" FontSize="10.5" Opacity="0.55" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Spacing="7">
+                        <HyperlinkButton x:Name="Token_MM" Content="MM" Click="Token_Click" Padding="0" FontFamily="Cascadia Mono, Consolas" FontSize="11"/>
+                        <TextBlock Text="Two-digit (03)" FontSize="10.5" Opacity="0.55" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Spacing="7">
+                        <HyperlinkButton x:Name="Token_M" Content="M" Click="Token_Click" Padding="0" FontFamily="Cascadia Mono, Consolas" FontSize="11"/>
+                        <TextBlock Text="No leading zero (3)" FontSize="10.5" Opacity="0.55" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Grid>
 
-            <TextBlock Grid.Row="3" Grid.Column="0" Text="MMM" FontFamily="Cascadia Mono, Consolas" FontSize="11.5" Opacity="0.85"/>
-            <TextBlock Grid.Row="3" Grid.Column="1" Text="Abbreviated month (Mar)" FontSize="11.5" Opacity="0.55"/>
+                <!-- Day -->
+                <TextBlock Text="DAY" FontSize="9.5" FontWeight="SemiBold"
+                           CharacterSpacing="100" Opacity="0.45"
+                           Margin="0,0,0,4"/>
+                <Grid ColumnSpacing="8" RowSpacing="3">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Spacing="7">
+                        <HyperlinkButton x:Name="Token_dddd" Content="dddd" Click="Token_Click" Padding="0" FontFamily="Cascadia Mono, Consolas" FontSize="11"/>
+                        <TextBlock Text="Full name (Monday)" FontSize="10.5" Opacity="0.55" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Spacing="7">
+                        <HyperlinkButton x:Name="Token_ddd" Content="ddd" Click="Token_Click" Padding="0" FontFamily="Cascadia Mono, Consolas" FontSize="11"/>
+                        <TextBlock Text="Abbreviated (Mon)" FontSize="10.5" Opacity="0.55" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Spacing="7">
+                        <HyperlinkButton x:Name="Token_dd" Content="dd" Click="Token_Click" Padding="0" FontFamily="Cascadia Mono, Consolas" FontSize="11"/>
+                        <TextBlock Text="Two-digit (05)" FontSize="10.5" Opacity="0.55" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Spacing="7">
+                        <HyperlinkButton x:Name="Token_d" Content="d" Click="Token_Click" Padding="0" FontFamily="Cascadia Mono, Consolas" FontSize="11"/>
+                        <TextBlock Text="No leading zero (5)" FontSize="10.5" Opacity="0.55" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Grid>
+            </StackPanel>
+        </Border>
 
-            <TextBlock Grid.Row="4" Grid.Column="0" Text="MM" FontFamily="Cascadia Mono, Consolas" FontSize="11.5" Opacity="0.85"/>
-            <TextBlock Grid.Row="4" Grid.Column="1" Text="Two-digit month (03)" FontSize="11.5" Opacity="0.55"/>
-
-            <TextBlock Grid.Row="5" Grid.Column="0" Text="M" FontFamily="Cascadia Mono, Consolas" FontSize="11.5" Opacity="0.85"/>
-            <TextBlock Grid.Row="5" Grid.Column="1" Text="Month without leading zero (3)" FontSize="11.5" Opacity="0.55"/>
-
-            <TextBlock Grid.Row="6" Grid.Column="0" Text="dddd" FontFamily="Cascadia Mono, Consolas" FontSize="11.5" Opacity="0.85"/>
-            <TextBlock Grid.Row="6" Grid.Column="1" Text="Full day name (Monday)" FontSize="11.5" Opacity="0.55"/>
-
-            <TextBlock Grid.Row="7" Grid.Column="0" Text="ddd" FontFamily="Cascadia Mono, Consolas" FontSize="11.5" Opacity="0.85"/>
-            <TextBlock Grid.Row="7" Grid.Column="1" Text="Abbreviated day (Mon)" FontSize="11.5" Opacity="0.55"/>
-
-            <TextBlock Grid.Row="8" Grid.Column="0" Text="dd" FontFamily="Cascadia Mono, Consolas" FontSize="11.5" Opacity="0.85"/>
-            <TextBlock Grid.Row="8" Grid.Column="1" Text="Two-digit day (05)" FontSize="11.5" Opacity="0.55"/>
-
-            <TextBlock Grid.Row="9" Grid.Column="0" Text="d" FontFamily="Cascadia Mono, Consolas" FontSize="11.5" Opacity="0.85"/>
-            <TextBlock Grid.Row="9" Grid.Column="1" Text="Day without leading zero (5)" FontSize="11.5" Opacity="0.55"/>
-        </Grid>
-
+        <!-- Separator hint -->
         <TextBlock Text="Use any separator: - . / or space"
-                   FontSize="11.5" Opacity="0.55"
-                   Margin="0,6,0,0"/>
+                   FontSize="11" Opacity="0.45"
+                   Margin="0,8,0,0"/>
     </StackPanel>
 
 </UserControl>
