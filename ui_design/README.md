@@ -15,8 +15,9 @@ A Windows 10/11 desktop application built with C# and WinUI 3. This document des
 7. [File Table](#7-file-table)
 8. [Hover Preview Card](#8-hover-preview-card)
 9. [Partial Organize Dialog](#9-partial-organize-dialog)
-10. [State Lifecycle](#10-state-lifecycle)
-11. [Theme System](#11-theme-system)
+10. [Custom Format Dialog](#10-custom-format-dialog)
+11. [State Lifecycle](#11-state-lifecycle)
+12. [Theme System](#12-theme-system)
 
 ---
 
@@ -82,6 +83,8 @@ A compact dropdown (`min-width: 152 px`) that lets the user pick the subfolder n
 | `MM-dd-yyyy` | `07-15-2024` |
 
 The selected format is shown in the trigger. The dropdown menu closes on outside click or on item selection. The currently selected item is highlighted in accent colour with a checkmark icon.
+
+A **Custom…** entry at the bottom of the list (separated by a top border and rendered in accent colour) opens the [Custom Format Dialog](#10-custom-format-dialog). When a custom format is active, the trigger label displays the user-supplied pattern instead of a preset name.
 
 ### Organize Button
 
@@ -265,7 +268,82 @@ A modal confirmation dialog triggered when the user clicks **Organize** while on
 
 ---
 
-## 10. State Lifecycle
+## 10. Custom Format Dialog
+
+A modal dialog that opens when the user selects **Custom…** from the Folder Format Dropdown. It allows free-form entry of a date format pattern and provides an interactive token reference.
+
+```
+┌─────────────────────────────────────────┐
+│ ✏  Custom Folder Format                 │
+│    Enter a date format pattern…         │
+├─────────────────────────────────────────┤
+│  Format Pattern                         │
+│  ┌──────────────────┬─────────────────┐ │
+│  │ yyyy/MMMM/dd     │ Preview: 2024/… │ │
+│  └──────────────────┴─────────────────┘ │
+│                                         │
+│  ╔ Format Tokens — click to insert ═══╗ │
+│  ║ Year                               ║ │
+│  ║  yyyy  Full year       (2024)      ║ │
+│  ║  yy    Two-digit year  (24)        ║ │
+│  ║ Month                              ║ │
+│  ║  MMMM  Full name       (March)     ║ │
+│  ║  MMM   Abbreviated     (Mar)       ║ │
+│  ║  MM    Two-digit       (03)        ║ │
+│  ║  M     No leading zero (3)         ║ │
+│  ║ Day                                ║ │
+│  ║  dddd  Full name       (Monday)    ║ │
+│  ║  ddd   Abbreviated     (Mon)       ║ │
+│  ║  dd    Two-digit       (05)        ║ │
+│  ║  d     No leading zero (5)         ║ │
+│  ╚════════════════════════════════════╝ │
+├─────────────────────────────────────────┤
+│                    [Cancel]  [Apply]    │
+└─────────────────────────────────────────┘
+```
+
+### Input Field
+
+The text input accepts any combination of format tokens and literal separator characters (hyphens, dots, slashes, spaces, etc.). A **Preview** tag on the right side of the input field updates in real time as the user types, rendering the pattern against a fixed sample date (`2024-03-05`) so the output is immediately visible.
+
+### Token Reference
+
+A two-column grid grouped into **Year**, **Month**, and **Day** sections. Every token label is clickable — clicking it inserts the token at the current cursor position in the input field, allowing patterns to be assembled without typing.
+
+| Group | Token | Example output |
+|---|---|---|
+| Year | `yyyy` | `2024` |
+| Year | `yy` | `24` |
+| Month | `MMMM` | `March` |
+| Month | `MMM` | `Mar` |
+| Month | `MM` | `03` |
+| Month | `M` | `3` |
+| Day | `dddd` | `Monday` |
+| Day | `ddd` | `Mon` |
+| Day | `dd` | `05` |
+| Day | `d` | `5` |
+
+### Actions
+
+| Action | Behaviour |
+|---|---|
+| **Apply** | Validates that the input is non-empty; on success, saves the pattern, updates the dropdown trigger label, marks **Custom…** as selected (with checkmark), and closes the dialog |
+| **Cancel** | Closes the dialog without changing the active format |
+| **Enter key** | Equivalent to clicking Apply |
+| **Escape key** | Equivalent to clicking Cancel |
+| **Backdrop click** | Equivalent to clicking Cancel |
+
+### Format Persistence
+
+The last applied custom pattern is stored in the `savedCustomFmt` variable for the duration of the session. Re-opening the dialog pre-fills the input with this saved value and positions the cursor at the end, so the user can refine rather than re-enter the pattern from scratch.
+
+### Validation
+
+If the user clicks **Apply** with an empty input, an inline error message `"Pattern cannot be empty."` appears in the dialog footer without closing the dialog.
+
+---
+
+## 11. State Lifecycle
 
 ### Application States
 
@@ -314,7 +392,7 @@ Transitioning back to `allMode` happens in two ways: the user clicks the All chi
 
 ---
 
-## 11. Theme System
+## 12. Theme System
 
 The application ships with two themes toggled by the pill switch in the Stats & Filter Bar.
 

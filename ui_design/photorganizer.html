@@ -152,12 +152,18 @@
     background: #ffffff;
     border: 1px solid rgba(0,0,0,0.1);
     border-radius: var(--radius-sm);
-    overflow: hidden;
+    overflow-y: auto;
+    max-height: 280px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0,0,0,0.12) transparent;
     box-shadow: 0 8px 28px rgba(0,0,0,0.12);
     z-index: 50;
     display: none;
     animation: dropIn 0.18s cubic-bezier(0.16,1,0.3,1);
   }
+  .dropdown-menu::-webkit-scrollbar { width: 3px; }
+  .dropdown-menu::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.12); border-radius: 3px; }
+  body.dark .dropdown-menu::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); }
   .dropdown-menu.open { display: block; }
   @keyframes dropIn {
     from { opacity: 0; transform: translateY(-4px); }
@@ -765,6 +771,173 @@
   body.dark .toggle-icon-sun  { opacity: 0;  transform: scale(0.5); }
   body.dark .toggle-icon-moon { opacity: 1;  transform: scale(1); }
 
+  /* ── Custom Format Item ─────────────────────── */
+  .dropdown-item.custom-item {
+    border-top: 1px solid rgba(0,0,0,0.08);
+    color: var(--accent);
+    gap: 6px;
+  }
+  body.dark .dropdown-item.custom-item { border-top-color: rgba(255,255,255,0.06); }
+  .dropdown-item.custom-item svg:first-child { opacity: 0.7; flex-shrink: 0; }
+
+  /* ── Custom Format Dialog ───────────────────── */
+  .custom-fmt-dialog {
+    width: 420px;
+    background: #ffffff;
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 14px;
+    box-shadow: 0 16px 40px rgba(0,0,0,0.14);
+    overflow: hidden;
+    transform: scale(0.96) translateY(6px);
+    transition: transform 0.22s cubic-bezier(0.16,1,0.3,1);
+  }
+  .dialog-backdrop.open .custom-fmt-dialog { transform: scale(1) translateY(0); }
+
+  .custom-fmt-header {
+    display: flex; align-items: center; gap: 11px;
+    padding: 18px 20px 14px;
+    border-bottom: 1px solid rgba(0,0,0,0.07);
+  }
+  .custom-fmt-icon {
+    width: 34px; height: 34px; flex-shrink: 0;
+    background: rgba(0,120,212,0.08);
+    border: 1px solid rgba(0,120,212,0.2);
+    border-radius: 9px;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .custom-fmt-body { padding: 16px 20px 6px; }
+
+  .custom-fmt-label {
+    font-size: 11.5px; font-weight: 600;
+    color: var(--text-muted);
+    letter-spacing: 0.06em; text-transform: uppercase;
+    margin-bottom: 7px;
+  }
+
+  .custom-fmt-input-wrap {
+    display: flex; align-items: center;
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    transition: border-color 0.15s;
+    overflow: hidden;
+  }
+  .custom-fmt-input-wrap:focus-within {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(0,120,212,0.1);
+  }
+  body.dark .custom-fmt-input-wrap:focus-within {
+    box-shadow: 0 0 0 3px rgba(99,179,237,0.12);
+  }
+  .custom-fmt-input {
+    flex: 1;
+    padding: 9px 12px;
+    background: transparent;
+    border: none; outline: none;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px; color: var(--text);
+  }
+  .custom-fmt-preview-tag {
+    padding: 0 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; color: var(--text-muted);
+    border-left: 1px solid var(--border);
+    height: 100%; display: flex; align-items: center;
+    white-space: nowrap;
+    background: rgba(0,0,0,0.02);
+  }
+  body.dark .custom-fmt-preview-tag { background: rgba(255,255,255,0.02); }
+
+  /* Token reference grid */
+  .token-ref {
+    margin-top: 14px;
+    padding: 12px 14px;
+    background: rgba(0,0,0,0.025);
+    border: 1px solid rgba(0,0,0,0.06);
+    border-radius: var(--radius-sm);
+  }
+  body.dark .token-ref {
+    background: rgba(255,255,255,0.03);
+    border-color: rgba(255,255,255,0.06);
+  }
+  .token-ref-title {
+    font-size: 10.5px; font-weight: 600;
+    color: var(--text-muted);
+    letter-spacing: 0.07em; text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .token-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+  .token-section-title {
+    grid-column: span 2;
+    font-size: 10px; font-weight: 600;
+    color: var(--text-dim);
+    letter-spacing: 0.08em; text-transform: uppercase;
+    margin: 8px 0 4px;
+    opacity: 0.65;
+  }
+  .token-section-title:first-child { margin-top: 0; }
+  .token-row {
+    display: flex; align-items: baseline; gap: 7px;
+    padding: 3px 0;
+  }
+  .token-key {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; font-weight: 500;
+    color: var(--accent);
+    min-width: 46px; flex-shrink: 0;
+    cursor: pointer;
+    transition: opacity 0.1s;
+  }
+  .token-key:hover { opacity: 0.7; }
+  .token-desc {
+    font-size: 10.5px; color: var(--text-muted);
+    line-height: 1.4;
+  }
+  .token-example {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; color: var(--text-dim);
+    opacity: 0.75;
+  }
+
+  .custom-fmt-footer {
+    display: flex; justify-content: flex-end; align-items: center; gap: 8px;
+    padding: 14px 20px;
+    border-top: 1px solid rgba(0,0,0,0.07);
+    background: rgba(0,0,0,0.02);
+    margin-top: 16px;
+  }
+  .custom-fmt-error {
+    flex: 1;
+    font-size: 11px; color: var(--warning);
+    display: none;
+  }
+  .custom-fmt-error.visible { display: block; }
+
+  /* dark overrides for custom dialog */
+  body.dark .custom-fmt-dialog {
+    background: #16162a;
+    border-color: rgba(255,255,255,0.12);
+    box-shadow: 0 24px 60px rgba(0,0,0,0.7);
+  }
+  body.dark .custom-fmt-header { border-bottom-color: rgba(255,255,255,0.07); }
+  body.dark .custom-fmt-icon {
+    background: rgba(99,179,237,0.1);
+    border-color: rgba(99,179,237,0.25);
+  }
+  body.dark .custom-fmt-footer {
+    border-top-color: rgba(255,255,255,0.07);
+    background: rgba(0,0,0,0.15);
+  }
+  body.dark .custom-fmt-footer .btn:not(.btn-primary) {
+    background: rgba(255,255,255,0.04);
+    border-color: rgba(255,255,255,0.08);
+  }
+
 </style>
 </head>
 <body>
@@ -818,20 +991,57 @@
           yyyy-MM-dd
           <svg class="check" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
         </div>
+        <div class="dropdown-item" onclick="selectFormat(this, 'yyyy-M-d')">
+          yyyy-M-d
+          <svg class="check" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
         <div class="dropdown-item" onclick="selectFormat(this, 'dd-MM-yyyy')">
           dd-MM-yyyy
           <svg class="check" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
         </div>
-        <div class="dropdown-item" onclick="selectFormat(this, 'yyyyMMdd')">
-          yyyyMMdd
+        <div class="dropdown-item" onclick="selectFormat(this, 'd-M-yyyy')">
+          d-M-yyyy
+          <svg class="check" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="dropdown-item" onclick="selectFormat(this, 'MM-dd-yyyy')">
+          MM-dd-yyyy
+          <svg class="check" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="dropdown-item" onclick="selectFormat(this, 'M-d-yyyy')">
+          M-d-yyyy
+          <svg class="check" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="dropdown-item" onclick="selectFormat(this, 'yyyy.MM.dd')">
+          yyyy.MM.dd
           <svg class="check" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
         </div>
         <div class="dropdown-item" onclick="selectFormat(this, 'yyyy.M.d')">
           yyyy.M.d
           <svg class="check" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
         </div>
-        <div class="dropdown-item" onclick="selectFormat(this, 'MM-dd-yyyy')">
-          MM-dd-yyyy
+        <div class="dropdown-item" onclick="selectFormat(this, 'dd.MM.yyyy')">
+          dd.MM.yyyy
+          <svg class="check" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="dropdown-item" onclick="selectFormat(this, 'd.M.yyyy')">
+          d.M.yyyy
+          <svg class="check" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="dropdown-item" onclick="selectFormat(this, 'MM.dd.yyyy')">
+          MM.dd.yyyy
+          <svg class="check" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="dropdown-item" onclick="selectFormat(this, 'M.d.yyyy')">
+          M.d.yyyy
+          <svg class="check" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="dropdown-item" onclick="selectFormat(this, 'yyyy MMM')">
+          yyyy MMM
+          <svg class="check" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="dropdown-item custom-item" id="customFmtItem" onclick="openCustomFmtDialog()">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Custom…
           <svg class="check" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
         </div>
       </div>
@@ -939,6 +1149,89 @@
     </table>
   </div>
 
+</div>
+
+<!-- Custom Format Dialog -->
+<div class="dialog-backdrop" id="customFmtDialog">
+  <div class="custom-fmt-dialog">
+    <div class="custom-fmt-header">
+      <div class="custom-fmt-icon">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--accent)">
+          <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/>
+        </svg>
+      </div>
+      <div>
+        <div class="dialog-title">Custom Folder Format</div>
+        <div style="font-size:11.5px;color:var(--text-muted);margin-top:1px;">Enter a date format pattern for subfolder names</div>
+      </div>
+    </div>
+
+    <div class="custom-fmt-body">
+      <div class="custom-fmt-label">Format Pattern</div>
+      <div class="custom-fmt-input-wrap">
+        <input class="custom-fmt-input" id="customFmtInput" type="text" placeholder="e.g. yyyy-MM-dd" spellcheck="false" oninput="updateCustomPreview()" onkeydown="customFmtKeydown(event)">
+        <div class="custom-fmt-preview-tag" id="customFmtPreview">Preview: 2024-03-05</div>
+      </div>
+
+      <!-- Token reference -->
+      <div class="token-ref">
+        <div class="token-ref-title">Format Tokens — click to insert</div>
+        <div class="token-grid">
+          <div class="token-section-title">Year</div>
+          <div class="token-row">
+            <span class="token-key" onclick="insertToken('yyyy')">yyyy</span>
+            <span class="token-desc">Full year <span class="token-example">(2024)</span></span>
+          </div>
+          <div class="token-row">
+            <span class="token-key" onclick="insertToken('yy')">yy</span>
+            <span class="token-desc">Two-digit year <span class="token-example">(24)</span></span>
+          </div>
+
+          <div class="token-section-title">Month</div>
+          <div class="token-row">
+            <span class="token-key" onclick="insertToken('MMMM')">MMMM</span>
+            <span class="token-desc">Full name <span class="token-example">(March)</span></span>
+          </div>
+          <div class="token-row">
+            <span class="token-key" onclick="insertToken('MMM')">MMM</span>
+            <span class="token-desc">Abbreviated <span class="token-example">(Mar)</span></span>
+          </div>
+          <div class="token-row">
+            <span class="token-key" onclick="insertToken('MM')">MM</span>
+            <span class="token-desc">Two-digit <span class="token-example">(03)</span></span>
+          </div>
+          <div class="token-row">
+            <span class="token-key" onclick="insertToken('M')">M</span>
+            <span class="token-desc">No leading zero <span class="token-example">(3)</span></span>
+          </div>
+
+          <div class="token-section-title">Day</div>
+          <div class="token-row">
+            <span class="token-key" onclick="insertToken('dddd')">dddd</span>
+            <span class="token-desc">Full name <span class="token-example">(Monday)</span></span>
+          </div>
+          <div class="token-row">
+            <span class="token-key" onclick="insertToken('ddd')">ddd</span>
+            <span class="token-desc">Abbreviated <span class="token-example">(Mon)</span></span>
+          </div>
+          <div class="token-row">
+            <span class="token-key" onclick="insertToken('dd')">dd</span>
+            <span class="token-desc">Two-digit <span class="token-example">(05)</span></span>
+          </div>
+          <div class="token-row">
+            <span class="token-key" onclick="insertToken('d')">d</span>
+            <span class="token-desc">No leading zero <span class="token-example">(5)</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="custom-fmt-footer">
+      <span class="custom-fmt-error" id="customFmtError">Pattern cannot be empty.</span>
+      <button class="btn" style="background:var(--surface);border:1px solid var(--border);color:var(--text-muted);font-size:12.5px;" onclick="closeCustomFmtDialog()">Cancel</button>
+      <button class="btn btn-primary" style="font-size:12.5px;" onclick="applyCustomFormat()">Apply</button>
+    </div>
+  </div>
 </div>
 
 <!-- Confirm Dialog -->
@@ -1291,6 +1584,94 @@
         </div>
       </td>
     </tr>`;
+  /* ── Custom Format Dialog ── */
+  const PREVIEW_DATE = new Date(2024, 2, 5); // March 5, 2024
+
+  const MONTH_NAMES_FULL  = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const MONTH_NAMES_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const DAY_NAMES_FULL    = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const DAY_NAMES_SHORT   = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+  function applyDateFormat(pattern, date) {
+    const y  = date.getFullYear();
+    const yy = String(y).slice(-2);
+    const mo = date.getMonth();
+    const d  = date.getDate();
+    const dw = date.getDay();
+    return pattern
+      .replace(/yyyy/g,  String(y))
+      .replace(/yy/g,    yy)
+      .replace(/MMMM/g,  MONTH_NAMES_FULL[mo])
+      .replace(/MMM/g,   MONTH_NAMES_SHORT[mo])
+      .replace(/MM/g,    String(mo + 1).padStart(2, '0'))
+      .replace(/M/g,     String(mo + 1))
+      .replace(/dddd/g,  DAY_NAMES_FULL[dw])
+      .replace(/ddd/g,   DAY_NAMES_SHORT[dw])
+      .replace(/dd/g,    String(d).padStart(2, '0'))
+      .replace(/d/g,     String(d));
+  }
+
+  function updateCustomPreview() {
+    const raw = $('customFmtInput').value;
+    const preview = raw.trim() ? applyDateFormat(raw, PREVIEW_DATE) : '—';
+    $('customFmtPreview').textContent = 'Preview: ' + preview;
+    $('customFmtError').classList.remove('visible');
+  }
+
+  function insertToken(token) {
+    const inp = $('customFmtInput');
+    const start = inp.selectionStart, end = inp.selectionEnd;
+    const val = inp.value;
+    inp.value = val.slice(0, start) + token + val.slice(end);
+    inp.selectionStart = inp.selectionEnd = start + token.length;
+    inp.focus();
+    updateCustomPreview();
+  }
+
+  let savedCustomFmt = '';
+
+  function openCustomFmtDialog() {
+    $('fmtMenu').classList.remove('open');
+    $('fmtTrigger').classList.remove('open');
+    $('customFmtInput').value = savedCustomFmt;
+    $('customFmtError').classList.remove('visible');
+    updateCustomPreview();
+    $('customFmtDialog').classList.add('open');
+    setTimeout(() => {
+      const inp = $('customFmtInput');
+      inp.focus();
+      inp.setSelectionRange(inp.value.length, inp.value.length);
+    }, 220);
+  }
+
+  function closeCustomFmtDialog() {
+    $('customFmtDialog').classList.remove('open');
+  }
+
+  function applyCustomFormat() {
+    const raw = $('customFmtInput').value.trim();
+    if (!raw) {
+      $('customFmtError').textContent = 'Pattern cannot be empty.';
+      $('customFmtError').classList.add('visible');
+      return;
+    }
+    savedCustomFmt = raw;
+    $('formatLabel').textContent = raw;
+    document.querySelectorAll('.dropdown-item').forEach(e => e.classList.remove('selected'));
+    $('customFmtItem').classList.add('selected');
+    closeCustomFmtDialog();
+  }
+
+  function customFmtKeydown(e) {
+    if (e.key === 'Enter') applyCustomFormat();
+    if (e.key === 'Escape') closeCustomFmtDialog();
+  }
+
+  // Close custom dialog on backdrop click
+  $('customFmtDialog').addEventListener('click', e => {
+    if (e.target === $('customFmtDialog')) closeCustomFmtDialog();
+  });
+
 </script>
 </body>
 </html>
