@@ -79,18 +79,107 @@
                               Foreground="{ThemeResource TextDimBrush}" Margin="8,0,0,0"/>
                 </Grid>
                 <Button.Flyout>
-                    <MenuFlyout x:Name="FormatFlyout" Placement="Bottom">
-                        <RadioMenuFlyoutItem Text="yyyy-MM-dd" GroupName="FolderFormat" IsChecked="True" Click="FormatItem_Click"/>
-                        <RadioMenuFlyoutItem Text="yyyy-M-d" GroupName="FolderFormat" Click="FormatItem_Click"/>
-                        <RadioMenuFlyoutItem Text="dd-MM-yyyy" GroupName="FolderFormat" Click="FormatItem_Click"/>
-                        <RadioMenuFlyoutItem Text="d-M-yyyy" GroupName="FolderFormat" Click="FormatItem_Click"/>
-                        <RadioMenuFlyoutItem Text="yyyy.MM.dd" GroupName="FolderFormat" Click="FormatItem_Click"/>
-                        <RadioMenuFlyoutItem Text="yyyy.M.d" GroupName="FolderFormat" Click="FormatItem_Click"/>
-                        <RadioMenuFlyoutItem Text="dd.MM.yyyy" GroupName="FolderFormat" Click="FormatItem_Click"/>
-                        <RadioMenuFlyoutItem Text="d.M.yyyy" GroupName="FolderFormat" Click="FormatItem_Click"/>
-                        <MenuFlyoutSeparator/>
-                        <RadioMenuFlyoutItem x:Name="CustomFormatItem" Text="Custom..." GroupName="FolderFormat" Click="CustomFormatItem_Click"/>
-                    </MenuFlyout>
+                    <Flyout x:Name="FormatFlyout" Placement="Bottom">
+                        <Flyout.FlyoutPresenterStyle>
+                            <Style TargetType="FlyoutPresenter">
+                                <Setter Property="Padding" Value="0"/>
+                                <Setter Property="MinWidth" Value="152"/>
+                                <Setter Property="CornerRadius" Value="6"/>
+                                <Setter Property="Background" Value="{ThemeResource FmtDropdownBg}"/>
+                                <Setter Property="BorderBrush" Value="{ThemeResource FmtDropdownBorder}"/>
+                                <Setter Property="BorderThickness" Value="1"/>
+                            </Style>
+                        </Flyout.FlyoutPresenterStyle>
+                        <StackPanel x:Name="FormatItemsPanel">
+                            <Button Tag="yyyy-MM-dd" Click="FormatItem_Click" Style="{StaticResource FmtDropdownItemStyle}" Padding="12,8"
+                                    Background="{ThemeResource FmtDropdownSelectedBg}"
+                                    BorderBrush="{ThemeResource FmtDropdownItemBorder}" BorderThickness="0,0,0,1">
+                                <Grid>
+                                    <TextBlock Text="yyyy-MM-dd" FontFamily="Cascadia Mono, Consolas" FontSize="12.5"
+                                               Foreground="{ThemeResource AccentBrush}" VerticalAlignment="Center"/>
+                                    <FontIcon Glyph="&#xE73E;" FontSize="11" HorizontalAlignment="Right"
+                                              Foreground="{ThemeResource AccentBrush}" FontFamily="{ThemeResource SymbolThemeFontFamily}"/>
+                                </Grid>
+                            </Button>
+                            <Button Tag="yyyy-M-d" Click="FormatItem_Click" Style="{StaticResource FmtDropdownItemStyle}" Padding="12,8"
+                                    BorderBrush="{ThemeResource FmtDropdownItemBorder}" BorderThickness="0,0,0,1">
+                                <Grid>
+                                    <TextBlock Text="yyyy-M-d" FontFamily="Cascadia Mono, Consolas" FontSize="12.5"
+                                               Foreground="{ThemeResource TextDimBrush}" VerticalAlignment="Center"/>
+                                    <FontIcon Glyph="&#xE73E;" FontSize="11" HorizontalAlignment="Right"
+                                              Foreground="{ThemeResource AccentBrush}" FontFamily="{ThemeResource SymbolThemeFontFamily}" Visibility="Collapsed"/>
+                                </Grid>
+                            </Button>
+                            <Button Tag="dd-MM-yyyy" Click="FormatItem_Click" Style="{StaticResource FmtDropdownItemStyle}" Padding="12,8"
+                                    BorderBrush="{ThemeResource FmtDropdownItemBorder}" BorderThickness="0,0,0,1">
+                                <Grid>
+                                    <TextBlock Text="dd-MM-yyyy" FontFamily="Cascadia Mono, Consolas" FontSize="12.5"
+                                               Foreground="{ThemeResource TextDimBrush}" VerticalAlignment="Center"/>
+                                    <FontIcon Glyph="&#xE73E;" FontSize="11" HorizontalAlignment="Right"
+                                              Foreground="{ThemeResource AccentBrush}" FontFamily="{ThemeResource SymbolThemeFontFamily}" Visibility="Collapsed"/>
+                                </Grid>
+                            </Button>
+                            <Button Tag="d-M-yyyy" Click="FormatItem_Click" Style="{StaticResource FmtDropdownItemStyle}" Padding="12,8"
+                                    BorderBrush="{ThemeResource FmtDropdownItemBorder}" BorderThickness="0,0,0,1">
+                                <Grid>
+                                    <TextBlock Text="d-M-yyyy" FontFamily="Cascadia Mono, Consolas" FontSize="12.5"
+                                               Foreground="{ThemeResource TextDimBrush}" VerticalAlignment="Center"/>
+                                    <FontIcon Glyph="&#xE73E;" FontSize="11" HorizontalAlignment="Right"
+                                              Foreground="{ThemeResource AccentBrush}" FontFamily="{ThemeResource SymbolThemeFontFamily}" Visibility="Collapsed"/>
+                                </Grid>
+                            </Button>
+                            <Button Tag="yyyy.MM.dd" Click="FormatItem_Click" Style="{StaticResource FmtDropdownItemStyle}" Padding="12,8"
+                                    BorderBrush="{ThemeResource FmtDropdownItemBorder}" BorderThickness="0,0,0,1">
+                                <Grid>
+                                    <TextBlock Text="yyyy.MM.dd" FontFamily="Cascadia Mono, Consolas" FontSize="12.5"
+                                               Foreground="{ThemeResource TextDimBrush}" VerticalAlignment="Center"/>
+                                    <FontIcon Glyph="&#xE73E;" FontSize="11" HorizontalAlignment="Right"
+                                              Foreground="{ThemeResource AccentBrush}" FontFamily="{ThemeResource SymbolThemeFontFamily}" Visibility="Collapsed"/>
+                                </Grid>
+                            </Button>
+                            <Button Tag="yyyy.M.d" Click="FormatItem_Click" Style="{StaticResource FmtDropdownItemStyle}" Padding="12,8"
+                                    BorderBrush="{ThemeResource FmtDropdownItemBorder}" BorderThickness="0,0,0,1">
+                                <Grid>
+                                    <TextBlock Text="yyyy.M.d" FontFamily="Cascadia Mono, Consolas" FontSize="12.5"
+                                               Foreground="{ThemeResource TextDimBrush}" VerticalAlignment="Center"/>
+                                    <FontIcon Glyph="&#xE73E;" FontSize="11" HorizontalAlignment="Right"
+                                              Foreground="{ThemeResource AccentBrush}" FontFamily="{ThemeResource SymbolThemeFontFamily}" Visibility="Collapsed"/>
+                                </Grid>
+                            </Button>
+                            <Button Tag="dd.MM.yyyy" Click="FormatItem_Click" Style="{StaticResource FmtDropdownItemStyle}" Padding="12,8"
+                                    BorderBrush="{ThemeResource FmtDropdownItemBorder}" BorderThickness="0,0,0,1">
+                                <Grid>
+                                    <TextBlock Text="dd.MM.yyyy" FontFamily="Cascadia Mono, Consolas" FontSize="12.5"
+                                               Foreground="{ThemeResource TextDimBrush}" VerticalAlignment="Center"/>
+                                    <FontIcon Glyph="&#xE73E;" FontSize="11" HorizontalAlignment="Right"
+                                              Foreground="{ThemeResource AccentBrush}" FontFamily="{ThemeResource SymbolThemeFontFamily}" Visibility="Collapsed"/>
+                                </Grid>
+                            </Button>
+                            <Button Tag="d.M.yyyy" Click="FormatItem_Click" Style="{StaticResource FmtDropdownItemStyle}" Padding="12,8"
+                                    BorderBrush="{ThemeResource FmtDropdownCustomBorder}" BorderThickness="0,0,0,1">
+                                <Grid>
+                                    <TextBlock Text="d.M.yyyy" FontFamily="Cascadia Mono, Consolas" FontSize="12.5"
+                                               Foreground="{ThemeResource TextDimBrush}" VerticalAlignment="Center"/>
+                                    <FontIcon Glyph="&#xE73E;" FontSize="11" HorizontalAlignment="Right"
+                                              Foreground="{ThemeResource AccentBrush}" FontFamily="{ThemeResource SymbolThemeFontFamily}" Visibility="Collapsed"/>
+                                </Grid>
+                            </Button>
+                            <!-- Custom format item -->
+                            <Button x:Name="CustomFormatItem" Click="CustomFormatItem_Click"
+                                    Style="{StaticResource FmtDropdownItemStyle}" Padding="12,8">
+                                <Grid>
+                                    <StackPanel Orientation="Horizontal" Spacing="6">
+                                        <FontIcon Glyph="&#xE710;" FontSize="11"
+                                                  Foreground="{ThemeResource AccentBrush}" FontFamily="{ThemeResource SymbolThemeFontFamily}" Opacity="0.7"/>
+                                        <TextBlock Text="Custom…" FontFamily="Cascadia Mono, Consolas" FontSize="12.5"
+                                                   Foreground="{ThemeResource AccentBrush}" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                    <FontIcon Glyph="&#xE73E;" FontSize="11" HorizontalAlignment="Right"
+                                              Foreground="{ThemeResource AccentBrush}" FontFamily="{ThemeResource SymbolThemeFontFamily}" Visibility="Collapsed"/>
+                                </Grid>
+                            </Button>
+                        </StackPanel>
+                    </Flyout>
                 </Button.Flyout>
             </Button>
 

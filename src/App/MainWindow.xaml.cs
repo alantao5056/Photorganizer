@@ -318,6 +318,7 @@ namespace Alan.Photorganizer.App
             RootGrid.RequestedTheme = isDark ? ElementTheme.Dark : ElementTheme.Light;
 
             UpdateChipVisuals();
+            UpdateFormatDropdownVisuals(_currentFormat);
 
             if (_folderLoaded)
             {
@@ -458,11 +459,13 @@ namespace Alan.Photorganizer.App
         // ── Format Dropdown ──
         private void FormatItem_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is RadioMenuFlyoutItem item)
+            if (sender is Button btn && btn.Tag is string fmt)
             {
-                _currentFormat = item.Text;
-                FormatLabel.Text = item.Text;
+                _currentFormat = fmt;
+                FormatLabel.Text = fmt;
+                UpdateFormatDropdownVisuals(fmt);
                 UpdateAllDestFolders();
+                FormatFlyout.Hide();
             }
         }
 
@@ -471,6 +474,59 @@ namespace Alan.Photorganizer.App
             CustomFmtPanel.FormatString = _customFormat;
             CustomFmtError.Visibility = Visibility.Collapsed;
             CustomFmtOverlay.Visibility = Visibility.Visible;
+            FormatFlyout.Hide();
+        }
+
+        private void UpdateFormatDropdownVisuals(string selectedFormat)
+        {
+            bool dark = IsDark;
+            var accentBrush = new SolidColorBrush(dark
+                ? Color.FromArgb(255, 99, 179, 237) : Color.FromArgb(255, 0, 120, 212));
+            var dimBrush = new SolidColorBrush(dark
+                ? Color.FromArgb(255, 156, 163, 175) : Color.FromArgb(255, 121, 119, 117));
+            var selectedBg = new SolidColorBrush(dark
+                ? Color.FromArgb(0x12, 99, 179, 237) : Color.FromArgb(0x14, 0, 120, 212));
+            var transparentBrush = new SolidColorBrush(Microsoft.UI.Colors.Transparent);
+
+            foreach (var child in FormatItemsPanel.Children)
+            {
+                if (child is not Button btn) continue;
+
+                bool isCustom = btn == CustomFormatItem;
+                bool isSelected = btn.Tag is string tag && tag == selectedFormat;
+                bool isCustomSelected = isCustom && !FormatItemsPanel.Children
+                    .OfType<Button>()
+                    .Any(b => b != CustomFormatItem && b.Tag is string t && t == selectedFormat);
+
+                bool selected = isSelected || isCustomSelected;
+
+                btn.Background = selected ? selectedBg : transparentBrush;
+
+                if (btn.Content is Grid grid)
+                {
+                    foreach (var element in grid.Children)
+                    {
+                        if (element is TextBlock tb && !isCustom)
+                        {
+                            tb.Foreground = selected ? accentBrush : dimBrush;
+                        }
+                        else if (element is FontIcon fi && fi.Glyph == "\uE73E")
+                        {
+                            fi.Visibility = selected ? Visibility.Visible : Visibility.Collapsed;
+                            fi.Foreground = accentBrush;
+                        }
+                        else if (element is StackPanel sp)
+                        {
+                            // Custom item text/icon — refresh accent color for theme
+                            foreach (var spChild in sp.Children)
+                            {
+                                if (spChild is TextBlock stb) stb.Foreground = accentBrush;
+                                else if (spChild is FontIcon sfi) sfi.Foreground = accentBrush;
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         private void CustomFmtApply_Click(object sender, RoutedEventArgs e)
@@ -488,6 +544,7 @@ namespace Alan.Photorganizer.App
                 _customFormat = fmt;
                 _currentFormat = fmt;
                 FormatLabel.Text = fmt;
+                UpdateFormatDropdownVisuals(fmt);
                 UpdateAllDestFolders();
                 CustomFmtOverlay.Visibility = Visibility.Collapsed;
             }
@@ -510,15 +567,7 @@ namespace Alan.Photorganizer.App
 
         private void RevertFormatSelection()
         {
-            CustomFormatItem.IsChecked = false;
-            foreach (var menuItem in FormatFlyout.Items.OfType<RadioMenuFlyoutItem>())
-            {
-                if (menuItem.Text == _currentFormat)
-                {
-                    menuItem.IsChecked = true;
-                    break;
-                }
-            }
+            UpdateFormatDropdownVisuals(_currentFormat);
         }
 
         private string FormatDestFolder(DateTime dateTaken)

@@ -34,6 +34,30 @@
                 </Setter>
             </Style>
 
+            <!-- Format dropdown item: no built-in hover/press chrome -->
+            <Style x:Key="FmtDropdownItemStyle" TargetType="Button">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="MinHeight" Value="0"/>
+                <Setter Property="MinWidth" Value="0"/>
+                <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    Padding="{TemplateBinding Padding}">
+                                <ContentPresenter Content="{TemplateBinding Content}"
+                                                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
             <ResourceDictionary.ThemeDictionaries>
                 <!-- Light Theme -->
                 <ResourceDictionary x:Key="Light">
@@ -99,6 +123,12 @@
                     <SolidColorBrush x:Key="DialogFooterBrush" Color="#08000000"/>
                     <SolidColorBrush x:Key="AccentIconBackgroundBrush" Color="#140078D4"/>
                     <SolidColorBrush x:Key="AccentIconBorderBrush" Color="#330078D4"/>
+
+                    <SolidColorBrush x:Key="FmtDropdownBg" Color="#FFFFFF"/>
+                    <SolidColorBrush x:Key="FmtDropdownBorder" Color="#1A000000"/>
+                    <SolidColorBrush x:Key="FmtDropdownItemBorder" Color="#0D000000"/>
+                    <SolidColorBrush x:Key="FmtDropdownSelectedBg" Color="#140078D4"/>
+                    <SolidColorBrush x:Key="FmtDropdownCustomBorder" Color="#14000000"/>
                 </ResourceDictionary>
 
                 <!-- Dark Theme -->
@@ -165,6 +195,12 @@
                     <SolidColorBrush x:Key="DialogFooterBrush" Color="#05FFFFFF"/>
                     <SolidColorBrush x:Key="AccentIconBackgroundBrush" Color="#1A63B3ED"/>
                     <SolidColorBrush x:Key="AccentIconBorderBrush" Color="#4063B3ED"/>
+
+                    <SolidColorBrush x:Key="FmtDropdownBg" Color="#1A1A2C"/>
+                    <SolidColorBrush x:Key="FmtDropdownBorder" Color="#1EFFFFFF"/>
+                    <SolidColorBrush x:Key="FmtDropdownItemBorder" Color="#0AFFFFFF"/>
+                    <SolidColorBrush x:Key="FmtDropdownSelectedBg" Color="#1263B3ED"/>
+                    <SolidColorBrush x:Key="FmtDropdownCustomBorder" Color="#0FFFFFFF"/>
                 </ResourceDictionary>
             </ResourceDictionary.ThemeDictionaries>
         </ResourceDictionary>
