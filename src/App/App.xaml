@@ -91,15 +91,21 @@
                     <SolidColorBrush x:Key="MovBackground" Color="#14A4262C"/>
                     <SolidColorBrush x:Key="MovBorder" Color="#33A4262C"/>
 
-                    <SolidColorBrush x:Key="ReadyForeground" Color="#107C41"/>
-                    <SolidColorBrush x:Key="ReadyBackground" Color="#12107C41"/>
-                    <SolidColorBrush x:Key="ReadyBorder" Color="#33107C41"/>
+                    <SolidColorBrush x:Key="ReadyForeground" Color="#0078D4"/>
+                    <SolidColorBrush x:Key="ReadyBackground" Color="#120078D4"/>
+                    <SolidColorBrush x:Key="ReadyBorder" Color="#330078D4"/>
                     <SolidColorBrush x:Key="NoExifForeground" Color="#CA5010"/>
                     <SolidColorBrush x:Key="NoExifBackground" Color="#12CA5010"/>
                     <SolidColorBrush x:Key="NoExifBorder" Color="#33CA5010"/>
                     <SolidColorBrush x:Key="PendingForeground" Color="#CA5010"/>
                     <SolidColorBrush x:Key="PendingBackground" Color="#12CA5010"/>
                     <SolidColorBrush x:Key="PendingBorder" Color="#33CA5010"/>
+                    <SolidColorBrush x:Key="MovedForeground" Color="#107C41"/>
+                    <SolidColorBrush x:Key="MovedBackground" Color="#12107C41"/>
+                    <SolidColorBrush x:Key="MovedBorder" Color="#33107C41"/>
+                    <SolidColorBrush x:Key="ErrorForeground" Color="#D13438"/>
+                    <SolidColorBrush x:Key="ErrorBackground" Color="#12D13438"/>
+                    <SolidColorBrush x:Key="ErrorBorder" Color="#33D13438"/>
 
                     <LinearGradientBrush x:Key="PrimaryButtonBrush" StartPoint="0,0" EndPoint="1,1">
                         <GradientStop Color="#005A9E" Offset="0"/>
@@ -166,15 +172,21 @@
                     <SolidColorBrush x:Key="MovBackground" Color="#1AFC8181"/>
                     <SolidColorBrush x:Key="MovBorder" Color="#33FC8181"/>
 
-                    <SolidColorBrush x:Key="ReadyForeground" Color="#68D391"/>
-                    <SolidColorBrush x:Key="ReadyBackground" Color="#1468D391"/>
-                    <SolidColorBrush x:Key="ReadyBorder" Color="#2E68D391"/>
+                    <SolidColorBrush x:Key="ReadyForeground" Color="#63B3ED"/>
+                    <SolidColorBrush x:Key="ReadyBackground" Color="#1463B3ED"/>
+                    <SolidColorBrush x:Key="ReadyBorder" Color="#2E63B3ED"/>
                     <SolidColorBrush x:Key="NoExifForeground" Color="#F6AD55"/>
                     <SolidColorBrush x:Key="NoExifBackground" Color="#14F6AD55"/>
                     <SolidColorBrush x:Key="NoExifBorder" Color="#33F6AD55"/>
                     <SolidColorBrush x:Key="PendingForeground" Color="#F6AD55"/>
                     <SolidColorBrush x:Key="PendingBackground" Color="#14F6AD55"/>
                     <SolidColorBrush x:Key="PendingBorder" Color="#33F6AD55"/>
+                    <SolidColorBrush x:Key="MovedForeground" Color="#68D391"/>
+                    <SolidColorBrush x:Key="MovedBackground" Color="#1468D391"/>
+                    <SolidColorBrush x:Key="MovedBorder" Color="#3368D391"/>
+                    <SolidColorBrush x:Key="ErrorForeground" Color="#FC8181"/>
+                    <SolidColorBrush x:Key="ErrorBackground" Color="#14FC8181"/>
+                    <SolidColorBrush x:Key="ErrorBorder" Color="#33FC8181"/>
 
                     <LinearGradientBrush x:Key="PrimaryButtonBrush" StartPoint="0,0" EndPoint="1,1">
                         <GradientStop Color="#4A9FD4" Offset="0"/>

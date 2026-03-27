@@ -56,6 +56,8 @@ namespace Alan.Photorganizer.App
         private Dictionary<MediaFormat, List<FileItem>> _noExifFiles = [];
         private string _currentFormat = "yyyy-MM-dd";
         private string _customFormat = "";
+        private bool _isDone;
+        private string _sourceFolder = "";
 
         public bool IsDarkTheme { get; set; } = Application.Current.RequestedTheme == ApplicationTheme.Dark;
 
@@ -166,6 +168,7 @@ namespace Alan.Photorganizer.App
 
             BuildGrouping();
             UpdateGroupAndNoExifPills();
+            UpdateOrganizeButton();
         }
 
         private void LoadFiles(IEnumerable<FileInfo> files)
@@ -276,6 +279,16 @@ namespace Alan.Photorganizer.App
                 FileList.ItemsSource = _allFiles.Where(f => _activeFormats.Contains(f.Format)).ToList();
 
             UpdateGroupAndNoExifPills();
+            UpdateOrganizeButton();
+        }
+
+        private void UpdateOrganizeButton()
+        {
+            if (!_folderLoaded) return;
+            bool hasReady = _allMode
+                ? _allFiles.Any(f => f.StatusText == "Ready")
+                : _allFiles.Any(f => f.StatusText == "Ready" && _activeFormats.Contains(f.Format));
+            OrganizeBtn.IsEnabled = hasReady;
         }
 
         // ── Folder Pick ──
@@ -295,6 +308,15 @@ namespace Alan.Photorganizer.App
             FolderPath.Text = folder.Path;
             FolderPath.Foreground = (Brush)Application.Current.Resources["AccentBrush"];
 
+            // Reset done state from previous organize
+            if (_isDone)
+            {
+                _isDone = false;
+                ProgressStrip.Visibility = Visibility.Collapsed;
+            }
+
+            _sourceFolder = folder.Path;
+
             // Scan root-level supported files
             var dir = new DirectoryInfo(folder.Path);
             _scannedFiles = dir.EnumerateFiles()
@@ -303,7 +325,6 @@ namespace Alan.Photorganizer.App
                 .ToList();
 
             _folderLoaded = true;
-            OrganizeBtn.IsEnabled = true;
             _allMode = true;
             _activeFormats.Clear();
             SetAllModeVisuals();
@@ -479,9 +500,109 @@ namespace Alan.Photorganizer.App
             StartOrganize();
         }
 
-        private void StartOrganize()
+        private async void StartOrganize()
         {
-            // Will be implemented in a future task
+            // Disable all toolbar buttons
+            FolderPickBtn.IsEnabled = false;
+            OrganizeBtn.IsEnabled = false;
+            FormatDropdownBtn.IsEnabled = false;
+            FormatFlyout.Hide();
+
+            // Disable filter chips and theme toggle
+            ChipAll.IsEnabled = false;
+            foreach (var (chip, _) in GetFormatChips())
+                chip.IsEnabled = false;
+            ThemeToggle.IsEnabled = false;
+
+            // Determine which files to organize (only Ready files)
+            var filesToMove = _allFiles
+                .Where(f => f.StatusText == "Ready")
+                .Where(f => _allMode || _activeFormats.Contains(f.Format))
+                .ToList();
+
+            // Show progress strip in determinate mode
+            ProgressSpinner.Visibility = Visibility.Visible;
+            ProgressDoneIcon.Visibility = Visibility.Collapsed;
+            ProgressStrip.Visibility = Visibility.Visible;
+            ProgressBar.IsIndeterminate = false;
+            ProgressBar.Minimum = 0;
+            ProgressBar.Maximum = filesToMove.Count;
+            ProgressBar.Value = 0;
+            ProgressLabel.Text = "Organizing files\u2026";
+            ProgressDetail.Text = $"0 / {filesToMove.Count} files";
+            ProgressPct.Text = "0%";
+
+            int completed = 0;
+            int errors = 0;
+
+            foreach (var file in filesToMove)
+            {
+                try
+                {
+                    var destSubFolder = Path.Combine(_sourceFolder, file.DestFolder);
+                    await Task.Run(() =>
+                    {
+                        Directory.CreateDirectory(destSubFolder);
+                        var destPath = Path.Combine(destSubFolder, file.Name);
+
+                        // Handle name collision by appending suffix
+                        if (File.Exists(destPath))
+                        {
+                            var nameWithoutExt = Path.GetFileNameWithoutExtension(file.Name);
+                            var ext = Path.GetExtension(file.Name);
+                            int suffix = 1;
+                            do
+                            {
+                                destPath = Path.Combine(destSubFolder, $"{nameWithoutExt} ({suffix}){ext}");
+                                suffix++;
+                            } while (File.Exists(destPath));
+                        }
+
+                        File.Move(file.FilePath, destPath);
+                    });
+
+                    file.StatusText = "Moved";
+                }
+                catch
+                {
+                    file.StatusText = "Error";
+                    errors++;
+                }
+
+                completed++;
+                ProgressBar.Value = completed;
+                int pct = (int)((double)completed / filesToMove.Count * 100);
+                ProgressDetail.Text = $"{completed} / {filesToMove.Count} files";
+                ProgressPct.Text = $"{pct}%";
+            }
+
+            // Done state
+            _isDone = true;
+            ProgressSpinner.Visibility = Visibility.Collapsed;
+            ProgressDoneIcon.Visibility = Visibility.Visible;
+            int movedCount = completed - errors;
+            int folderCount = filesToMove
+                .Where(f => f.StatusText == "Moved")
+                .Select(f => f.DestFolder)
+                .Distinct()
+                .Count();
+            ProgressLabel.Text = errors > 0
+                ? $"Done \u2014 {movedCount} files organized, {errors} errors"
+                : "Done \u2014 all files organized";
+            ProgressDetail.Text = $"{movedCount} files moved into {folderCount} folders";
+            ProgressPct.Text = "";
+
+            // Re-enable everything except Organize button
+            FolderPickBtn.IsEnabled = true;
+            FormatDropdownBtn.IsEnabled = true;
+            ThemeToggle.IsEnabled = true;
+            ChipAll.IsEnabled = true;
+            foreach (var (chip, fmt) in GetFormatChips())
+            {
+                int count = _allFiles.Count(f => f.Format == fmt.ToString());
+                chip.IsEnabled = count > 0;
+            }
+            UpdateOrganizeButton();
         }
 
         // ── Format Dropdown ──

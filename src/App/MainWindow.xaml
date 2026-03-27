@@ -60,7 +60,7 @@
             </Button>
 
             <!-- Format Dropdown -->
-            <Button Grid.Column="1"
+            <Button Grid.Column="1" x:Name="FormatDropdownBtn"
                     Background="{ThemeResource SurfaceBrush}"
                     BorderBrush="{ThemeResource AppBorderBrush}" BorderThickness="1"
                     CornerRadius="7" Padding="12,8" MinWidth="152">
@@ -209,17 +209,27 @@
             <!-- Top row: status + details -->
             <Grid Grid.Row="0" Margin="0,0,0,7">
                 <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Left" VerticalAlignment="Center">
-                    <ProgressRing Width="13" Height="13" IsActive="True"
+                    <ProgressRing x:Name="ProgressSpinner" Width="13" Height="13" IsActive="True"
                                   Foreground="{ThemeResource AccentBrush}"/>
+                    <Viewbox x:Name="ProgressDoneIcon" Width="16" Height="16" Visibility="Collapsed">
+                        <Canvas Width="24" Height="24">
+                            <Path Data="M22,11.08 V12 A10,10 0 1 1 16.07,2.86"
+                                  Stroke="{ThemeResource SuccessBrush}" StrokeThickness="2"
+                                  StrokeStartLineCap="Round" StrokeEndLineCap="Round"/>
+                            <Path Data="M22,4 L12,14.01 L9,11.01"
+                                  Stroke="{ThemeResource SuccessBrush}" StrokeThickness="2"
+                                  StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round"/>
+                        </Canvas>
+                    </Viewbox>
                     <TextBlock x:Name="ProgressLabel" Text="Scanning folder..."
                                FontSize="12.5" FontWeight="Medium"
                                Foreground="{ThemeResource AppTextBrush}"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Spacing="14" HorizontalAlignment="Right" VerticalAlignment="Center">
-                    <TextBlock x:Name="ProgressDetail" FontSize="11.5"
+                    <TextBlock x:Name="ProgressDetail" FontSize="12.5"
                                FontFamily="Cascadia Mono, Consolas"
                                Foreground="{ThemeResource TextMutedBrush}"/>
-                    <TextBlock x:Name="ProgressPct" FontSize="11.5" FontWeight="SemiBold"
+                    <TextBlock x:Name="ProgressPct" FontSize="12.5" FontWeight="SemiBold"
                                FontFamily="Cascadia Mono, Consolas"
                                Foreground="{ThemeResource AccentBrush}"/>
                 </StackPanel>

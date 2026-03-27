@@ -36,6 +36,8 @@ namespace Alan.Photorganizer.App
             var key = status switch
             {
                 "No EXIF" => "NoExif",
+                "Moved" => "Moved",
+                "Error" => "Error",
                 _ => status
             };
 

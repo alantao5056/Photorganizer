@@ -275,6 +275,12 @@
   }
   @keyframes spin { to { transform: rotate(360deg); } }
 
+  .progress-done-check {
+    width: 16px; height: 16px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
   .progress-right {
     display: flex; align-items: center; gap: 14px;
     font-size: 11.5px; color: var(--text-muted);
@@ -1081,7 +1087,10 @@
   <div class="progress-strip" id="progressStrip">
     <div class="progress-top">
       <div class="progress-status">
-        <div class="spinner"></div>
+        <div class="spinner" id="progressSpinner"></div>
+        <div class="progress-done-check" id="progressDoneCheck" style="display:none">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#107C41" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        </div>
         <span id="progressLabel">Scanning folder…</span>
       </div>
       <div class="progress-right">
@@ -1318,15 +1327,17 @@
   const FMTS   = ['JPG','HEIC','PNG','MOV'];
   const $      = id => document.getElementById(id);
   const el = {
-    tbody:  $('fileTableBody'),
-    strip:  $('progressStrip'),
-    fill:   $('progressFill'),
-    label:  $('progressLabel'),
-    detail: $('progressDetail'),
-    pct:    $('progressPct'),
-    btn:    $('organizeBtn'),
-    stats:  $('statsRow'),
-    path:   $('folderPath'),
+    tbody:     $('fileTableBody'),
+    strip:     $('progressStrip'),
+    fill:      $('progressFill'),
+    label:     $('progressLabel'),
+    detail:    $('progressDetail'),
+    pct:       $('progressPct'),
+    btn:       $('organizeBtn'),
+    stats:     $('statsRow'),
+    path:      $('folderPath'),
+    spinner:   $('progressSpinner'),
+    doneCheck: $('progressDoneCheck'),
   };
 
   /* ── Filter state ── */
@@ -1513,6 +1524,8 @@
   function runOrganize() {
     if (running) return;
     running = true; el.btn.disabled = true;
+    el.spinner.style.display = '';
+    el.doneCheck.style.display = 'none';
     el.fill.classList.remove('indeterminate');
     el.fill.style.width = '0%';
     el.label.textContent = 'Organizing files…';
@@ -1533,8 +1546,9 @@
         el.label.textContent  = 'Done — all files organized';
         el.detail.textContent = `${TOTAL} files moved into 18 folders`;
         el.pct.textContent = '';
+        el.spinner.style.display = 'none';
+        el.doneCheck.style.display = 'flex';
         el.btn.disabled = false; running = false;
-        setTimeout(() => hideProgress(), 3500);
       }
     }, 130);
   }
