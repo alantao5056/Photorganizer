@@ -3,6 +3,7 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
+using Microsoft.UI.Xaml.Media.Imaging;
 using Microsoft.UI.Windowing;
 using System;
 using System.Collections.Generic;
@@ -67,6 +68,7 @@ namespace Alan.Photorganizer.App
             LoadPersistedFormat();
             SetupWindow();
             SetAllModeVisuals();
+            UpdateEmptyStateLogo(IsDarkTheme);
         }
 
         private void SetupWindow()
@@ -350,8 +352,17 @@ namespace Alan.Photorganizer.App
             }
 
             UpdateCaptionButtonColors(isDark);
+            UpdateEmptyStateLogo(isDark);
 
             App.Settings.IsDarkTheme = isDark;
+        }
+
+        private void UpdateEmptyStateLogo(bool isDark)
+        {
+            var uri = isDark
+                ? new Uri("ms-appx:///Assets/logo_with_text_800_dark.png")
+                : new Uri("ms-appx:///Assets/logo_with_text_800.png");
+            EmptyStateLogo.Source = new BitmapImage(uri);
         }
 
         // ── Filter Chips ──

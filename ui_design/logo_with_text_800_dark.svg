@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="4200" height="800" viewBox="0 0 4200 800">
+  <defs>
+    <clipPath id="iconclip"><rect x="60" y="80" width="640" height="640" rx="144"/></clipPath>
+    <clipPath id="c1"><rect x="148" y="170" width="210" height="175" rx="20"/></clipPath>
+    <clipPath id="c2"><rect x="390" y="170" width="210" height="175" rx="20"/></clipPath>
+    <clipPath id="c3"><rect x="148" y="372" width="210" height="175" rx="20"/></clipPath>
+    <clipPath id="c4"><rect x="390" y="372" width="210" height="175" rx="20"/></clipPath>
+  </defs>
+
+  <!-- Icon base -->
+  <g clip-path="url(#iconclip)">
+    <rect x="60" y="80" width="640" height="640" fill="#0078D4"/>
+  </g>
+
+  <!-- TL tile -->
+  <g clip-path="url(#c1)">
+    <rect x="148" y="170" width="210" height="175" rx="20" fill="rgba(255,255,255,0.92)"/>
+    <polygon points="148,322 220,222 295,282 358,242 358,322" fill="rgba(0,120,212,0.18)"/>
+    <circle cx="318" cy="200" r="28" fill="rgba(255,195,0,0.30)"/>
+  </g>
+  <rect x="148" y="170" width="210" height="175" rx="20" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="2"/>
+
+  <!-- TR tile -->
+  <g clip-path="url(#c2)">
+    <rect x="390" y="170" width="210" height="175" rx="20" fill="rgba(255,255,255,0.92)"/>
+    <polygon points="390,322 455,225 522,278 582,215 600,244 600,322" fill="rgba(0,120,212,0.14)"/>
+    <circle cx="412" cy="200" r="22" fill="rgba(255,195,0,0.22)"/>
+  </g>
+  <rect x="390" y="170" width="210" height="175" rx="20" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="2"/>
+
+  <!-- BL tile -->
+  <g clip-path="url(#c3)">
+    <rect x="148" y="372" width="210" height="175" rx="20" fill="rgba(255,255,255,0.62)"/>
+    <polygon points="148,524 208,432 272,485 340,444 358,466 358,524" fill="rgba(0,120,212,0.12)"/>
+  </g>
+  <rect x="148" y="372" width="210" height="175" rx="20" fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="2"/>
+
+  <!-- BR tile -->
+  <g clip-path="url(#c4)">
+    <rect x="390" y="372" width="210" height="175" rx="20" fill="rgba(255,255,255,0.62)"/>
+    <circle cx="566" cy="410" r="28" fill="rgba(255,195,0,0.18)"/>
+    <polygon points="390,524 462,432 536,486 600,454 600,524" fill="rgba(0,120,212,0.1)"/>
+  </g>
+  <rect x="390" y="372" width="210" height="175" rx="20" fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="2"/>
+
+  <!-- Ghost row -->
+  <rect x="148" y="568" width="210" height="58" rx="15" fill="rgba(255,255,255,0.25)"/>
+  <rect x="390" y="568" width="210" height="58" rx="15" fill="rgba(255,255,255,0.25)"/>
+
+  <!-- Calendar badge -->
+  <rect x="408" y="452" width="142" height="116" rx="19" fill="white"/>
+  <rect x="408" y="452" width="142" height="43" rx="19" fill="#005A9E"/>
+  <rect x="408" y="471" width="142" height="24" fill="#005A9E"/>
+  <circle cx="444" cy="514" r="9" fill="#0078D4"/>
+  <circle cx="479" cy="514" r="9" fill="#0078D4"/>
+  <circle cx="514" cy="514" r="9" fill="#0078D4"/>
+  <circle cx="444" cy="540" r="9" fill="#B5D4F4"/>
+  <circle cx="479" cy="540" r="9" fill="#B5D4F4"/>
+  <circle cx="514" cy="540" r="9" fill="#B5D4F4"/>
+
+  <!-- Wordmark: dark mode — "Phot" in white, "organizer" in brand blue -->
+  <text x="780" y="548" font-family="'Liberation Sans','DejaVu Sans',sans-serif" font-size="496" letter-spacing="-6">
+    <tspan font-weight="300" fill="#E8E8E8">Phot</tspan><tspan font-weight="700" fill="#0078D4">organizer</tspan>
+  </text>
+</svg>
