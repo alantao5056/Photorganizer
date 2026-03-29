@@ -76,6 +76,7 @@ namespace Alan.Photorganizer.App
             SetTitleBar(AppTitleBar);
 
             UpdateCaptionButtonColors(IsDarkTheme);
+            AppWindow.SetIcon("Assets/app.ico");
 
             var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(this);
             var dpi = GetDpiForWindow(hwnd);
