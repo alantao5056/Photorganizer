@@ -5,7 +5,7 @@ using Windows.Services.Store;
 
 namespace Alan.Photorganizer.App.Services;
 
-public static class UpdateService
+public static class AppUpdateService
 {
     /// <summary>
     /// Checks the Microsoft Store for mandatory app updates.

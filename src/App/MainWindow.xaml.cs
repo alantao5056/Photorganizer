@@ -765,7 +765,7 @@ namespace Alan.Photorganizer.App
         // ── Mandatory Update Check ──
         private async void CheckForMandatoryUpdate()
         {
-            if (await UpdateService.HasMandatoryUpdateAsync())
+            if (await AppUpdateService.HasMandatoryUpdateAsync())
             {
                 MandatoryUpdateOverlay.Visibility = Visibility.Visible;
             }
