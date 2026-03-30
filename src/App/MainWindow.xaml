@@ -536,5 +536,28 @@
                 </local:DialogShell.Body>
             </local:DialogShell>
         </Grid>
+
+        <!-- ═══ Mandatory Update Dialog Overlay ═══ -->
+        <Grid x:Name="MandatoryUpdateOverlay" Visibility="Collapsed"
+              Canvas.ZIndex="200" Grid.RowSpan="5">
+            <local:DialogShell x:Name="MandatoryUpdateShell"
+                               IconGlyph="&#xE946;"
+                               IconForeground="{ThemeResource ErrorBrush}"
+                               IconBackground="{ThemeResource WarningIconBackgroundBrush}"
+                               IconBorderBrush="{ThemeResource WarningIconBorderBrush}"
+                               DialogTitle="Update Required"
+                               DialogSubtitle="A mandatory update is available"
+                               DialogWidth="400"
+                               PrimaryButtonText="Open Microsoft Store"
+                               IsCancelButtonVisible="False"
+                               PrimaryClick="MandatoryUpdateOpen_Click">
+                <local:DialogShell.Body>
+                    <TextBlock Margin="20,16,20,16" TextWrapping="Wrap"
+                               FontSize="13" Foreground="{ThemeResource TextMutedBrush}">
+                        A newer version of Photorganizer is required. Please update from the Microsoft Store to continue using this app.
+                    </TextBlock>
+                </local:DialogShell.Body>
+            </local:DialogShell>
+        </Grid>
     </Grid>
 </Window>

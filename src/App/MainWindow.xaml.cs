@@ -69,6 +69,7 @@ namespace Alan.Photorganizer.App
             SetupWindow();
             SetAllModeVisuals();
             UpdateEmptyStateLogo(IsDarkTheme);
+            CheckForMandatoryUpdate();
         }
 
         private void SetupWindow()
@@ -759,6 +760,22 @@ namespace Alan.Photorganizer.App
                 if (file.DateTaken.HasValue)
                     file.DestFolder = FormatDestFolder(file.DateTaken.Value);
             }
+        }
+
+        // ── Mandatory Update Check ──
+        private async void CheckForMandatoryUpdate()
+        {
+            if (await UpdateService.HasMandatoryUpdateAsync())
+            {
+                MandatoryUpdateOverlay.Visibility = Visibility.Visible;
+            }
+        }
+
+        private async void MandatoryUpdateOpen_Click(object sender, RoutedEventArgs e)
+        {
+            var pfn = Windows.ApplicationModel.Package.Current.Id.FamilyName;
+            await Windows.System.Launcher.LaunchUriAsync(
+                new Uri($"ms-windows-store://pdp/?PFN={pfn}"));
         }
 
     }

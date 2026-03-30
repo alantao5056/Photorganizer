@@ -213,6 +213,24 @@ public sealed partial class DialogShell : UserControl
             shell.FooterGrid.Margin = new Thickness(0, (double)e.NewValue, 0, 0);
     }
 
+    // ── Cancel button visibility ──
+
+    public static readonly DependencyProperty IsCancelButtonVisibleProperty =
+        DependencyProperty.Register(nameof(IsCancelButtonVisible), typeof(bool), typeof(DialogShell),
+            new PropertyMetadata(true, OnIsCancelButtonVisibleChanged));
+
+    public bool IsCancelButtonVisible
+    {
+        get => (bool)GetValue(IsCancelButtonVisibleProperty);
+        set => SetValue(IsCancelButtonVisibleProperty, value);
+    }
+
+    private static void OnIsCancelButtonVisibleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        if (d is DialogShell shell)
+            shell.CancelBtn.Visibility = (bool)e.NewValue ? Visibility.Visible : Visibility.Collapsed;
+    }
+
     // ── Events ──
 
     public event RoutedEventHandler? CancelClick;
