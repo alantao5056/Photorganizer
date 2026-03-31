@@ -45,7 +45,7 @@
     width: 860px;
     height: 620px;
     margin: 24px auto;
-    border-radius: 16px;
+    border-radius: 0;
     border: 1px solid rgba(0,0,0,0.1);
     overflow: hidden;
     box-shadow: 0 0 0 1px rgba(0,0,0,0.1), 0 12px 40px rgba(0,0,0,0.14);
@@ -61,28 +61,34 @@
 
   /* ── Title bar ───────────────────────────────── */
   .titlebar {
-    height: 42px;
+    height: 32px;
     background: rgba(242,242,242,0.98);
     border-bottom: 1px solid var(--border);
     display: flex; align-items: center;
-    padding: 0 16px;
     flex-shrink: 0;
     user-select: none;
-    position: relative;
   }
 
-  .dots { display: flex; gap: 7px; }
-  .dot { width: 11px; height: 11px; border-radius: 50%; cursor: pointer; transition: filter 0.15s; }
-  .dot:hover { filter: brightness(1.25); }
-  .dot.close { background: #ff5f57; }
-  .dot.min   { background: #febc2e; }
-  .dot.max   { background: #28c840; }
-
-  .titlebar-center {
-    position: absolute; left: 50%; transform: translateX(-50%);
-    display: flex; align-items: center; gap: 7px;
-    font-size: 12.5px; font-weight: 500; color: var(--text-dim);
+  .titlebar-title {
+    text-align: left;
+    padding-left: 12px;
+    font-size: 12px; font-weight: 400;
+    color: var(--text-dim);
+    letter-spacing: 0.01em;
   }
+
+  /* Windows-style caption buttons */
+  .win-controls { display: flex; height: 100%; }
+
+  .win-btn {
+    width: 46px; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; color: var(--text);
+    transition: background 0.1s, color 0.1s;
+  }
+  .win-btn:hover { background: rgba(0,0,0,0.08); }
+  .win-btn.win-close:hover { background: #c42b1c; color: #ffffff; }
+  .win-btn svg { pointer-events: none; }
 
   /* ── Toolbar ─────────────────────────────────── */
   .toolbar {
@@ -617,6 +623,8 @@
 
   /* titlebar */
   body.dark .titlebar { background: rgba(10,10,18,0.98); }
+  body.dark .win-btn:hover { background: rgba(255,255,255,0.1); }
+  body.dark .win-btn.win-close:hover { background: #c42b1c; color: #ffffff; }
 
   /* toolbar */
   body.dark .toolbar { background: rgba(10,10,18,0.7); }
@@ -951,19 +959,72 @@
 
   <!-- Title Bar -->
   <div class="titlebar">
-    <div class="dots">
-      <div class="dot close"></div>
-      <div class="dot min"></div>
-      <div class="dot max"></div>
-    </div>
-    <div class="titlebar-center">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <rect x="3" y="3" width="8" height="8" rx="1"/>
-        <rect x="13" y="3" width="8" height="8" rx="1"/>
-        <rect x="3" y="13" width="8" height="8" rx="1"/>
-        <rect x="13" y="13" width="8" height="8" rx="1"/>
-      </svg>
-      Photorganizer
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 800 800" style="flex-shrink:0;margin-left:8px;">
+      <defs>
+        <clipPath id="tile"><rect width="800" height="800" rx="180"/></clipPath>
+        <clipPath id="c1"><rect x="110" y="130" width="240" height="200" rx="24"/></clipPath>
+        <clipPath id="c2"><rect x="450" y="130" width="240" height="200" rx="24"/></clipPath>
+        <clipPath id="c3"><rect x="110" y="370" width="240" height="200" rx="24"/></clipPath>
+        <clipPath id="c4"><rect x="450" y="370" width="240" height="200" rx="24"/></clipPath>
+      </defs>
+      <g clip-path="url(#tile)"><rect width="800" height="800" fill="#0078D4"/></g>
+      <g clip-path="url(#c1)">
+        <rect x="110" y="130" width="240" height="200" rx="24" fill="rgba(255,255,255,0.92)"/>
+        <polygon points="110,294 195,190 290,270 350,220 350,294" fill="rgba(0,120,212,0.18)"/>
+        <circle cx="300" cy="170" r="28" fill="rgba(255,195,0,0.28)"/>
+      </g>
+      <rect x="110" y="130" width="240" height="200" rx="24" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="2"/>
+      <g clip-path="url(#c2)">
+        <rect x="450" y="130" width="240" height="200" rx="24" fill="rgba(255,255,255,0.92)"/>
+        <polygon points="450,294 520,200 590,265 660,190 690,230 690,294" fill="rgba(0,120,212,0.14)"/>
+        <circle cx="508" cy="165" r="22" fill="rgba(255,195,0,0.22)"/>
+      </g>
+      <rect x="450" y="130" width="240" height="200" rx="24" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="2"/>
+      <g clip-path="url(#c3)">
+        <rect x="110" y="370" width="240" height="200" rx="24" fill="rgba(255,255,255,0.62)"/>
+        <polygon points="110,534 175,440 240,505 310,455 350,490 350,534" fill="rgba(0,120,212,0.12)"/>
+      </g>
+      <rect x="110" y="370" width="240" height="200" rx="24" fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="2"/>
+      <g clip-path="url(#c4)">
+        <rect x="450" y="370" width="240" height="200" rx="24" fill="rgba(255,255,255,0.62)"/>
+        <circle cx="618" cy="415" r="28" fill="rgba(255,195,0,0.18)"/>
+        <polygon points="450,534 530,450 610,512 690,468 690,534" fill="rgba(0,120,212,0.1)"/>
+      </g>
+      <rect x="450" y="370" width="240" height="200" rx="24" fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="2"/>
+      <rect x="110" y="606" width="240" height="58" rx="16" fill="rgba(255,255,255,0.25)"/>
+      <rect x="450" y="606" width="240" height="58" rx="16" fill="rgba(255,255,255,0.25)"/>
+      <rect x="524" y="500" width="140" height="116" rx="20" fill="white"/>
+      <rect x="524" y="500" width="140" height="42" rx="20" fill="#005A9E"/>
+      <rect x="524" y="520" width="140" height="22" fill="#005A9E"/>
+      <circle cx="559" cy="565" r="8" fill="#0078D4"/>
+      <circle cx="594" cy="565" r="8" fill="#0078D4"/>
+      <circle cx="629" cy="565" r="8" fill="#0078D4"/>
+      <circle cx="559" cy="592" r="8" fill="#B5D4F4"/>
+      <circle cx="594" cy="592" r="8" fill="#B5D4F4"/>
+      <circle cx="629" cy="592" r="8" fill="#B5D4F4"/>
+    </svg>
+    <div class="titlebar-title">Photorganizer</div>
+    <div style="flex:1;"></div>
+    <div class="win-controls">
+      <!-- Minimize -->
+      <div class="win-btn win-min" title="Minimize">
+        <svg width="10" height="1" viewBox="0 0 10 1" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <line x1="0" y1="0.5" x2="10" y2="0.5" stroke="currentColor" stroke-width="1.1"/>
+        </svg>
+      </div>
+      <!-- Maximize -->
+      <div class="win-btn win-max" title="Maximize">
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="0.5" y="0.5" width="9" height="9" stroke="currentColor" stroke-width="1.1"/>
+        </svg>
+      </div>
+      <!-- Close -->
+      <div class="win-btn win-close" title="Close">
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <line x1="0.5" y1="0.5" x2="9.5" y2="9.5" stroke="currentColor" stroke-width="1.2"/>
+          <line x1="9.5" y1="0.5" x2="0.5" y2="9.5" stroke="currentColor" stroke-width="1.2"/>
+        </svg>
+      </div>
     </div>
   </div>
 
@@ -1063,7 +1124,7 @@
   </div>
 
   <!-- HEIC Banner -->
-  <div class="heic-banner" id="heicBanner">
+  <div class="heic-banner" id="heicBanner" style="display:none;">
     <div class="heic-banner-icon">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#CA5010" stroke-width="2.5">
         <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>

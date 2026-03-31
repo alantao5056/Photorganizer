@@ -1,0 +1,47 @@
+Photorganizer — Privacy Policy
+
+1. Introduction
+Thank you for using Photorganizer. This Privacy Policy explains how Photorganizer handles information when you use the application on Windows 10 and Windows 11.
+Photorganizer is designed with your privacy in mind. The application operates entirely on your local device and does not collect, transmit, store, or share any personal data or file content with the developer or any third party.
+
+2. Information We Do Not Collect
+Photorganizer does not collect any personal information whatsoever. Specifically, the application does not:
+
+Collect your name, email address, or any other identifying information.
+Access the content of your photos or videos beyond reading file metadata (such as capture date and time) required to perform its core function.
+Transmit any data over the internet.
+Create user accounts or profiles.
+Use cookies, tracking pixels, or any other tracking technologies.
+Share any information with third parties, advertisers, or analytics providers.
+
+
+3. How the Application Works
+Photorganizer performs all of its operations locally on your device:
+
+You select a target folder on your local file system.
+The application reads the metadata (specifically the capture date and time) of JPG, JPEG, HEIC, PNG, and MOV files located directly in the selected folder. Files in subfolders are not accessed.
+Based on the capture date, the application organizes your files by moving them into subfolders within the selected folder, using a date-based naming format that you choose (e.g., yyyy-MM-dd, dd-MM-yyyy, yyyy.M.d, yyyyMMdd).
+All file operations are performed exclusively on your device. No file content or metadata ever leaves your device.
+
+
+4. Local Storage and Application Settings
+Photorganizer may store minimal application preferences (such as your last-used folder path or preferred date format) locally on your device using standard Windows application storage mechanisms. This information never leaves your device and is used solely to improve your experience within the application.
+
+5. Third-Party Services
+Photorganizer does not integrate with, connect to, or rely on any third-party services, APIs, or cloud platforms. The application functions entirely offline and does not require an internet connection to operate.
+
+6. Children's Privacy
+Photorganizer does not collect any data from any user, including children under the age of 13. Because no data is collected, the application is compliant with the Children's Online Privacy Protection Act (COPPA) and similar regulations by design.
+
+7. Data Security
+Since Photorganizer does not collect, transmit, or store any personal data externally, there is no data at risk of breach on our end. The security of your files on your local device is governed by your operating system and Windows security settings, which you control.
+We recommend maintaining regular backups of your files before using any file organization tool, including Photorganizer.
+
+8. Changes to This Privacy Policy
+We may update this Privacy Policy from time to time. When we do, the updated policy will be made available through the application or its associated listing in the Microsoft Store. The "Effective Date" at the top of this document will be revised accordingly. We encourage you to review this policy periodically.
+Continued use of the application after any changes to this Privacy Policy constitutes your acceptance of the revised policy.
+
+9. Contact Us
+If you have any questions, concerns, or feedback about this Privacy Policy or the Photorganizer application, please contact us through the support channel listed in the Microsoft Store application page.
+
+Photorganizer is a local-only application. Your files stay on your device — always.

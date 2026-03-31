@@ -1,0 +1,120 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1366" height="768" viewBox="0 0 1366 768">
+
+  <!-- ── Background ── -->
+  <rect width="1366" height="768" fill="#003B6F"/>
+
+  <!-- ── Abstract photo layers (right half) ── -->
+  <g opacity="0.07">
+    <rect x="690" y="-40"  width="220" height="170" rx="18" fill="white" transform="rotate(15,670,45)"/>
+    <rect x="980" y="80"   width="180" height="138" rx="18" fill="white" transform="rotate(-8,870,149)"/>
+    <rect x="1140" y="300"  width="200" height="154" rx="18" fill="white" transform="rotate(12,1000,377)"/>
+    <rect x="600" y="420"  width="210" height="162" rx="18" fill="white" transform="rotate(-6,585,501)"/>
+    <rect x="830" y="580"  width="190" height="146" rx="18" fill="white" transform="rotate(9,815,473)"/>
+  </g>
+  <g opacity="0.13">
+    <rect x="720" y="20"   width="200" height="154" rx="16" fill="white" transform="rotate(-12,700,97)"/>
+    <rect x="940" y="160"  width="185" height="142" rx="16" fill="white" transform="rotate(6,912,231)"/>
+    <rect x="980" y="420"  width="195" height="150" rx="16" fill="white" transform="rotate(-10,957,495)"/>
+    <rect x="650" y="520"  width="200" height="154" rx="16" fill="white" transform="rotate(14,630,557)"/>
+  </g>
+  <g opacity="0.30">
+    <rect x="860" y="60"   width="185" height="142" rx="14" fill="#85B7EB" transform="rotate(-8,732,131)"/>
+    <rect x="1060" y="220"  width="170" height="130" rx="14" fill="#378ADD" transform="rotate(5,925,285)"/>
+    <rect x="1000" y="420"  width="180" height="138" rx="14" fill="#85B7EB" transform="rotate(-14,870,499)"/>
+  </g>
+  <rect x="990" y="90"  width="200" height="154" rx="16" fill="#0078D4" opacity="0.50" transform="rotate(8,920,167)"/>
+  <rect x="890" y="520" width="185" height="142" rx="16" fill="#0078D4" opacity="0.40" transform="rotate(-5,962,561)"/>
+
+  <!-- ══════════════════════════════════════════════════════ -->
+  <!-- LOGO — top-left, independent, NO clipPaths            -->
+  <!-- Icon: x=32 y=24 w=72 h=72  inner pad=9  gap=4        -->
+  <!-- Tiles 25×25: TL(41,33) TR(70,33) BL(41,62) BR(70,62) -->
+  <!-- ══════════════════════════════════════════════════════ -->
+
+  <!-- Icon background: x=52 y=44 w=90 h=90 rx=20 -->
+  <rect x="50" y="42" width="90" height="90" rx="20" fill="#0078D4"/>
+
+  <!-- Tile size=31, pad=9, gap=6: TL(61,53) TR(98,53) BL(61,90) BR(98,90) -->
+
+  <!-- TL tile: x=61 y=53 w=31 h=31 (right=92 bottom=84) -->
+  <rect x="61" y="53" width="31" height="31" rx="5" fill="rgba(255,255,255,0.92)"/>
+  <polygon points="61,84 70,68 78,75 92,63 92,84" fill="rgba(0,120,212,0.2)"/>
+  <circle cx="86" cy="61" r="6" fill="rgba(255,195,0,0.38)"/>
+  <rect x="61" y="53" width="31" height="31" rx="5" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.2"/>
+
+  <!-- TR tile: x=98 y=53 w=31 h=31 (right=129 bottom=84) -->
+  <rect x="98" y="53" width="31" height="31" rx="5" fill="rgba(255,255,255,0.92)"/>
+  <polygon points="98,84 107,67 115,74 129,62 129,84" fill="rgba(0,120,212,0.16)"/>
+  <circle cx="102" cy="61" r="5" fill="rgba(255,195,0,0.28)"/>
+  <rect x="98" y="53" width="31" height="31" rx="5" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.2"/>
+
+  <!-- BL tile: x=61 y=90 w=31 h=31 (right=92 bottom=121) -->
+  <rect x="61" y="90" width="31" height="31" rx="5" fill="rgba(255,255,255,0.60)"/>
+  <polygon points="61,121 71,104 79,111 92,102 92,121" fill="rgba(0,120,212,0.14)"/>
+  <rect x="61" y="90" width="31" height="31" rx="5" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="1.2"/>
+
+  <!-- BR tile: x=98 y=90 w=31 h=31 (right=129 bottom=121) -->
+  <rect x="98" y="90" width="31" height="31" rx="5" fill="rgba(255,255,255,0.60)"/>
+  <circle cx="120" cy="99" r="7" fill="rgba(255,195,0,0.22)"/>
+  <polygon points="98,121 108,104 117,111 129,103 129,121" fill="rgba(0,120,212,0.1)"/>
+  <rect x="98" y="90" width="31" height="31" rx="5" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="1.2"/>
+
+  <!-- Calendar badge: x=101 y=98 w=26 h=21 (within BR tile ✓) -->
+  <rect x="101" y="98" width="26" height="21" rx="5" fill="white"/>
+  <rect x="101" y="98" width="26" height="9"  rx="5" fill="#005A9E"/>
+  <rect x="101" y="103" width="26" height="4" fill="#005A9E"/>
+  <circle cx="108" cy="113" r="2.5" fill="#0078D4"/>
+  <circle cx="115" cy="113" r="2.5" fill="#0078D4"/>
+  <circle cx="122" cy="113" r="2.5" fill="#0078D4"/>
+
+  <!-- Wordmark: icon center y = 44+45 = 89, font-size=70 -->
+  <text x="156" y="112" font-family="'Liberation Sans','DejaVu Sans',sans-serif" font-size="70" letter-spacing="-1">
+    <tspan font-weight="300" fill="white">Phot</tspan><tspan font-weight="700" fill="#63B3ED">organizer</tspan>
+  </text>
+
+  <!-- ══════════════════════════════════════════════════════ -->
+  <!-- Main content — vertical blue bar + hero text          -->
+  <!-- ══════════════════════════════════════════════════════ -->
+  <rect x="110" y="178" width="5" height="390" rx="2.5" fill="#0078D4"/>
+
+  <!-- Hero tagline -->
+  <text x="144" y="268" font-family="'Liberation Sans','DejaVu Sans',sans-serif" font-size="68" font-weight="700" fill="white" letter-spacing="-1">Your photos.</text>
+  <text x="144" y="348" font-family="'Liberation Sans','DejaVu Sans',sans-serif" font-size="68" font-weight="300" fill="#85B7EB" letter-spacing="-1">Finally sorted.</text>
+
+  <!-- Subtitle -->
+  <text x="144" y="400" font-family="'Liberation Sans','DejaVu Sans',sans-serif" font-size="20" fill="rgba(255,255,255,0.55)">Organize by capture date. One click.</text>
+
+  <!-- Privacy message with lock icon -->
+  <path d="M148,432 L148,428 A6,6 0 0,1 160,428 L160,432" fill="none" stroke="rgba(255,255,255,0.65)" stroke-width="1.8" stroke-linecap="round"/>
+  <rect x="144" y="432" width="20" height="14" rx="4" fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.45)" stroke-width="1.4"/>
+  <circle cx="154" cy="439" r="2.2" fill="rgba(255,255,255,0.65)"/>
+  <text x="172" y="443" font-family="'Liberation Sans','DejaVu Sans',sans-serif" font-size="16" fill="rgba(255,255,255,0.68)">Your files never leave your device. Ever.</text>
+
+  <!-- Format pills — coloured -->
+  <!-- JPG: green -->
+  <rect x="144" y="472" width="52" height="26" rx="13" fill="rgba(16,124,65,0.28)" stroke="rgba(104,211,145,0.55)" stroke-width="1"/>
+  <text x="170" y="489" text-anchor="middle" font-family="'Liberation Sans','DejaVu Sans',sans-serif" font-size="12" font-weight="700" fill="#68D391">JPG</text>
+
+  <!-- HEIC: blue -->
+  <rect x="204" y="472" width="60" height="26" rx="13" fill="rgba(0,120,212,0.28)" stroke="rgba(99,179,237,0.55)" stroke-width="1"/>
+  <text x="234" y="489" text-anchor="middle" font-family="'Liberation Sans','DejaVu Sans',sans-serif" font-size="12" font-weight="700" fill="#63B3ED">HEIC</text>
+
+  <!-- PNG: orange -->
+  <rect x="272" y="472" width="52" height="26" rx="13" fill="rgba(202,80,16,0.28)" stroke="rgba(246,173,85,0.55)" stroke-width="1"/>
+  <text x="298" y="489" text-anchor="middle" font-family="'Liberation Sans','DejaVu Sans',sans-serif" font-size="12" font-weight="700" fill="#F6AD55">PNG</text>
+
+  <!-- MOV: red -->
+  <rect x="332" y="472" width="56" height="26" rx="13" fill="rgba(164,38,44,0.28)" stroke="rgba(252,129,129,0.55)" stroke-width="1"/>
+  <text x="360" y="489" text-anchor="middle" font-family="'Liberation Sans','DejaVu Sans',sans-serif" font-size="12" font-weight="700" fill="#FC8181">MOV</text>
+
+  <!-- Windows badge -->
+  <g transform="translate(144, 514)">
+    <rect width="156" height="32" rx="6" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.25)" stroke-width="1"/>
+    <text x="78" y="21" text-anchor="middle" font-family="'Liberation Sans','DejaVu Sans',sans-serif" font-size="13" fill="rgba(255,255,255,0.65)">Windows 10 &amp; 11  ·  Free</text>
+  </g>
+
+  <!-- Bottom strip -->
+  <rect x="0" y="736" width="1366" height="32" fill="rgba(0,0,0,0.28)"/>
+  <text x="711" y="756" text-anchor="middle" font-family="'Liberation Sans','DejaVu Sans',sans-serif" font-size="12" fill="rgba(255,255,255,0.4)" letter-spacing="2">FREE · OPEN SOURCE · WORKS OFFLINE · WINDOWS 10 &amp; 11</text>
+
+</svg>
