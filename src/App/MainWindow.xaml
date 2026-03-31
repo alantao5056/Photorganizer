@@ -247,7 +247,7 @@
         </Grid>
 
         <!-- ═══ Row 3: Stats & Filter Bar ═══ -->
-        <Grid Grid.Row="3" Padding="20,8" Background="{ThemeResource StatsRowBrush}">
+        <Grid x:Name="StatsRow" Grid.Row="3" Padding="20,8" Background="{ThemeResource StatsRowBrush}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
@@ -486,6 +486,54 @@
                     <TextBlock Text="Choose a folder to get started" FontSize="15" Opacity="1"
                                Foreground="{ThemeResource TextMutedBrush}"
                                HorizontalAlignment="Center"/>
+                </StackPanel>
+            </Grid>
+
+            <!-- No Supported Files Empty State -->
+            <Grid x:Name="NoFilesState" Visibility="Collapsed" Margin="0,38,0,0">
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="12"
+                            Margin="0,0,0,40">
+                    <!-- Warning Icon Circle -->
+                    <Border Width="48" Height="48" CornerRadius="24"
+                            Background="{ThemeResource WarningIconBackgroundBrush}"
+                            BorderBrush="{ThemeResource WarningIconBorderBrush}"
+                            BorderThickness="1"
+                            HorizontalAlignment="Center">
+                        <Viewbox Width="22" Height="22">
+                            <Canvas Width="24" Height="24">
+                                <Path Data="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"
+                                      Stroke="{ThemeResource WarningBrush}" StrokeThickness="1.5"
+                                      Fill="Transparent"/>
+                                <Path Data="M12 9L12 13"
+                                      Stroke="{ThemeResource WarningBrush}" StrokeThickness="1.5"
+                                      StrokeStartLineCap="Round" StrokeEndLineCap="Round"/>
+                                <Path Data="M12 17L12.01 17"
+                                      Stroke="{ThemeResource WarningBrush}" StrokeThickness="2"
+                                      StrokeStartLineCap="Round" StrokeEndLineCap="Round"/>
+                            </Canvas>
+                        </Viewbox>
+                    </Border>
+
+                    <!-- Title -->
+                    <TextBlock Text="No supported photos found in this folder"
+                               FontSize="13" FontWeight="SemiBold" Opacity="0.75"
+                               Foreground="{ThemeResource AppTextBrush}"
+                               HorizontalAlignment="Center"/>
+
+                    <!-- Description -->
+                    <TextBlock Text="Please choose a different folder with files in one of the following formats:"
+                               FontSize="11.5"
+                               Foreground="{ThemeResource TextMutedBrush}"
+                               HorizontalAlignment="Center" TextAlignment="Center"
+                               MaxWidth="360" TextWrapping="Wrap"/>
+
+                    <!-- Format Badges -->
+                    <StackPanel Orientation="Horizontal" Spacing="6" HorizontalAlignment="Center">
+                        <local:FormatBadge Format="JPG"/>
+                        <local:FormatBadge Format="HEIC"/>
+                        <local:FormatBadge Format="PNG"/>
+                        <local:FormatBadge Format="MOV"/>
+                    </StackPanel>
                 </StackPanel>
             </Grid>
         </Grid>

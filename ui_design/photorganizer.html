@@ -508,6 +508,36 @@
   .pill-noexif { background: rgba(202,80,16,0.07);  color: var(--warning); border: 1px solid rgba(202,80,16,0.2);  }
   .dot-sm { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
 
+  /* ── No-files Empty State ───────────────────────── */
+  .empty-no-files {
+    display: flex; flex-direction: column; align-items: center; gap: 12px;
+    padding: 52px 0;
+  }
+  .empty-no-files-icon {
+    width: 48px; height: 48px;
+    background: rgba(202,80,16,0.07);
+    border: 1px solid rgba(202,80,16,0.18);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0.9;
+  }
+  .empty-no-files-title {
+    font-size: 13px; font-weight: 600;
+    color: var(--text); opacity: 0.75;
+  }
+  .empty-no-files-desc {
+    font-size: 11.5px; color: var(--text-muted);
+    display: flex; align-items: center; gap: 6px; flex-wrap: wrap; justify-content: center;
+    text-align: center; line-height: 1.6; max-width: 360px;
+  }
+  .empty-no-files-desc .fmt-badge {
+    font-size: 10.5px; padding: 1px 7px;
+  }
+  body.dark .empty-no-files-icon {
+    background: rgba(246,173,85,0.08);
+    border-color: rgba(246,173,85,0.2);
+  }
+
   /* ── Hover Preview Card ───────────────────────── */
   .preview-card {
     position: fixed;
@@ -1537,20 +1567,52 @@
 
   /* ── Folder pick ── */
   let folderSelected = false;
+  let demoNoFiles = false; // toggle for demo: alternates between normal and no-files result
   function pickFolder() {
     el.tbody.innerHTML = '';
     el.btn.disabled = true; folderSelected = false;
-    el.path.textContent = 'D:\\Photos\\2024_vacation';
+    demoNoFiles = !demoNoFiles;
+    el.path.textContent = demoNoFiles ? 'D:\\Documents\\Reports' : 'D:\\Photos\\2024_vacation';
     el.path.classList.remove('placeholder');
     showScanning();
     setTimeout(() => {
-      hideProgress(); renderTable();
-      // Reveal numbers and meta chips now that data is loaded
-      document.querySelectorAll('#statsRow .val').forEach(v => v.style.display = '');
-      $('chipGroups').style.display = '';
-      $('chipNoExif').style.display = '';
-      el.btn.disabled = false; folderSelected = true;
-      setAllMode();
+      hideProgress();
+      if (demoNoFiles) {
+        // ── No supported files found ──
+        document.querySelectorAll('#statsRow .val').forEach(v => v.style.display = 'none');
+        $('chipGroups').style.display = 'none';
+        $('chipNoExif').style.display = 'none';
+        el.tbody.innerHTML = `
+          <tr id="emptyNoFilesRow">
+            <td colspan="5">
+              <div class="empty-no-files">
+                <div class="empty-no-files-icon">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#CA5010" stroke-width="1.5">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+                    <line x1="12" y1="9" x2="12" y2="13" stroke-width="1.5" stroke-linecap="round"/>
+                    <line x1="12" y1="17" x2="12.01" y2="17" stroke-width="2" stroke-linecap="round"/>
+                  </svg>
+                </div>
+                <span class="empty-no-files-title">No supported photos found in this folder</span>
+                <span class="empty-no-files-desc">Please choose a different folder with files in one of the following formats:</span>
+                <span class="empty-no-files-desc">
+                  <span class="fmt-badge fmt-jpg">JPG</span>
+                  <span class="fmt-badge fmt-heic">HEIC</span>
+                  <span class="fmt-badge fmt-png">PNG</span>
+                  <span class="fmt-badge fmt-mov">MOV</span>
+                </span>
+              </div>
+            </td>
+          </tr>`;
+      } else {
+        // ── Normal result ──
+        renderTable();
+        document.querySelectorAll('#statsRow .val').forEach(v => v.style.display = '');
+        $('chipGroups').style.display = '';
+        $('chipNoExif').style.display = '';
+        el.btn.disabled = false; folderSelected = true;
+        setAllMode();
+      }
     }, 2000);
   }
 

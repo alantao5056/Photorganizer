@@ -328,13 +328,22 @@ namespace Alan.Photorganizer.App
                 .OrderBy(f => f.Name)
                 .ToList();
 
-            _folderLoaded = true;
             _allMode = true;
             _activeFormats.Clear();
             SetAllModeVisuals();
-            LoadFiles(_scannedFiles);
 
-            await ExtractMetadataAsync(_allFiles);
+            if (_scannedFiles.Count == 0)
+            {
+                _folderLoaded = false;
+                ShowNoFilesState();
+            }
+            else
+            {
+                _folderLoaded = true;
+                NoFilesState.Visibility = Visibility.Collapsed;
+                LoadFiles(_scannedFiles);
+                await ExtractMetadataAsync(_allFiles);
+            }
         }
 
         // ── Theme Toggle ──
@@ -364,6 +373,26 @@ namespace Alan.Photorganizer.App
                 ? new Uri("ms-appx:///Assets/logo_with_text_800_dark.png")
                 : new Uri("ms-appx:///Assets/logo_with_text_800.png");
             EmptyStateLogo.Source = new BitmapImage(uri);
+        }
+
+        private void ShowNoFilesState()
+        {
+            EmptyState.Visibility = Visibility.Collapsed;
+            NoFilesState.Visibility = Visibility.Visible;
+            FileList.ItemsSource = null;
+
+            // Hide chip count values
+            ChipAllVal.Visibility = Visibility.Collapsed;
+            CntJpg.Visibility = Visibility.Collapsed;
+            CntHeic.Visibility = Visibility.Collapsed;
+            CntPng.Visibility = Visibility.Collapsed;
+            CntMov.Visibility = Visibility.Collapsed;
+
+            // Hide Groups and No EXIF pills
+            ChipGroups.Visibility = Visibility.Collapsed;
+            ChipNoExif.Visibility = Visibility.Collapsed;
+
+            OrganizeBtn.IsEnabled = false;
         }
 
         // ── Filter Chips ──
