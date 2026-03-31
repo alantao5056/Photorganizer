@@ -11,12 +11,12 @@
   <Identity
     Name="AlanTao.Photorganizersortyourphotosandvideosintoda"
     Publisher="CN=E55EA33F-7D5A-4638-86DF-F18ECFF57888"
-    Version="1.0.0.0" />
+    Version="1.0.2.0" />
 
   <mp:PhoneIdentity PhoneProductId="991d53ad-5686-48c5-912e-4bd91ac03440" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
-    <DisplayName>Photorganizer – Sort Photos &amp; Videos into date-based Folders</DisplayName>
+    <DisplayName>Photorganizer by Date</DisplayName>
     <PublisherDisplayName>Alan Tao</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
@@ -35,7 +35,7 @@
       Executable="$targetnametoken$.exe"
       EntryPoint="$targetentrypoint$">
       <uap:VisualElements
-        DisplayName="Photorganizer – Sort Photos &amp; Videos into date-based Folders"
+        DisplayName="Photorganizer by Date"
         Description="App"
         BackgroundColor="transparent"
         Square150x150Logo="Assets\Square150x150Logo.png"
