@@ -1,16 +1,16 @@
-# Photorganizer
+# Sortify
 
-**Photorganizer** is a modern Windows application built on **WinUI 3.0** designed to help you effortlessly manage and categorize your local photo and video collections.
+**Sortify** is a modern Windows application built on **WinUI 3.0** designed to help you effortlessly manage and categorize your local photo and video collections.
 
 ## 🌟 Overview
 
-Tired of messy photo folders? Photorganizer automatically extracts the "Date Taken" metadata from your media files and reorganizes them into a structured, custom folder hierarchy based on when they were actually captured.
+Tired of messy photo folders? Sortify automatically extracts the "Date Taken" metadata from your media files and reorganizes them into a structured, custom folder hierarchy based on when they were actually captured.
 
 ## 📸 The Problem it Solves
 
 When you import photos from an iPhone or other mobile devices to Windows, they are often grouped into generic, month-based folders. This makes finding specific events or maintaining a clean library incredibly difficult. 
 
-**Photorganizer** gives you back control. You can define your own folder naming patterns and let the app batch-process your entire library, moving or copying files into their new, logically organized homes.
+**Sortify** gives you back control. You can define your own folder naming patterns and let the app batch-process your entire library, moving or copying files into their new, logically organized homes.
 
 ## ✨ Key Features
 
@@ -22,7 +22,7 @@ When you import photos from an iPhone or other mobile devices to Windows, they a
 
 ## 🚀 Typical Use Case
 
-Imagine you've just imported 2,000 photos from your phone. Windows puts them all into a single "March 2024" folder. With Photorganizer, you can instantly redistribute those 2,000 files into specific subfolders like `2024-03-01`, `2024-03-15`, etc., making your memories much easier to browse.
+Imagine you've just imported 2,000 photos from your phone. Windows puts them all into a single "March 2024" folder. With Sortify, you can instantly redistribute those 2,000 files into specific subfolders like `2024-03-01`, `2024-03-15`, etc., making your memories much easier to browse.
 
 ## 🛠 Built With
 

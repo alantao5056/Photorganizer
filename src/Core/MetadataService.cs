@@ -7,7 +7,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 
-namespace Alan.Photorganizer.App.Services
+namespace Alan.Sortify.App.Services
 {
     public static class MetadataService
     {

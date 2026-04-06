@@ -3,9 +3,9 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
 using System.Collections.Generic;
 using System.Linq;
-using Alan.Photorganizer.App.Models;
+using Alan.Sortify.App.Models;
 
-namespace Alan.Photorganizer.App;
+namespace Alan.Sortify.App;
 
 public sealed partial class PartialOrganizePanel : UserControl
 {

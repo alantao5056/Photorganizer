@@ -6,8 +6,8 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <RootNamespace>Alan.Photorganizer.Tests</RootNamespace>
-    <AssemblyName>Alan.Photorganizer.Tests</AssemblyName>
+    <RootNamespace>Alan.Sortify.Tests</RootNamespace>
+    <AssemblyName>Alan.Sortify.Tests</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

@@ -1,4 +1,4 @@
-namespace Alan.Photorganizer.App.Services;
+namespace Alan.Sortify.App.Services;
 
 public interface ISettingsService
 {

@@ -1,8 +1,8 @@
 using System.Collections.Generic;
-using Alan.Photorganizer.App.Services;
+using Alan.Sortify.App.Services;
 using Xunit;
 
-namespace Alan.Photorganizer.Tests
+namespace Alan.Sortify.Tests
 {
     public class LocalSettingsServiceTests
     {

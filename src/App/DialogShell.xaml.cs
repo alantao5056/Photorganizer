@@ -2,7 +2,7 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
 
-namespace Alan.Photorganizer.App;
+namespace Alan.Sortify.App;
 
 public sealed partial class DialogShell : UserControl
 {

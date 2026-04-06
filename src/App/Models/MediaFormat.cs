@@ -1,6 +1,6 @@
 using System;
 
-namespace Alan.Photorganizer.App.Models
+namespace Alan.Sortify.App.Models
 {
     public enum MediaFormat
     {

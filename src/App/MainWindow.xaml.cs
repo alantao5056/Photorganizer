@@ -13,10 +13,10 @@ using System.Runtime.InteropServices;
 using Windows.Graphics;
 using Windows.UI;
 using System.Threading.Tasks;
-using Alan.Photorganizer.App.Models;
-using Alan.Photorganizer.App.Services;
+using Alan.Sortify.App.Models;
+using Alan.Sortify.App.Services;
 
-namespace Alan.Photorganizer.App
+namespace Alan.Sortify.App
 {
     public sealed partial class MainWindow : Window
     {
@@ -68,13 +68,13 @@ namespace Alan.Photorganizer.App
             LoadPersistedFormat();
             SetupWindow();
             SetAllModeVisuals();
-            UpdateEmptyStateLogo(IsDarkTheme);
+
             CheckForMandatoryUpdate();
         }
 
         private void SetupWindow()
         {
-            Title = "Photorganizer";
+            Title = "Sortify - Photo &amp; Video Organizer";
             ExtendsContentIntoTitleBar = true;
             SetTitleBar(AppTitleBar);
 
@@ -362,18 +362,9 @@ namespace Alan.Photorganizer.App
             }
 
             UpdateCaptionButtonColors(isDark);
-            UpdateEmptyStateLogo(isDark);
-
             App.Settings.IsDarkTheme = isDark;
         }
 
-        private void UpdateEmptyStateLogo(bool isDark)
-        {
-            var uri = isDark
-                ? new Uri("ms-appx:///Assets/logo_with_text_800_dark.png")
-                : new Uri("ms-appx:///Assets/logo_with_text_800.png");
-            EmptyStateLogo.Source = new BitmapImage(uri);
-        }
 
         private void ShowNoFilesState()
         {

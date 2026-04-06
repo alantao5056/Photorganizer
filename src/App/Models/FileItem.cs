@@ -2,7 +2,7 @@ using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace Alan.Photorganizer.App.Models
+namespace Alan.Sortify.App.Models
 {
     public class FileItem : INotifyPropertyChanged
     {

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Windows.Storage;
 
-namespace Alan.Photorganizer.App.Services;
+namespace Alan.Sortify.App.Services;
 
 public sealed class LocalSettingsService : ISettingsService
 {

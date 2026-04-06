@@ -1,7 +1,7 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 
-namespace Alan.Photorganizer.App
+namespace Alan.Sortify.App
 {
     public sealed partial class HeicWarningBanner : UserControl
     {

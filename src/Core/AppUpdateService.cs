@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Windows.Services.Store;
 
-namespace Alan.Photorganizer.App.Services;
+namespace Alan.Sortify.App.Services;
 
 public static class AppUpdateService
 {

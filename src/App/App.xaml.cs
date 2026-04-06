@@ -15,12 +15,12 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
-using Alan.Photorganizer.App.Services;
+using Alan.Sortify.App.Services;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
 
-namespace Alan.Photorganizer.App
+namespace Alan.Sortify.App
 {
     /// <summary>
     /// Provides application-specific behavior to supplement the default Application class.

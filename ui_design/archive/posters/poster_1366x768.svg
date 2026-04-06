@@ -31,58 +31,45 @@
   <!-- Tiles 25×25: TL(41,33) TR(70,33) BL(41,62) BR(70,62) -->
   <!-- ══════════════════════════════════════════════════════ -->
 
-<!-- Outer group: top-left anchor at (50, 42) -->
-<g transform="translate(67, 42)">
+  <!-- Icon background: x=52 y=44 w=90 h=90 rx=20 -->
+  <rect x="50" y="42" width="90" height="90" rx="20" fill="#0078D4"/>
 
-  <!-- Background -->
-  <rect x="0" y="0" width="90" height="90" rx="20" fill="#0078D4"/>
+  <!-- Tile size=31, pad=9, gap=6: TL(61,53) TR(98,53) BL(61,90) BR(98,90) -->
 
-  <!-- Top-left tile: offset (11, 11) from outer -->
-  <g transform="translate(11, 11)">
-    <rect x="0" y="0" width="31" height="31" rx="5" fill="rgba(255,255,255,0.92)"/>
-    <polygon points="0,31 9,15 17,22 31,10 31,31" fill="rgba(0,120,212,0.2)"/>
-    <circle cx="25" cy="8" r="6" fill="rgba(255,195,0,0.38)"/>
-    <rect x="0" y="0" width="31" height="31" rx="5" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.2"/>
-  </g>
+  <!-- TL tile: x=61 y=53 w=31 h=31 (right=92 bottom=84) -->
+  <rect x="61" y="53" width="31" height="31" rx="5" fill="rgba(255,255,255,0.92)"/>
+  <polygon points="61,84 70,68 78,75 92,63 92,84" fill="rgba(0,120,212,0.2)"/>
+  <circle cx="86" cy="61" r="6" fill="rgba(255,195,0,0.38)"/>
+  <rect x="61" y="53" width="31" height="31" rx="5" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.2"/>
 
-  <!-- Top-right tile: offset (48, 11) from outer -->
-  <g transform="translate(48, 11)">
-    <rect x="0" y="0" width="31" height="31" rx="5" fill="rgba(255,255,255,0.92)"/>
-    <polygon points="0,31 9,14 17,21 31,9 31,31" fill="rgba(0,120,212,0.16)"/>
-    <circle cx="4" cy="8" r="5" fill="rgba(255,195,0,0.28)"/>
-    <rect x="0" y="0" width="31" height="31" rx="5" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.2"/>
-  </g>
+  <!-- TR tile: x=98 y=53 w=31 h=31 (right=129 bottom=84) -->
+  <rect x="98" y="53" width="31" height="31" rx="5" fill="rgba(255,255,255,0.92)"/>
+  <polygon points="98,84 107,67 115,74 129,62 129,84" fill="rgba(0,120,212,0.16)"/>
+  <circle cx="102" cy="61" r="5" fill="rgba(255,195,0,0.28)"/>
+  <rect x="98" y="53" width="31" height="31" rx="5" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.2"/>
 
-  <!-- Bottom-left tile: offset (11, 48) from outer -->
-  <g transform="translate(11, 48)">
-    <rect x="0" y="0" width="31" height="31" rx="5" fill="rgba(255,255,255,0.60)"/>
-    <polygon points="0,31 10,14 18,21 31,12 31,31" fill="rgba(0,120,212,0.14)"/>
-    <rect x="0" y="0" width="31" height="31" rx="5" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="1.2"/>
-  </g>
+  <!-- BL tile: x=61 y=90 w=31 h=31 (right=92 bottom=121) -->
+  <rect x="61" y="90" width="31" height="31" rx="5" fill="rgba(255,255,255,0.60)"/>
+  <polygon points="61,121 71,104 79,111 92,102 92,121" fill="rgba(0,120,212,0.14)"/>
+  <rect x="61" y="90" width="31" height="31" rx="5" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="1.2"/>
 
-  <!-- Bottom-right tile: offset (48, 48) from outer -->
-  <g transform="translate(48, 48)">
-    <rect x="0" y="0" width="31" height="31" rx="5" fill="rgba(255,255,255,0.60)"/>
-    <circle cx="22" cy="9" r="7" fill="rgba(255,195,0,0.22)"/>
-    <polygon points="0,31 10,14 19,21 31,13 31,31" fill="rgba(0,120,212,0.1)"/>
-    <rect x="0" y="0" width="31" height="31" rx="5" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="1.2"/>
+  <!-- BR tile: x=98 y=90 w=31 h=31 (right=129 bottom=121) -->
+  <rect x="98" y="90" width="31" height="31" rx="5" fill="rgba(255,255,255,0.60)"/>
+  <circle cx="120" cy="99" r="7" fill="rgba(255,195,0,0.22)"/>
+  <polygon points="98,121 108,104 117,111 129,103 129,121" fill="rgba(0,120,212,0.1)"/>
+  <rect x="98" y="90" width="31" height="31" rx="5" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="1.2"/>
 
-    <!-- Calendar badge: offset (3, 8) from bottom-right tile -->
-    <g transform="translate(3, 8)">
-      <rect x="0" y="0" width="26" height="21" rx="5" fill="white"/>
-      <rect x="0" y="0" width="26" height="9"  rx="5" fill="#005A9E"/>
-      <rect x="0" y="5" width="26" height="4"  fill="#005A9E"/>
-      <circle cx="7"  cy="15" r="2.5" fill="#0078D4"/>
-      <circle cx="14" cy="15" r="2.5" fill="#0078D4"/>
-      <circle cx="21" cy="15" r="2.5" fill="#0078D4"/>
-    </g>
-  </g>
-
-</g>
+  <!-- Calendar badge: x=101 y=98 w=26 h=21 (within BR tile ✓) -->
+  <rect x="101" y="98" width="26" height="21" rx="5" fill="white"/>
+  <rect x="101" y="98" width="26" height="9"  rx="5" fill="#005A9E"/>
+  <rect x="101" y="103" width="26" height="4" fill="#005A9E"/>
+  <circle cx="108" cy="113" r="2.5" fill="#0078D4"/>
+  <circle cx="115" cy="113" r="2.5" fill="#0078D4"/>
+  <circle cx="122" cy="113" r="2.5" fill="#0078D4"/>
 
   <!-- Wordmark: icon center y = 44+45 = 89, font-size=70 -->
-  <text x="176" y="112" font-family="'Liberation Sans','DejaVu Sans',sans-serif" font-size="68">
-    <tspan font-weight="600" fill="white">Sortify</tspan>
+  <text x="156" y="112" font-family="'Liberation Sans','DejaVu Sans',sans-serif" font-size="70" letter-spacing="-1">
+    <tspan font-weight="300" fill="white">Phot</tspan><tspan font-weight="700" fill="#63B3ED">organizer</tspan>
   </text>
 
   <!-- ══════════════════════════════════════════════════════ -->
@@ -91,8 +78,8 @@
   <rect x="110" y="178" width="5" height="390" rx="2.5" fill="#0078D4"/>
 
   <!-- Hero tagline -->
-  <text x="144" y="268" font-family="'Liberation Sans','DejaVu Sans',sans-serif" font-size="60" font-weight="500" fill="#63B3ED">Your photos &amp; videos.</text>
-  <text x="144" y="348" font-family="'Liberation Sans','DejaVu Sans',sans-serif" font-size="60" font-weight="500" fill="#85B7EB">Finally sorted.</text>
+  <text x="144" y="268" font-family="'Liberation Sans','DejaVu Sans',sans-serif" font-size="68" font-weight="700" fill="white" letter-spacing="-1">Your photos.</text>
+  <text x="144" y="348" font-family="'Liberation Sans','DejaVu Sans',sans-serif" font-size="68" font-weight="300" fill="#85B7EB" letter-spacing="-1">Finally sorted.</text>
 
   <!-- Subtitle -->
   <text x="144" y="400" font-family="'Liberation Sans','DejaVu Sans',sans-serif" font-size="20" fill="rgba(255,255,255,0.55)">Organize by capture date. One click.</text>

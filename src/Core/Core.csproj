@@ -1,13 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
-    <RootNamespace>Alan.Photorganizer.App.Services</RootNamespace>
-    <AssemblyName>Alan.Photorganizer.Core</AssemblyName>
+    <RootNamespace>Alan.Sortify.App.Services</RootNamespace>
+    <AssemblyName>Alan.Sortify.Core</AssemblyName>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
-    <InternalsVisibleTo Include="Alan.Photorganizer.Tests" />
+    <InternalsVisibleTo Include="Alan.Sortify.Tests" />
   </ItemGroup>
 
   <ItemGroup>

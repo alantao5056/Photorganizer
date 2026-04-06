@@ -3,7 +3,7 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
 using System;
 
-namespace Alan.Photorganizer.App
+namespace Alan.Sortify.App
 {
     public sealed partial class CustomFormatPanel : UserControl
     {

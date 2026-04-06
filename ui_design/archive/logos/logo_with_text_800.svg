@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="2500" height="800" viewBox="0 0 2500 800">
+<svg xmlns="http://www.w3.org/2000/svg" width="4200" height="800" viewBox="0 0 4200 800">
   <defs>
     <clipPath id="iconclip"><rect x="60" y="80" width="640" height="640" rx="144"/></clipPath>
     <clipPath id="c1"><rect x="148" y="170" width="210" height="175" rx="20"/></clipPath>
@@ -59,7 +59,7 @@
   <circle cx="514" cy="540" r="9" fill="#B5D4F4"/>
 
   <!-- Wordmark: 496px = 58% of 800px canvas height, vertically centred -->
-  <text x="780" y="565" font-family="'Liberation Sans','DejaVu Sans',sans-serif" font-size="496">
-    <tspan font-weight="700" fill="#0078D4">Sortify</tspan>
+  <text x="780" y="548" font-family="'Liberation Sans','DejaVu Sans',sans-serif" font-size="496" letter-spacing="-6">
+    <tspan font-weight="300" fill="#1a1a1a">Phot</tspan><tspan font-weight="700" fill="#0078D4">organizer</tspan>
   </text>
 </svg>

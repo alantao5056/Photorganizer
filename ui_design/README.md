@@ -1,4 +1,4 @@
-# Photorganizer — UI Design Reference
+# Sortify — UI Design Reference
 
 A Windows 10/11 desktop application built with C# and WinUI 3. This document describes the interface layout, component behaviour, and state interactions of the UI prototype (`photorganizer.html`).
 
@@ -52,7 +52,7 @@ A **42 px** strip that mimics the native WinUI title bar.
 | Element | Description |
 |---|---|
 | Traffic-light dots | Three coloured circles (red / yellow / green) in the top-left, matching macOS-style window controls used as decorative chrome in the prototype |
-| App title | Centred icon + "Photorganizer" label, rendered in a muted colour to feel like a system element |
+| App title | Centred icon + "Sortify" label, rendered in a muted colour to feel like a system element |
 
 The title bar has **no interactive application controls**. Theme switching and all other app-level controls live in regions below it, keeping the system chrome visually distinct.
 
